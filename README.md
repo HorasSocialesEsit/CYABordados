@@ -1,52 +1,97 @@
-# 📘 Empresa CBYBordado
+# 🧵 CYABordados
 
-Bienvenido a **ERPBordados**, una aplicación web desarrollada en **Laravel** para la gestión de de una empresa de Bordado.  
-Con esta herramienta puedes llevar el control de **materiales, Ingreso de Ordenes, Control de Produccion y Reportes de ventas,producccion y inventarios \*** de una manera moderna y organizada.
+Bienvenido a **CYABordados**, un sistema ERP desarrollado en **Laravel** para la gestión integral de una empresa de bordados.  
+Esta aplicación permite administrar de forma moderna y organizada los procesos de **materiales, ingreso de órdenes, control de producción, ventas e inventarios**.
 
 ---
 
 ## 🚀 Tecnologías utilizadas
 
--   [Laravel 10](https://laravel.com/) - Framework PHP
--   [Bootstrap 5](https://getbootstrap.com/) - Estilos y componentes
--   [FontAwesome](https://fontawesome.com/) - Iconos
--   [AOS](https://michalsnik.github.io/aos/) - Animaciones en scroll
--   [MySQL](https://www.mysql.com/) - Base de datos
+-   ⚙️ [**Laravel 10**](https://laravel.com/) — Framework PHP moderno y potente
+-   🎨 [**Bootstrap 5**](https://getbootstrap.com/) — Diseño responsivo y componentes UI
+-   🖼️ [**FontAwesome**](https://fontawesome.com/) — Iconografía profesional
+-   ✨ [**AOS (Animate On Scroll)**](https://michalsnik.github.io/aos/) — Animaciones en scroll
+-   💾 [**MySQL**](https://www.mysql.com/) — Base de datos relacional
 
 ---
 
 ## ⚙️ Instalación y Configuración
 
-Sigue estos pasos para correr el proyecto en tu máquina local:
+Sigue los pasos para ejecutar el proyecto en tu entorno local:
 
 ```bash
-# 1. Clonar el repositorio
+# 1️⃣ Clonar el repositorio
 git clone https://github.com/HorasSocialesEsit/CYABordados.git
 
-# 2. Entrar al directorio
+# 2️⃣ Entrar al directorio del proyecto
 cd CYABordados
 
-# 3. Instalar dependencias
+# 3️⃣ Instalar dependencias de Laravel
 composer install
 
-# 4. Copiar archivo de entorno
+# 4️⃣ Copiar archivo de entorno
 cp .env.example .env
 
-# 5. Generar la key de la aplicación
+# 5️⃣ Generar la clave de la aplicación
 php artisan key:generate
 
-# 6. Configurar la base de datos en el archivo .env
+# 6️⃣ Configurar la base de datos en el archivo .env
+# (Editar los valores DB_DATABASE, DB_USERNAME, DB_PASSWORD)
 
-# 7. Ejecutar migraciones
+# 7️⃣ Ejecutar migraciones
 php artisan migrate
 
-# 8. (Opcional) Cargar datos iniciales
+# 8️⃣ (Opcional) Cargar datos iniciales
 php artisan db:seed
 
-# 9 es crear storage para guardar las fotos de los usuarios
+# 9️⃣ Crear el enlace simbólico para almacenamiento (imágenes, archivos, etc.)
 php artisan storage:link
 
-
-# 9. Levantar el servidor prueba
+# 🔟 Levantar el servidor local
 php artisan serve
+
+# 1️⃣ Clonar el repositorio
+git clone https://github.com/HorasSocialesEsit/CYABordados.git
+cd CYABordados
+
+# 2️⃣ Crear tu rama de desarrollo personal (desde main)
+# Solo una vez por persona
+git checkout -b dev-moises   # Para Moises
+git checkout -b dev-luis     # Para Luis
+
+# 3️⃣ Hacer tus cambios de código
+# (editar archivos, crear controladores, vistas, etc.)
+
+# 4️⃣ Agregar tus cambios al área de commit
+git add .
+
+# 5️⃣ Confirmar los cambios con un mensaje claro
+git commit -m "Agregado campo municipio en tabla clientes"
+
+# 6️⃣ Subir tu rama al repositorio remoto
+git push origin dev-moises
+# o si eres Luis
+git push origin dev-luis
+
+# 7️⃣ Crear un Pull Request (PR)
+# Ir a GitHub → pestaña "Pull Requests" → "New Pull Request"
+# Seleccionar:
+#   base: main
+#   compare: tu_rama (ej: dev-moises)
+# Luego crear el PR para revisión antes del merge.
+
+# 🔁 (Opcional) Si hay nuevos cambios en main y quieres mantener tu rama actualizada:
+git checkout dev-moises
+git fetch origin
+git merge origin/main   # Integra los últimos cambios sin borrar tu trabajo
+
+# 👁 Ver en qué rama estás
+git branch
+
+# 🔄 Cambiar de rama
+git checkout main
+
+# 🔄 Actualizar la rama principal localmente
+git pull origin main
+
 ```
