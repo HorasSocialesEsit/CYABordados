@@ -9,8 +9,6 @@
     <title>@yield('title')</title>
     <link rel="shortcut icon" href="{{ asset('faviconEdunotas.ico') }}" type="image/x-icon">
 
-
-    <link rel="shortcut icon" href="{{ asset('faviconEdunotas.ico') }}" type="image/x-icon">
     <!-- Bootstrap 4.6 CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
 
@@ -28,7 +26,94 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
     <style>
+        :root {
+            --verde-principal: #195231;
+            --negro: #000000;
+            --blanco: #ffffff;
+            --verde-claro: #28a745;
+            --gris-texto: #f4f4f4;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            background: linear-gradient(180deg, var(--negro) 0%, var(--verde-principal) 100%);
+        }
+
+        .sidebar .nav-item .nav-link {
+            color: var(--blanco);
+            transition: all 0.2s ease;
+        }
+
+        .sidebar .nav-item .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #aef3c1;
+        }
+
+        .sidebar .nav-item.active .nav-link {
+            background-color: var(--verde-claro);
+            color: var(--negro);
+            font-weight: bold;
+        }
+
+        .sidebar-brand {
+            background-color: var(--blanco);
+            color: var(--verde-principal) !important;
+            font-weight: bold;
+        }
+
+        .sidebar-brand-icon i {
+            color: var(--verde-principal);
+        }
+
+        /* ===== TOPBAR ===== */
+        .topbar {
+            background-color: var(--verde-principal) !important;
+        }
+
+        .topbar .nav-link,
+        .topbar .navbar-brand {
+            color: var(--blanco) !important;
+        }
+
+        .topbar .nav-link:hover {
+            color: #aef3c1 !important;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--verde-principal);
+            color: var(--blanco);
+        }
+
+        /* ===== BOTONES ===== */
+        .btn-primary {
+            background-color: var(--verde-principal);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #14722a;
+        }
+
+        /* ===== FOOTER ===== */
+        footer.sticky-footer {
+            background-color: var(--negro);
+            color: var(--gris-texto);
+        }
+
+        /* ===== TABLAS ===== */
+        .table thead {
+            background-color: var(--verde-principal);
+            color: var(--blanco);
+        }
+
+        /* Print etiqueta */
         @media print {
             body * {
                 visibility: hidden;
@@ -56,52 +141,49 @@
             }
         }
     </style>
-
 </head>
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-info sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center"
                 href="{{ route('index.dashboardGeneral') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fa-solid fa-graduation-cap" style="color: #195231;"></i>
+                    <i class="fa-solid fa-scissors"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3" style="color: #195231;">EduNotas</div>
+                <div class="sidebar-brand-text mx-3">CYABordados</div>
             </a>
 
             <hr class="sidebar-divider my-0">
 
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('index.dashboardGeneral') }}">
-                    <i class="fa-solid fa-chart-line" style="color:#195231;"></i>
+                    <i class="fa-solid fa-chart-line"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
 
             <hr class="sidebar-divider">
-            <div class="sidebar-heading">Panel Operativo</div>
+            <div class="sidebar-heading text-light">Panel Operativo</div>
 
             @auth
                 @if (auth()->user()->hasRole(['admin']))
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRecepcion"
                             aria-expanded="false" aria-controls="collapseRecepcion">
-                            <i class="fa-solid fa-bell-concierge" style="color: #63E6BE;"></i>
+                            <i class="fa-solid fa-bell-concierge text-success"></i>
                             <span>Ventas</span>
                         </a>
                         <div id="collapseRecepcion" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Recepcion de Ordenes:</h6>
+                                <h6 class="collapse-header">Recepción de Órdenes:</h6>
                                 <a class="collapse-item" href="#">Crear Orden</a>
-                                <a class="collapse-item" href="#">Ver Ordenes</a>
-
+                                <a class="collapse-item" href="#">Ver Órdenes</a>
                             </div>
                         </div>
                     </li>
@@ -111,15 +193,15 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBodega"
                             aria-expanded="false" aria-controls="collapseBodega">
-                            <i class="fa-solid fa-book-open-reader" style="color: #63E6BE;"></i>
-                            <span>Produccion</span>
+                            <i class="fa-solid fa-book-open-reader text-success"></i>
+                            <span>Producción</span>
                         </a>
                         <div id="collapseBodega" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Producion:</h6>
-                                <a class="collapse-item" href="#">Asignar orden</a>
-                                <a class="collapse-item" href="#">Tiempos estimados</a>
-                                <a class="collapse-item" href="#">Ordenes en Proceso</a>
+                                <h6 class="collapse-header">Producción:</h6>
+                                <a class="collapse-item" href="#">Asignar Orden</a>
+                                <a class="collapse-item" href="#">Tiempos Estimados</a>
+                                <a class="collapse-item" href="#">Órdenes en Proceso</a>
                             </div>
                         </div>
                     </li>
@@ -129,14 +211,13 @@
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRuteo"
                             aria-expanded="false" aria-controls="collapseRuteo">
-                            <i class="fa-solid fa-clipboard" style="color: #63E6BE;"></i>
+                            <i class="fa-solid fa-clipboard text-success"></i>
                             <span>Inventario</span>
                         </a>
                         <div id="collapseRuteo" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Inventario de Hilo:</h6>
                                 <a class="collapse-item" href="#">Ver Material</a>
-
                             </div>
                         </div>
                     </li>
@@ -147,7 +228,7 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse"
                             data-target="#collapseconfiguraciones" aria-expanded="false"
                             aria-controls="collapseconfiguraciones">
-                            <i class="fa-solid fa-gear" style="color: #bdff24;"></i>
+                            <i class="fa-solid fa-gear text-warning"></i>
                             <span>Configuraciones</span>
                         </a>
                         <div id="collapseconfiguraciones" class="collapse" data-parent="#accordionSidebar">
@@ -156,7 +237,7 @@
                                 <a class="collapse-item" href="#">Horarios</a>
                                 <a class="collapse-item" href="#">Materias</a>
                                 <a class="collapse-item" href="#">Medidas</a>
-                                <a class="collapse-item" href="#">Codigo De hilos</a>
+                                <a class="collapse-item" href="#">Código de Hilos</a>
                             </div>
                         </div>
                     </li>
@@ -167,8 +248,8 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse"
                             data-target="#collapseAdministracion" aria-expanded="false"
                             aria-controls="collapseAdministracion">
-                            <i class="fa-solid fa-user-gear" style="color: #f15d07;"></i>
-                            <span>Administracion</span>
+                            <i class="fa-solid fa-user-gear text-danger"></i>
+                            <span>Administración</span>
                         </a>
                         <div id="collapseAdministracion" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
@@ -190,35 +271,28 @@
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
-            <!-- Main Content -->
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-info topbar mb-4 shadow">
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                <nav class="navbar navbar-expand navbar-light topbar mb-4 shadow">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 text-white">
                         <i class="fa fa-bars"></i>
                     </button>
 
                     <ul class="navbar-nav ml-auto">
-
-
-
-                        <!-- Nav Item - User Info -->
                         @auth
                             <li class="nav-item dropdown no-arrow">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                                    <span class="mr-2 d-none d-lg-inline text-white small">
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown"
+                                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline small">
                                         {{ optional(Auth::user())->name }}
-                                        <br>
                                     </span>
 
                                     @if (!empty(optional(Auth::user())->foto))
                                         <img class="img-profile rounded-circle" width="35" height="35"
                                             src="{{ asset('storage/' . Auth::user()->foto) }}" alt="Foto Empleado">
                                     @else
-                                        <i class="fa-solid fa-user-circle fa-2x text-gray-400"></i>
+                                        <i class="fa-solid fa-user-circle fa-2x text-white"></i>
                                     @endif
                                 </a>
 
@@ -239,7 +313,7 @@
                                     <form class="bg-danger" action="{{ route('logout') }}" method="POST">
                                         @csrf
                                         <button type="submit" class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2  text-gray-400"></i>
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Cerrar Sesión
                                         </button>
                                     </form>
@@ -248,46 +322,35 @@
                         @endauth
                     </ul>
                 </nav>
-                <!-- End of Topbar -->
 
-                <!-- Page Content -->
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">@yield('PasosProcesos')</h1>
                     @yield('contenido')
                 </div>
-                <!-- End Page Content -->
-
             </div>
-            <!-- End Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <footer class="sticky-footer">
                 <div class="container my-auto">
                     <div class="text-center my-auto">
-                        <span>Copyright &copy; </span><br>
-                        <small> pendiente</small>
+                        <span>Copyright &copy; CYABordados 2025</span><br>
+                        <small>Todos los derechos reservados</small>
                     </div>
                 </div>
             </footer>
         </div>
-        <!-- End Content Wrapper -->
     </div>
-    <!-- End Wrapper -->
 
     <!-- Scroll to Top -->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Bootstrap 4.6 JS -->
+    <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Otros scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('js/admin/sb-admin-2.min.js') }}"></script>
-    <!-- En el <head> o antes de cerrar </body> -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @yield('scripts')
