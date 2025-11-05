@@ -15,7 +15,8 @@ class Material extends Model
         'nombre',
         'codigo',
         'descripcion',
-        'TipoHilo',
+        'stock',
+        'tipoHilo',
     ];
 
       public function ordenDetalles()

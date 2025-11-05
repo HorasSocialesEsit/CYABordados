@@ -3,6 +3,7 @@
 use App\Http\Controllers\AlumnosController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\MateriasController;
 use App\Http\Controllers\NotasController;
 use App\Http\Controllers\PerfilController;
@@ -28,7 +29,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('index.das
 Route::prefix('consultarNotas')->group(function () {
 
     Route::post('/notas/alumno', [NotasController::class, 'notasPorAlumno'])->name('notas.alumnoPublico');
-
 });
 
 // ////// Recepcion   ///////////
@@ -36,7 +36,6 @@ Route::prefix('Recepcion')->middleware(['auth', 'active', 'role:recepcion,admin'
 
     Route::get('/', [RecepcionController::class, 'index'])->name('recepcion');
     Route::post('/', [AlumnosController::class, 'store'])->name('alumnos.store');
-
 });
 
 // ////// alumnos //////
@@ -47,7 +46,6 @@ Route::prefix('alumnos')->middleware(['auth', 'active', 'role:recepcion,admin'])
     Route::get('/alumnos-por-materia', [AlumnosController::class, 'alumnosPorMateria'])->name('alumnos.porMateria');
     Route::get('/alumnos/{carnet}/edit', [AlumnosController::class, 'edit'])->name('alumnos.edit');
     Route::put('/alumnos/{carnet}', [AlumnosController::class, 'update'])->name('alumnos.update');
-
 });
 
 // ////// Notas   ///////////
@@ -60,7 +58,6 @@ Route::prefix('NotasAlumnos')->middleware(['auth', 'active', 'role:recepcion,adm
     Route::post('/notas/alumno', [TuControlador::class, 'notasPorAlumno'])->name('notas.alumno');
     Route::get('/notas/{id}/editar', [NotasController::class, 'editarNota'])->name('notas.editar');
     Route::get('notas/alumno/{carnet}', [NotasController::class, 'notasAlumno'])->name('notas.alumno');
-
 });
 
 // ////// Materias   ///////////
@@ -72,6 +69,22 @@ Route::prefix('Alumnos-Materias')->middleware(['auth', 'active', 'role:recepcion
 Route::prefix('administracion-usuarios')->middleware(['auth', 'active', 'role:admin'])->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('usuarios.index');
 });
+
+
+// ////// administracion inventario   ///////////
+Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:admin'])->group(function () {
+    Route::get('/', [InventarioController::class, 'index'])->name('inventario.index');
+    Route::get('/inventario/create', [InventarioController::class, 'create'])->name('inventario.create');
+    Route::post('/inventario/store', [InventarioController::class, 'store'])->name('inventario.store');
+    Route::get('/inventario/{id}/edit', [InventarioController::class, 'edit'])->name('inventario.edit');
+    Route::put('/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
+    Route::delete('inventario/{id}/destroy', [InventarioController::class, 'destroy'])->name('inventario.destroy');
+});
+
+
+
+
+
 
 Route::middleware(['auth', 'active', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class);
