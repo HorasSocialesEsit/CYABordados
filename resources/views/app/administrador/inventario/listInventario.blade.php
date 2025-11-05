@@ -23,8 +23,8 @@
                                 <th>Nombre</th>
                                 <th>Codigo</th>
                                 <th>Descripcion</th>
-                                <th>Tipo Hilo</th>
                                 <th>Stock</th>
+                                <th>Tipo Hilo</th>
                                 <th>Estado</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
