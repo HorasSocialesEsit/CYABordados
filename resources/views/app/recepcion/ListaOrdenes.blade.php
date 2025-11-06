@@ -25,23 +25,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($alumnos as $alumno)
-                                <tr>
-                                    <td>{{ $alumno->carnet }}</td>
-                                    <td>{{ $alumno->nombre }}</td>
-                                    <td>{{ $alumno->correo }}</td>
-                                    <td>{{ $alumno->nombre_responsable }}</td>
-                                    <td>{{ $alumno->telefono_responsable }}</td>
-                                    <td>
-                                        <a class="btn btn-success"
-                                            href="{{ route('alumnos.agregarMateria', $alumno->carnet) }}">Agregar
-                                            materia</a>
-                                        <a class="btn btn-secondary"
-                                            href="{{ route('alumnos.edit', $alumno->carnet) }}">Editar</a>
-                                    </td>
 
-                                </tr>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>

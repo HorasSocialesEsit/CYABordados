@@ -182,8 +182,8 @@
                         <div id="collapseRecepcion" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Recepción de Órdenes:</h6>
-                                <a class="collapse-item" href="#">Crear Orden</a>
-                                <a class="collapse-item" href="#">Ver Órdenes</a>
+                                <a class="collapse-item" href="{{ route('ordenes.create') }}">Crear Orden</a>
+                                <a class="collapse-item" href="{{ route('ordenes.index') }}">Ver Órdenes</a>
                             </div>
                         </div>
                     </li>
@@ -234,7 +234,7 @@
                         <div id="collapseconfiguraciones" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Configuraciones:</h6>
-                                <a class="collapse-item" href="#">Horarios</a>
+                                <a class="collapse-item" href="{{ route('clientes.index') }}">Clientes</a>
                                 <a class="collapse-item" href="#">Materias</a>
                                 <a class="collapse-item" href="#">Medidas</a>
                                 <a class="collapse-item" href="#">Código de Hilos</a>

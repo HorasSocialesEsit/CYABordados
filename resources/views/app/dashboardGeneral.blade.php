@@ -12,7 +12,7 @@
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body text-center">
-                        <a href="{{ route('alumnos.index') }}">
+                        <a href="#">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ordenes</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalAlumnos }}</div>
 
@@ -26,7 +26,7 @@
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body text-center">
-                        <a href="{{ route('alumnos.porMateria') }}">
+                        <a href="#">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">rr
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalMatriculas }}</div>

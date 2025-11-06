@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class orden extends Model
+class Orden extends Model
 {
     use HasFactory;
-protected $table = 'ordenes';
+
+    protected $table = 'ordenes';
+
     protected $fillable = [
         'cliente_id',
         'fecha_orden',
@@ -27,8 +29,6 @@ protected $table = 'ordenes';
         'estado' => 'pendiente',
         'tipo' => 'venta',
     ];
-
-
 
     /**
      * 🔹 Relaciones
