@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -16,10 +17,10 @@ class UserController extends Controller
         return view('app.administrador.usuarios.listaUsuarios', compact('usuarios'));
     }
 
-     public function create()
+    public function create()
     {
-         $roles = Role::all(); // Trae todos los roles de la tabla roles
-        return view('app.administrador.usuarios.create',compact('roles'));
+        $roles = Role::all(); // Trae todos los roles de la tabla roles
+        return view('app.administrador.usuarios.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -32,25 +33,24 @@ class UserController extends Controller
             'password' => 'required|min:8',
         ]);
 
-       $user = new User();
-$user->name = $request->name;
-$user->email = $request->email;
-$user->estado = $request->estado;
-$user->password = Hash::make($request->password);
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->estado = $request->estado;
+        $user->password = Hash::make($request->password);
 
-if ($request->hasFile('foto')) {
-    $path = $request->file('foto')->store('uploads', 'public');
-    $user->foto = $path;
-}
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('uploads', 'public');
+            $user->foto = $path;
+        }
 
-// 1. Guardar el usuario primero
-$user->save();
+        // 1. Guardar el usuario primero
+        $user->save();
 
-// 2. Asignar roles después de que exista
-if ($request->filled('roles')) {
-    $user->roles()->sync($request->roles);
-
-}
+        // 2. Asignar roles después de que exista
+        if ($request->filled('roles')) {
+            $user->roles()->sync($request->roles);
+        }
 
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente');
@@ -58,8 +58,8 @@ if ($request->filled('roles')) {
 
     public function edit(User $user)
     {
-          $roles = Role::all(); // Trae todos los roles de la tabla roles
-        return view('app.administrador.usuarios.edit', compact('user','roles'));
+        $roles = Role::all(); // Trae todos los roles de la tabla roles
+        return view('app.administrador.usuarios.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
@@ -71,7 +71,7 @@ if ($request->filled('roles')) {
             'estado' => 'required',
         ]);
 
-          $previousEstado = $user->estado; // Guardamos estado anterior
+        $previousEstado = $user->estado; // Guardamos estado anterior
 
         $user->name = $request->name;
         $user->email = $request->email;
@@ -84,21 +84,21 @@ if ($request->filled('roles')) {
         }
 
         if ($request->hasFile('foto')) {
-    // Borrar la foto anterior si existe
-    if ($user->foto && \Storage::disk('public')->exists($user->foto)) {
-        \Storage::disk('public')->delete($user->foto);
-    }
+            // Borrar la foto anterior si existe
+            if ($user->foto && \Storage::disk('public')->exists($user->foto)) {
+                \Storage::disk('public')->delete($user->foto);
+            }
 
-    // Subir nueva
-    $path = $request->file('foto')->store('uploads', 'public');
-    $user->foto = $path;
+            // Subir nueva
+            $path = $request->file('foto')->store('uploads', 'public');
+            $user->foto = $path;
         }
         $user->save();
 
-         // Si cambió de activo a inactivo, eliminar todas sus sesiones
-    if ($previousEstado === 'activo' && $user->estado === 'inactivo') {
-        DB::table('sessions')->where('user_id', $user->id)->delete();
-    }
+        // Si cambió de activo a inactivo, eliminar todas sus sesiones
+        if ($previousEstado === 'activo' && $user->estado === 'inactivo') {
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+        }
 
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente');

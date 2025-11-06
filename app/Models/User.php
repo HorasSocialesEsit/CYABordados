@@ -41,29 +41,29 @@ class User extends Authenticatable
     ];
 
     public function roles()
-{
-    return $this->belongsToMany(Role::class);
-}
-
-public function hasRole($roles)
-{
-    if (is_array($roles)) {
-        return $this->roles()->whereIn('name', $roles)->exists();
+    {
+        return $this->belongsToMany(Role::class);
     }
 
-    return $this->roles()->where('name', $roles)->exists();
-}
+    public function hasRole($roles)
+    {
+        if (is_array($roles)) {
+            return $this->roles()->whereIn('name', $roles)->exists();
+        }
 
-public function hasAnyRole(array $roleNames)
-{
-    return $this->roles->whereIn('name', $roleNames)->isNotEmpty();
-}
-public function isActive()
-{
-    return $this->last_activity && $this->last_activity >= now()->subMinutes(5);
-}
-public function isOnline()
-{
-    return $this->last_activity && Carbon::parse($this->last_activity)->gt(now()->subMinutes(5));
-}
+        return $this->roles()->where('name', $roles)->exists();
+    }
+
+    public function hasAnyRole(array $roleNames)
+    {
+        return $this->roles->whereIn('name', $roleNames)->isNotEmpty();
+    }
+    public function isActive()
+    {
+        return $this->last_activity && $this->last_activity >= now()->subMinutes(5);
+    }
+    public function isOnline()
+    {
+        return $this->last_activity && Carbon::parse($this->last_activity)->gt(now()->subMinutes(5));
+    }
 }

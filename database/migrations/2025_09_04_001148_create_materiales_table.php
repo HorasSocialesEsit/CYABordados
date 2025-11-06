@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('materiales', function (Blueprint $table) {
-              $table->id();
-        $table->string('nombre');
-        $table->string('codigo')->unique(); // Ej: MAT101
-        $table->text('descripcion')->nullable();
-        $table->enum('TipoHilo', ['Poliester', 'Algodon']);
-        $table->timestamps();
+            $table->id();
+            $table->string('nombre');
+            $table->string('codigo')->unique(); // Ej: MAT101
+            $table->text('descripcion')->nullable();
+            $table->integer('stock');
+            $table->enum('tipoHilo', ['Poliester', 'Algodon']);
+            $table->timestamps();
         });
     }
 

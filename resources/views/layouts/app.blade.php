@@ -217,7 +217,7 @@
                         <div id="collapseRuteo" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Inventario de Hilo:</h6>
-                                <a class="collapse-item" href="#">Ver Material</a>
+                                <a class="collapse-item" href="{{ route('inventario.index') }}">Ver Material</a>
                             </div>
                         </div>
                     </li>
