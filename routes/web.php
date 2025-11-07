@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\Componentes;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\OrdenesController;
@@ -70,3 +71,7 @@ Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group
     Route::get('/crear', [ProduccionController::class, 'create'])->name('Produccion.arte.create');
     Route::get('/{id}/editar', [ProduccionController::class, 'edit'])->name('produccion.arte.edit');
 });
+
+
+// rutas libres
+Route::get('/municipios/{id}', [Componentes::class, 'getMunicipiosDepartamento']);

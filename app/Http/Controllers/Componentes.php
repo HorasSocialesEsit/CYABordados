@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Municipios;
 use Illuminate\Http\Request;
 
 class Componentes extends Controller
 {
+    /**
+     * este metodo devuelve la fecha actual
+     * @return string
+     */
     public function fechaActual()
     {
 
@@ -37,5 +42,15 @@ class Componentes extends Controller
         ];
 
         return $dia_semana[date("l")] . " " . $fecha_dia . " de " . $meses_year[$fecha_mes] . " de " . $fecha_year;
+    }
+    /**
+     * este metodo devuelve una lista de los municipios de un departamento
+     * @param mixed $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMunicipiosDepartamento($id)
+    {
+        $municipios = Municipios::where('id_departamento', $id)->get();
+        return response()->json($municipios);
     }
 }
