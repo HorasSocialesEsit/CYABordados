@@ -79,6 +79,7 @@ Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:
     Route::get('/inventario/{id}/edit', [InventarioController::class, 'edit'])->name('inventario.edit');
     Route::put('/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
     Route::delete('inventario/{id}/destroy', [InventarioController::class, 'destroy'])->name('inventario.destroy');
+    Route::get('inventario/reporte', [InventarioController::class, 'reporte'])->name('inventario.reporte');
 });
 
 
