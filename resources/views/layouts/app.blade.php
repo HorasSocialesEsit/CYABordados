@@ -199,6 +199,7 @@
                         <div id="collapseBodega" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Producción:</h6>
+                                <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Ordenes Nuevas</a>
                                 <a class="collapse-item" href="#">Asignar Orden</a>
                                 <a class="collapse-item" href="#">Tiempos Estimados</a>
                                 <a class="collapse-item" href="#">Órdenes en Proceso</a>
