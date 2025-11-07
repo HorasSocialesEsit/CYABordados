@@ -19,21 +19,17 @@ return new class extends Migration
             $table->date('fecha_orden');
             $table->string('codigo_orden')->unique();
             $table->date('fecha_entrega')->nullable();
-            $table->enum('estado', ['pendiente', 'en_proceso', 'completada', 'cancelada'])->default('pendiente');
-            $table->enum('tipo',['venta','compra'])->default('venta');
+            $table->enum('estado', ['nueva', 'en_diseño', 'asignada_maquina', 'en_proceso_maquina', 'completada', 'entregada_cliente', 'cancelada'])->default('nueva');
+            $table->enum('tipo', ['venta'])->default('venta');
 
-              // Totales de la orden
-    $table->decimal('subtotal', 12, 2)->default(0);
-    $table->decimal('impuestos', 12, 2)->default(0);
-    $table->decimal('total', 12, 2)->default(0);
+            // Totales de la orden
+            $table->decimal('PrecioTotal', 12, 2)->default(0);
 
-     // Control y trazabilidad
-    $table->unsignedBigInteger('usuario_id')->nullable(); // quién registró la orden
-    $table->foreign('usuario_id')->references('id')->on('users')->onDelete('set null');
+            // Control y trazabilidad
+            $table->unsignedBigInteger('usuario_id')->nullable(); // quién registró la orden
+            $table->foreign('usuario_id')->references('id')->on('users')->onDelete('set null');
 
-    $table->text('notas')->nullable(); // notas generales del pedido
-
-        $table->timestamps();
+            $table->timestamps();
         });
     }
 

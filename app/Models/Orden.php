@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class orden extends Model
+class Orden extends Model
 {
     use HasFactory;
-protected $table = 'ordenes';
+
+    protected $table = 'ordenes';
+
     protected $fillable = [
         'cliente_id',
         'fecha_orden',
@@ -16,19 +18,21 @@ protected $table = 'ordenes';
         'fecha_entrega',
         'estado',
         'tipo',
-        'subtotal',
-        'impuestos',
-        'total',
+        'PrecioTotal',
+
         'usuario_id',
-        'notas',
+
+    ];
+
+    protected $casts = [
+        'fecha_orden' => 'datetime',
+        'fecha_entrega' => 'date',
     ];
 
     protected $attributes = [
-        'estado' => 'pendiente',
+        'estado' => 'nueva',
         'tipo' => 'venta',
     ];
-
-
 
     /**
      * 🔹 Relaciones
@@ -75,9 +79,22 @@ protected $table = 'ordenes';
             return $detalle->cantidad * $detalle->precio_unitario;
         });
 
-        $this->subtotal = $subtotal;
-        $this->impuestos = $subtotal * 0.13; // IVA 13%
-        $this->total = $this->subtotal + $this->impuestos;
+        $this->precioTotal = $subtotal;
+        //   $this->impuestos = $subtotal * 0.13; // IVA 13%
+        // $this->total = $this->subtotal;
         $this->save();
+    }
+
+    public function pagos()
+    {
+        return $this->hasMany(OrdenPago::class, 'orden_id');
+    }
+
+    // 🔹 Accesor dinámico para saldo pendiente
+    public function getSaldoPendienteAttribute()
+    {
+        $pagado = $this->pagos->sum('monto');
+
+        return $this->total - $pagado;
     }
 }

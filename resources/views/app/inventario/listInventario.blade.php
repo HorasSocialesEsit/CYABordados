@@ -92,7 +92,7 @@
 @section('scripts')
     <script>
         // DataTables
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#dataTable').DataTable({
                 "pageLength": 6,
                 "lengthMenu": [5, 10, 25, 50],
@@ -103,9 +103,9 @@
         });
 
         // SweetAlert2 - Confirmación de eliminación
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.delete-material-form').forEach(form => {
-                form.addEventListener('submit', function (e) {
+                form.addEventListener('submit', function(e) {
                     e.preventDefault();
                     Swal.fire({
                         title: '¿Estás seguro?',

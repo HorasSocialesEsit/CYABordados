@@ -12,8 +12,8 @@
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body text-center">
-                        <a href="{{ route('alumnos.index') }}">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ordenes</div>
+                        <a href="#">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ordenes Activas</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalAlumnos }}</div>
 
                             <i class="fa-solid fa-users fa-2x mt-2" style="color: #63E6BE;"></i>
@@ -26,12 +26,13 @@
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body text-center">
-                        <a href="{{ route('alumnos.porMateria') }}">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">rr
+                        <a href="#">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ordenes Completadas
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalMatriculas }}</div>
 
-                            <i class="fa-regular fa-id-card fa-2xl mt-2" style="color: #63E6BE;"></i>
+
+                            <i class="fa-solid fa-clipboard-check fa-2xl mt-2" style="color: #10e922;"></i>
                         </a>
 
                     </div>
@@ -42,9 +43,10 @@
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body text-center">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Atrazado</div>
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Ordenes Atrazadas</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                        <i class="fa-solid fa-people-pulling fa-2xl mt-2" style="color: #f7d308;"></i>
+
+                        <i class="fa-solid fa-hand fa-2xl mt-2" style="color: #f73808;"></i>
                     </div>
                 </div>
             </div>
@@ -53,21 +55,40 @@
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-warning shadow h-100 py-2">
                     <div class="card-body text-center">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Dinero Recibido</div>
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Ventas</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                        <i class="fa-solid fa-face-sad-cry fa-2xl mt-2" style="color: #f70202;"></i>
+
+                        <i class="fa-solid fa-money-check-dollar fa-2xl mt-2" style="color: #44a854;"></i>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Gráfico: Produccion Diaria -->
-    <div class="container py-4">
-        <h2 class="text-center mb-4">Alumnos por Materia</h2>
-        <div style="width:100%; max-width:800px; margin: 0 auto;">
-            <canvas id="alumnosChart"></canvas>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body text-center">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Maquinas Operando</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+
+                    <i class="fa-solid fa-plug-circle-check fa-2xl mt-2" style="color: #4302f7;"></i>
+                </div>
+            </div>
         </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body text-center">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Materiales Bajos</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+
+
+                    <i class="fa-solid fa-triangle-exclamation fa-2xl mt-2" style="color: #f76402;"></i>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

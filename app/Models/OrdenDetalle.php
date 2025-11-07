@@ -40,14 +40,6 @@ class OrdenDetalle extends Model
         return $this->hasMany(OrdenDetalleImagen::class);
     }
 
-    // Si el detalle usa materiales (por ejemplo tipo de hilo)
-    public function materiales()
-    {
-        return $this->belongsToMany(Material::class, 'detalle_materiales')
-                    ->withPivot('cantidad_usada')
-                    ->withTimestamps();
-    }
-
     /**
      * 🔹 Métodos auxiliares
      */
@@ -63,5 +55,10 @@ class OrdenDetalle extends Model
     public function getDescripcionCortaAttribute()
     {
         return "{$this->nombre_arte} - {$this->color_hilo} ({$this->cantidad}x)";
+    }
+
+    public function hilos()
+    {
+        return $this->hasMany(DetalleHilo::class, 'orden_detalle_id');
     }
 }

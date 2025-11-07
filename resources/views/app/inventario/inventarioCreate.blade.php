@@ -8,7 +8,7 @@
             <h4>Nuevo Hilo</h4>
         </div>
         <div class="card-body">
-            @include('app.administrador.inventario.formInventario')
+            @include('app.inventario.formInventario')
         </div>
     </div>
 @endsection

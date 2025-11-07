@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Recepcion;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Cliente;
+use App\Models\Material;
+use App\Models\Orden;
 use Illuminate\Http\Request;
-use App\Models\Materia;
-class RecepcionController extends Controller
+
+class ProduccionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,8 +15,9 @@ class RecepcionController extends Controller
     public function index()
     {
         //
-       $materias = Materia::all();
-        return view('app.recepcion.index',compact('materias'));
+        $ordenes = Orden::where('estado', 'nueva')->get(); // Estado '1' para nuevas ordenes
+
+        return view('app.produccion.arte.OrdenesNuevas', compact('ordenes'));
     }
 
     /**
@@ -23,15 +26,21 @@ class RecepcionController extends Controller
     public function create()
     {
         //
+
+        $clientes = Cliente::where('estado', 'Activo')->get();
+        $hilos = Material::all();
+
+        return view('app.produccion.arte.ProcesarOrdenArte', compact('clientes', 'hilos'));
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-public function store(Request $request)
-{
-
-}
+    public function store(Request $request)
+    {
+        //
+    }
 
     /**
      * Display the specified resource.
@@ -47,6 +56,10 @@ public function store(Request $request)
     public function edit(string $id)
     {
         //
+        $orden = Orden::with('detalles')->findOrFail($id);
+        $clientes = Cliente::where('estado', 'Activo')->get();
+
+        return view('app.produccion.arte.ProcesarOrdenArte', compact('orden', 'clientes'));
     }
 
     /**
@@ -64,7 +77,4 @@ public function store(Request $request)
     {
         //
     }
-
-
-
- }
+}

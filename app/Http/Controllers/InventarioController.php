@@ -15,7 +15,8 @@ class InventarioController extends Controller
     public function index()
     {
         $inventario = Material::all();
-        return view('app.administrador.inventario.listInventario', compact('inventario'));
+
+        return view('app.inventario.listInventario', compact('inventario'));
     }
 
     /**
@@ -24,7 +25,8 @@ class InventarioController extends Controller
     public function create()
     {
         $tiposHilo = ['Algodon', 'Poliester'];
-        return view('app.administrador.inventario.inventarioCreate', compact('tiposHilo'));
+
+        return view('app.inventario.inventarioCreate', compact('tiposHilo'));
     }
 
     /**
@@ -58,6 +60,7 @@ class InventarioController extends Controller
             'stock.min' => 'El stock debe ser al menos 1 unidad.',
         ]);
         Material::create($validated);
+
         return redirect()->route('inventario.index')->with('success', 'Hilo agregado correctamente.');
     }
 
@@ -76,7 +79,8 @@ class InventarioController extends Controller
     {
         $tiposHilo = ['Algodon', 'Poliester'];
         $hilo = Material::findOrFail($id);
-        return view('app.administrador.inventario.inventarioEdit', compact('tiposHilo', 'hilo'));
+
+        return view('app.inventario.inventarioEdit', compact('tiposHilo', 'hilo'));
     }
 
     /**
@@ -115,14 +119,13 @@ class InventarioController extends Controller
 
             'stock.required' => 'Debe especificar el stock del material.',
             'stock.integer' => 'El stock debe ser un número entero.',
-            'stock.min' =>  'El stock debe ser al menos 1 unidad.',
+            'stock.min' => 'El stock debe ser al menos 1 unidad.',
         ]);
 
         $material->update($validated);
 
         return redirect()->route('inventario.index')->with('success', 'Hilo actualizado correctamente.');
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -134,6 +137,7 @@ class InventarioController extends Controller
 
             $material = Material::findOrFail($id);
             $material->delete();
+
             return redirect()->route('inventario.index')->with('success', 'Hilo Eliminado correctamente.');
         } catch (\Exception $e) {
             return redirect()->route('inventario.index')->with('error', 'Error al eliminar hilo ');

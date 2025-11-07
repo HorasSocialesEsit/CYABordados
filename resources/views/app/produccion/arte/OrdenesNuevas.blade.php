@@ -1,45 +1,44 @@
 @extends('layouts.app')
 
-@section('title', 'Edunotas Alumnos')
+@section('title', 'Producción - Ordenes Nuevas')
 
 @section('contenido')
     <div class="container-fluid">
 
-        <h1 class="h3 mb-2 text-gray-800">Administración de Alumnos</h1>
+        <h1 class="h3 mb-2 text-gray-800">Ordenes pendiente de Diseños</h1>
 
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Detalle de Alumnos</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Ordenes Para Diseños</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
                         <thead class="table-light">
                             <tr>
-                                <th>Carnet</th>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Nombre Responsable</th>
-                                <th>Teléfono Responsable</th>
+                                <th>Orden</th>
+                                <th>Estado</th>
+                                <th>Fecha de Entrega</th>
+                                <th>Entregar</th>
+                                <th>Arte</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($alumnos as $alumno)
+                            @foreach ($ordenes as $orden)
                                 <tr>
-                                    <td>{{ $alumno->carnet }}</td>
-                                    <td>{{ $alumno->nombre }}</td>
-                                    <td>{{ $alumno->correo }}</td>
-                                    <td>{{ $alumno->nombre_responsable }}</td>
-                                    <td>{{ $alumno->telefono_responsable }}</td>
-                                    <td>
-                                        <a class="btn btn-success"
-                                            href="{{ route('alumnos.agregarMateria', $alumno->carnet) }}">Agregar
-                                            materia</a>
-                                        <a class="btn btn-secondary"
-                                            href="{{ route('alumnos.edit', $alumno->carnet) }}">Editar</a>
-                                    </td>
+                                    <td>{{ $orden->codigo_orden }}</td>
+                                    <td>{{ $orden->estado }}</td>
 
+                                    <td>{{ $orden->fecha_entrega->format('d/m/Y') }}</td>
+                                    <td>{{ today()->diffInDays($orden->fecha_entrega, false) . '  Dias' }}</td>
+                                    <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
+
+                                    <td>
+
+                                        <a href="{{ route('produccion.arte.edit', $orden->id) }}"
+                                            class="btn btn-warning btn-sm">Procesar Diseño</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
