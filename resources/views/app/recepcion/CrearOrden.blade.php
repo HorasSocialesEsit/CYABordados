@@ -84,7 +84,7 @@
                             <div class="col-md-3">
                                 <label class="form-label">Tamaño de Cuello</label>
                                 <select name="detalles[0][tamaño_cuello]" class="form-select">
-                                    <option value="">-- Seleccione --</option>
+                                    <option value="">-- no aplica --</option>
                                     <option value="12">12</option>
                                     <option value="14">14</option>
                                     <option value="16">16</option>
@@ -170,8 +170,8 @@
                         <div class="card-body row g-3">
                             <div class="col-md-4">
                                 <label class="form-label">Monto Pagado</label>
-                                <input type="number" step="0.01" class="form-control" name="pago[monto]"
-                                    placeholder="0.00">
+                                <input onchange="RecalcularTotal()" type="number" step="0.01" class="form-control"
+                                    id="montoPagado" name="pago[monto]" placeholder="0.00">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Tipo de Pago</label>
@@ -182,9 +182,9 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Método</label>
-                                <input type="text" class="form-control" name="pago[metodo]"
-                                    placeholder="Efectivo / Transferencia">
+                                <label class="form-label">Saldo Pendiente</label>
+                                <input type="number" class="form-control" id="saldoPendiente" name="saldoPendiente"
+                                    placeholder="0.00">
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label">Nota</label>
@@ -210,20 +210,23 @@
     JAVASCRIPT
 =========================== --}}
     <script>
-        // Mostrar formulario de nuevo cliente
-        function mostrarNuevoCliente() {
-            const form = document.getElementById('nuevoClienteForm');
-            form.style.display = form.style.display === 'none' ? 'block' : 'none';
-        }
-
         // Calcular total automáticamente
-        document.getElementById('cantidad').addEventListener('input', calcularTotal);
-        document.getElementById('precio_unitario').addEventListener('input', calcularTotal);
+        document.getElementById('cantidad').addEventListener('input', actualizarTotales);
+        document.getElementById('precio_unitario').addEventListener('input', actualizarTotales);
+        document.getElementById('montoPagado').addEventListener('input', actualizarTotales);
 
-        function calcularTotal() {
+
+
+        function actualizarTotales() {
             const cantidad = parseFloat(document.getElementById('cantidad').value) || 0;
             const precio = parseFloat(document.getElementById('precio_unitario').value) || 0;
-            document.getElementById('precio_total').value = (cantidad * precio).toFixed(2);
+            const montoPagado = parseFloat(document.getElementById('montoPagado').value) || 0;
+
+            const precioTotal = cantidad * precio;
+            const saldoPendiente = precioTotal - montoPagado;
+
+            document.getElementById('precio_total').value = precioTotal.toFixed(2);
+            document.getElementById('saldoPendiente').value = saldoPendiente.toFixed(2);
         }
 
         // Agregar hilos a la tabla

@@ -59,8 +59,9 @@ class OrdenesController extends Controller
                 'fecha_orden' => now(),
                 'codigo_orden' => $codigo,
                 'fecha_entrega' => $request->fecha_entrega,
+
                 'usuario_id' => Auth::id(),
-                'notas' => $request->notas,
+
             ]);
 
             // Guardar detalles
@@ -80,6 +81,25 @@ class OrdenesController extends Controller
 
             // Calcular totales
             $orden->actualizarTotales();
+
+            // Guardar pago inicial si existe
+            if ($request->filled('pago.monto') && $request->pago['monto'] > 0) {
+                $montoPagado = $request->pago['monto'];
+                $tipoPago = $request->pago['tipo'] ?? 'anticipo';
+                $notaPago = $request->pago['nota'] ?? null;
+
+                // Calcular total de la orden
+                $totalOrden = $orden->detalles->sum('total');
+                $saldoRestante = $totalOrden - $montoPagado;
+
+                $orden->pagos()->create([
+                    'monto' => $montoPagado,
+                    'tipo' => $tipoPago,
+                    'nota' => $notaPago,
+                    'saldo_restante' => $saldoRestante,
+                    'usuario_id' => Auth::id(),
+                ]);
+            }
 
             DB::commit();
 
