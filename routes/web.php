@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\OrdenesController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\ProduccionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -61,4 +62,10 @@ Route::prefix('clientes')->middleware(['auth', 'active', 'role:admin'])->group(f
     Route::get('/{id}/editar', [ClienteController::class, 'edit'])->name('clientes.edit');
     Route::put('/{id}', [ClienteController::class, 'update'])->name('clientes.update');
     Route::delete('/{id}', [ClienteController::class, 'destroy'])->name('clientes.destroy');
+});
+
+Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group(function () {
+    Route::get('/', [ProduccionController::class, 'index'])->name('produccion.arte.index');
+    Route::get('/crear', [ProduccionController::class, 'create'])->name('Produccion.arte.create');
+    Route::get('/{id}/editar', [ProduccionController::class, 'edit'])->name('produccion.arte.edit');
 });
