@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Material;
 use App\Models\Orden;
+use App\Models\OrdenDetalle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -59,24 +60,32 @@ class OrdenesController extends Controller
                 'fecha_orden' => now(),
                 'codigo_orden' => $codigo,
                 'fecha_entrega' => $request->fecha_entrega,
-
                 'usuario_id' => Auth::id(),
-
             ]);
 
             // Guardar detalles
-            foreach ($request->detalles as $detalle) {
-                $orden->detalles()->create([
-                    'nombre_arte' => $detalle['nombre_arte'],
-                    'tamaño_diseño' => $detalle['tamaño_diseño'] ?? null,
-                    'color_hilo' => $detalle['color_hilo'] ?? null,
-                    'ubicacion_prenda' => $detalle['ubicacion_prenda'] ?? null,
-                    'tamaño_cuello' => $detalle['tamaño_cuello'] ?? null,
-                    'cantidad' => $detalle['cantidad'],
-                    'precio_unitario' => $detalle['precio_unitario'],
-                    'total' => $detalle['cantidad'] * $detalle['precio_unitario'],
-                    'notas' => $detalle['notas'] ?? null,
+            foreach ($request->detalles as $detalleData) {
+                $detalle = $orden->detalles()->create([
+                    'nombre_arte' => $detalleData['nombre_arte'],
+                    'tamaño_diseño' => $detalleData['tamaño_diseño'] ?? null,
+                    'color_hilo' => $detalleData['color_hilo'] ?? null,
+                    'ubicacion_prenda' => $detalleData['ubicacion_prenda'] ?? null,
+                    'tamaño_cuello' => $detalleData['tamaño_cuello'] ?? null,
+                    'cantidad' => $detalleData['cantidad'],
+                    'precio_unitario' => $detalleData['precio_unitario'],
+                    'total' => $detalleData['cantidad'] * $detalleData['precio_unitario'],
+                    'notas' => $detalleData['notas'] ?? null,
                 ]);
+
+                // 🔹 Guardar los hilos asociados a este detalle (si vienen en el request)
+                if (! empty($request->hilos)) {
+                    foreach ($request->hilos as $materialId) {
+                        $detalle->hilos()->create([
+                            'material_id' => $materialId,
+                            'cantidad' => 1,
+                        ]);
+                    }
+                }
             }
 
             // Calcular totales
@@ -88,7 +97,6 @@ class OrdenesController extends Controller
                 $tipoPago = $request->pago['tipo'] ?? 'anticipo';
                 $notaPago = $request->pago['nota'] ?? null;
 
-                // Calcular total de la orden
                 $totalOrden = $orden->detalles->sum('total');
                 $saldoRestante = $totalOrden - $montoPagado;
 
@@ -150,8 +158,31 @@ class OrdenesController extends Controller
         $orden->update([
             'cliente_id' => $request->cliente_id,
             'fecha_entrega' => $request->fecha_entrega,
-            'notas' => $request->notas,
+            'PrecioTotal' => $request->input('pago.saldo_restante'),
+
         ]);
+        $detalleData = $request->detalles[0];
+        $ordenDetalle = OrdenDetalle::where('orden_id', $id)->first();
+        $ordenDetalle->update([
+            'nombre_arte' => $detalleData['nombre_arte'] ?? null,
+            'tamaño_diseño' => $detalleData['tamaño_diseño'] ?? null,
+            'ubicacion_prenda' => $detalleData['ubicacion_prenda'] ?? null,
+            'tamaño_cuello' => $detalleData['tamaño_cuello'] ?? null,
+            'cantidad' => $detalleData['cantidad'] ?? 1,
+            'precio_unitario' => $detalleData['precio_unitario'] ?? 0,
+            'total' => ($detalleData['cantidad'] ?? 1) * ($detalleData['precio_unitario'] ?? 0),
+            'notas' => $detalleData['notas'] ?? null,
+        ]);
+
+        $OrdenPago = $orden->pagos()->where('orden_id', $id)->first();
+        if ($OrdenPago) {
+            $OrdenPago->update([
+                'monto' => $request->input('pago.monto'),
+                'tipo' => $request->input('pago.tipo'),
+                'nota' => $request->input('pago.nota'),
+                'saldo_restante' => $request->input('pago.saldo_restante'),
+            ]);
+        }
 
         return redirect()
             ->route('ordenes.index')
