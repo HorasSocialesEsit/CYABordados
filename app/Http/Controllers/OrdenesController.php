@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Material;
 use App\Models\Orden;
 use App\Models\OrdenDetalle;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +53,7 @@ class OrdenesController extends Controller
 
         try {
             // Generar código único para la orden
-            $codigo = 'ORD-'.strtoupper(Str::random(6));
+            $codigo = 'ORD-' . strtoupper(Str::random(6));
 
             // Crear orden principal
             $orden = Orden::create([
@@ -114,11 +115,10 @@ class OrdenesController extends Controller
             return redirect()
                 ->route('ordenes.index')
                 ->with('success', 'Orden creada correctamente.');
-
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            return back()->with('error', 'Error al crear la orden: '.$e->getMessage());
+            return back()->with('error', 'Error al crear la orden: ' . $e->getMessage());
         }
     }
 
@@ -200,5 +200,19 @@ class OrdenesController extends Controller
         return redirect()
             ->route('ordenes.index')
             ->with('success', 'Orden eliminada correctamente.');
+    }
+
+    public function reporteOrden($id)
+    {
+        $orden_buscada = Orden::with([
+            'cliente',
+            'usuario',
+            'detalles.hilos.material',
+            'pagos'
+        ])->findOrFail($id);
+        $fecha = (new Componentes())->fechaActual();
+        $pdf = PDF::loadView('app.reportes.ordenes.reporteOrden', compact('orden_buscada', 'fecha'));
+        $pdf->setPaper('letter');
+        return $pdf->stream('Reporte de orden.pdf');
     }
 }

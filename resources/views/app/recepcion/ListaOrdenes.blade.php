@@ -39,6 +39,8 @@
 
                                         <a href="{{ route('ordenes.edit', $orden->id) }}"
                                             class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{{ route('ordenes.reporteOrden', $orden->id) }}" target="_blank"
+                                            class="btn btn-warning btn-sm">Reporte</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -53,7 +55,7 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Inicializar DataTables
             $('#dataTable').DataTable({
                 "pageLength": 10,
@@ -65,7 +67,7 @@
         });
 
         // Mensajes SweetAlert2
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -83,6 +85,6 @@
                     text: '{{ session('error') }}'
                 });
             @endif
-        });
+            });
     </script>
 @endsection

@@ -30,6 +30,7 @@ Route::prefix('recepcion')->middleware(['auth', 'active', 'role:recepcion,admin'
     Route::get('/ordenes/{id}/editar', [OrdenesController::class, 'edit'])->name('ordenes.edit');
     Route::put('/ordenes/{id}', [OrdenesController::class, 'update'])->name('ordenes.update');
     Route::delete('/ordenes{id}', [OrdenesController::class, 'destroy'])->name('ordenes.destroy');
+    Route::get('/ordenes/{id}/reporte', [OrdenesController::class, 'reporteOrden'])->name('ordenes.reporteOrden');
 });
 
 // ////// administracion usuarios   ///////////
