@@ -18,11 +18,15 @@ class Orden extends Model
         'fecha_entrega',
         'estado',
         'tipo',
-        'subtotal',
-        'impuestos',
-        'total',
+        'PrecioTotal',
+
         'usuario_id',
 
+    ];
+
+    protected $casts = [
+        'fecha_orden' => 'datetime',
+        'fecha_entrega' => 'date',
     ];
 
     protected $attributes = [

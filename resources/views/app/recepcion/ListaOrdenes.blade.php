@@ -5,27 +5,43 @@
 @section('contenido')
     <div class="container-fluid">
 
-        <h1 class="h3 mb-2 text-gray-800">Administración de Alumnos</h1>
+        <h1 class="h3 mb-2 text-gray-800">Administración de Ordenes</h1>
 
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Detalle de Alumnos</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Detalle de Ordenes</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
                         <thead class="table-light">
                             <tr>
-                                <th>Carnet</th>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Nombre Responsable</th>
-                                <th>Teléfono Responsable</th>
+                                <th>Orden</th>
+                                <th>Estado</th>
+                                <th>Precio</th>
+                                <th>Fecha de Entrega</th>
+                                <th>Entregar</th>
+                                <th>Arte</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($ordenes as $orden)
+                                <tr>
+                                    <td>{{ $orden->codigo_orden }}</td>
+                                    <td>{{ $orden->estado }}</td>
+                                    <td>${{ number_format($orden->PrecioTotal, 2) }}</td>
+                                    <td>{{ $orden->fecha_entrega->format('d/m/Y') }}</td>
+                                    <td>{{ today()->diffInDays($orden->fecha_entrega, false) . '  Dias' }}</td>
+                                    <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
 
+                                    <td>
+
+                                        <a href="{{ route('ordenes.edit', $orden->id) }}"
+                                            class="btn btn-warning btn-sm">Editar</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

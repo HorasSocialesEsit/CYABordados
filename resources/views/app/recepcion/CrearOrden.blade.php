@@ -237,12 +237,17 @@
 
             const tabla = document.querySelector('#tablaHilos tbody');
             const row = document.createElement('tr');
+
             row.innerHTML = `
-            <td>${hilo.text.split(' - ')[0]}</td>
-            <td>${hilo.dataset.nombre}</td>
-            <td>${hilo.dataset.stock}</td>
-            <td><button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove()">Eliminar</button></td>
-        `;
+        <td>${hilo.text.split(' - ')[0]}</td>
+        <td>${hilo.dataset.nombre}</td>
+        <td>${hilo.dataset.stock}</td>
+        <td>
+            <input type="hidden" name="hilos[]" value="${hilo.value}">
+            <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove()">Eliminar</button>
+        </td>
+    `;
+
             tabla.appendChild(row);
             select.value = '';
         });
