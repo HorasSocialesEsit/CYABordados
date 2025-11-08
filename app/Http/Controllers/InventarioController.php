@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Material;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -141,5 +142,16 @@ class InventarioController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('inventario.index')->with('error', 'Error al eliminar hilo ');
         }
+    }
+
+    public function reporte()
+    {
+        $inventario = Material::orderBy('stock', 'asc')->orderBy('nombre', 'asc')->get();
+        $fecha = (new Componentes())->fechaActual();
+        $nombre_persona = "Pedro Perez";
+
+        $pdf = PDF::loadView('app.reportes.inventario.inventarioHilos', compact('fecha', 'inventario', 'nombre_persona'));
+        $pdf->setPaper('letter');
+        return $pdf->stream('Inventario Hilos.pdf');
     }
 }

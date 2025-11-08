@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use App\Models\Role;
 
 class AdminUserSeeder extends Seeder
 {
@@ -29,5 +29,6 @@ class AdminUserSeeder extends Seeder
 
         // Asignar rol al usuario
         $user->roles()->syncWithoutDetaching([$adminRole->id]);
+
     }
 }

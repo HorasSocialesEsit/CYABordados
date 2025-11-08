@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\Componentes;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\OrdenesController;
@@ -29,6 +30,7 @@ Route::prefix('recepcion')->middleware(['auth', 'active', 'role:recepcion,admin'
     Route::get('/ordenes/{id}/editar', [OrdenesController::class, 'edit'])->name('ordenes.edit');
     Route::put('/ordenes/{id}', [OrdenesController::class, 'update'])->name('ordenes.update');
     Route::delete('/ordenes{id}', [OrdenesController::class, 'destroy'])->name('ordenes.destroy');
+    Route::get('/ordenes/{id}/reporte', [OrdenesController::class, 'reporteOrden'])->name('ordenes.reporteOrden');
 });
 
 // ////// administracion usuarios   ///////////
@@ -44,6 +46,7 @@ Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:
     Route::get('/inventario/{id}/edit', [InventarioController::class, 'edit'])->name('inventario.edit');
     Route::put('/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
     Route::delete('inventario/{id}/destroy', [InventarioController::class, 'destroy'])->name('inventario.destroy');
+    Route::get('inventario/reporte', [InventarioController::class, 'reporte'])->name('inventario.reporte');
 });
 
 Route::middleware(['auth', 'active', 'role:admin'])->group(function () {
@@ -69,3 +72,7 @@ Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group
     Route::get('/crear', [ProduccionController::class, 'create'])->name('Produccion.arte.create');
     Route::get('/{id}/editar', [ProduccionController::class, 'edit'])->name('produccion.arte.edit');
 });
+
+
+// rutas libres
+Route::get('/municipios/{id}', [Componentes::class, 'getMunicipiosDepartamento']);

@@ -11,9 +11,14 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary">Usuarios</h6>
-                <a href="{{ route('inventario.create') }}" class="btn btn-success">
-                    <i class="fa-solid fa-material-plus"></i> Nuevo Hilo
-                </a>
+                <div class="card-header py-3 d-flex justify-content-between align-items-center" style="gap: .3rem;">
+                    <a href="{{ route('inventario.create') }}" class="btn btn-success">
+                        <i class="fa-solid fa-material-plus"></i> Nuevo Hilo
+                    </a>
+                    <a href="{{ route('inventario.reporte') }}" class="btn btn-success" target="_blank">
+                        <i class="fa-solid fa-material-plus"></i> Reporte
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
