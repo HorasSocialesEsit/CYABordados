@@ -28,6 +28,9 @@ cd CYABordados
 
 # 3️⃣ Instalar dependencias de Laravel
 composer install
+composer require barryvdh/laravel-dompdf
+
+
 
 # 4️⃣ Copiar archivo de entorno
 cp .env.example .env

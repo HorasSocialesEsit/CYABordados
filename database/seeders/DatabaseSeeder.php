@@ -37,7 +37,6 @@ class DatabaseSeeder extends Seeder
             ['nombre_departamento' => 'La Unión'],
         ]);
 
-
         Municipios::insert([
             ['nombre_municipio' => 'Ahuachapán', 'id_departamento' => 1],
             ['nombre_municipio' => 'San Pedro Puxtla', 'id_departamento' => 1],
@@ -300,7 +299,7 @@ class DatabaseSeeder extends Seeder
             ['nombre_municipio' => 'El Sauce', 'id_departamento' => '14'],
             ['nombre_municipio' => 'Concepción de Oriente', 'id_departamento' => '14'],
             ['nombre_municipio' => 'Polorós', 'id_departamento' => '14'],
-            ['nombre_municipio' => 'Lislique', 'id_departamento' => '14']
+            ['nombre_municipio' => 'Lislique', 'id_departamento' => '14'],
         ]);
     }
 }
