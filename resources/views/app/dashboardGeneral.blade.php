@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Edunotas Dashboard')
+@section('title', 'CYABordados Dashboard')
 @section('contenido')
     <div class="container py-5">
         <!-- Page Heading -->
@@ -13,8 +13,8 @@
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body text-center">
                         <a href="#">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ordenes Activas</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalAlumnos }}</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ordenes Nuevas</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $ordenesNuevas }}</div>
 
                             <i class="fa-solid fa-users fa-2x mt-2" style="color: #63E6BE;"></i>
                         </a>
@@ -29,7 +29,7 @@
                         <a href="#">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ordenes Completadas
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalMatriculas }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $ordenesCompletadas }}</div>
 
 
                             <i class="fa-solid fa-clipboard-check fa-2xl mt-2" style="color: #10e922;"></i>
@@ -44,7 +44,7 @@
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body text-center">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Ordenes Atrazadas</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $ordenesAtrazadas }}</div>
 
                         <i class="fa-solid fa-hand fa-2xl mt-2" style="color: #f73808;"></i>
                     </div>
