@@ -203,7 +203,7 @@
                                 <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Ordenes Nuevas</a>
                                 <a class="collapse-item" href="#">Asignar Orden</a>
                                 <a class="collapse-item" href="#">Tiempos Estimados</a>
-                                <a class="collapse-item" href="#">Órdenes en Proceso</a>
+                                <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Orden en Proceso</a>
                             </div>
                         </div>
                     </li>

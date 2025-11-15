@@ -6,6 +6,7 @@ use App\Http\Controllers\Componentes;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\OrdenesController;
+use App\Http\Controllers\OrdenProduccionController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProduccionController;
 use App\Http\Controllers\UserController;
@@ -72,6 +73,17 @@ Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group
     Route::get('/', [ProduccionController::class, 'index'])->name('produccion.arte.index');
     Route::get('/crear', [ProduccionController::class, 'create'])->name('Produccion.arte.create');
     Route::get('/{id}/editar', [ProduccionController::class, 'edit'])->name('produccion.arte.edit');
+    
+   
+
+});
+Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin'])->group(function () {
+    // rutas de menu orden en proceso
+    Route::get('/', [OrdenProduccionController::class, 'index'])->name('ordenProceso.index');
+    Route::put('/ordenProceso/{id}/inicio/{estado}', [OrdenProduccionController::class, 'iniciarProceso'])->name('ordenProceso.inicio');
+    Route::get('/ordenProceso/{id}/edit', [OrdenProduccionController::class, 'edit'])->name('ordenProceso.edit');
+    Route::put('/ordenProceso/{id}/update', [OrdenProduccionController::class, 'update'])->name('ordenProceso.update');
+
 });
 
 
