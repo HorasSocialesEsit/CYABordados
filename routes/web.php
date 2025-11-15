@@ -5,6 +5,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\Componentes;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\MaquinasController;
 use App\Http\Controllers\OrdenesController;
 use App\Http\Controllers\OrdenProduccionController;
 use App\Http\Controllers\PerfilController;
@@ -73,9 +74,6 @@ Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group
     Route::get('/', [ProduccionController::class, 'index'])->name('produccion.arte.index');
     Route::get('/crear', [ProduccionController::class, 'create'])->name('Produccion.arte.create');
     Route::get('/{id}/editar', [ProduccionController::class, 'edit'])->name('produccion.arte.edit');
-    
-   
-
 });
 Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin'])->group(function () {
     // rutas de menu orden en proceso
@@ -83,8 +81,17 @@ Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin'])->gro
     Route::put('/ordenProceso/{id}/inicio/{estado}', [OrdenProduccionController::class, 'iniciarProceso'])->name('ordenProceso.inicio');
     Route::get('/ordenProceso/{id}/edit', [OrdenProduccionController::class, 'edit'])->name('ordenProceso.edit');
     Route::put('/ordenProceso/{id}/update', [OrdenProduccionController::class, 'update'])->name('ordenProceso.update');
-
 });
+Route::prefix('maquinas')->middleware(['auth', 'active', 'role:admin'])->group(function () {
+    Route::get('/', [MaquinasController::class, 'index'])->name('maquinas.index');
+    Route::get('/create', [MaquinasController::class, 'create'])->name('maquinas.create');
+    Route::post('/', [MaquinasController::class, 'store'])->name('maquinas.store');
+    Route::get('/{id}', [MaquinasController::class, 'show'])->name('maquinas.show');
+    Route::get('/{id}/edit', [MaquinasController::class, 'edit'])->name('maquinas.edit');
+    Route::put('/{id}', [MaquinasController::class, 'update'])->name('maquinas.update');
+    Route::delete('/{id}', [MaquinasController::class, 'destroy'])->name('maquinas.destroy');
+});
+
 
 
 // rutas libres

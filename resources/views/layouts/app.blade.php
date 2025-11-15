@@ -237,6 +237,7 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Configuraciones:</h6>
                                 <a class="collapse-item" href="{{ route('clientes.index') }}">Clientes</a>
+                                <a class="collapse-item" href="{{ route('maquinas.index') }}">Maquinas</a>
                                 <a class="collapse-item" href="#">Materias</a>
                                 <a class="collapse-item" href="#">Medidas</a>
                                 <a class="collapse-item" href="#">Código de Hilos</a>
