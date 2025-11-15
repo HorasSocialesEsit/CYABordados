@@ -21,3 +21,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+
+resources/views/app/reportes/ordenes/reporteOrdenDisehnoV1.blade.php

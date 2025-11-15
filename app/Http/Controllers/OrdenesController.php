@@ -215,4 +215,34 @@ class OrdenesController extends Controller
         $pdf->setPaper('letter');
         return $pdf->stream('Reporte de orden.pdf');
     }
+    public function reporteOrdenDisehno($id)
+    {
+        $orden_buscada = Orden::with([
+            'detalles'
+        ])->findOrFail($id);
+
+        $detalle = $orden_buscada->detalles->first();
+        $data = [
+            'id'             => $orden_buscada->id,
+            'codigo_orden'   => $orden_buscada->codigo_orden,
+            'estado'         => $orden_buscada->estado,
+            'tipo'           => $orden_buscada->tipo,
+            'precioTotal'    => $orden_buscada->PrecioTotal,
+
+            'nombre_arte'    => $detalle->nombre_arte,
+            'tamano_diseno'  => $detalle->tamaño_diseño,
+            'color_hilo'     => $detalle->color_hilo,
+            'ubicacion_prenda' => $detalle->ubicacion_prenda,
+            'tamano_cuello'  => $detalle->tamaño_cuello,
+            'cantidad'       => $detalle->cantidad,
+            'precio_unitario' => $detalle->precio_unitario,
+            'total'          => $detalle->total,
+            'notas'          => $detalle->notas
+        ];
+
+        $fecha = (new Componentes())->fechaActual();
+        $pdf = PDF::loadView('app.reportes.ordenes.reporteOrdenDisehno', compact('data', 'fecha'));
+        $pdf->setPaper('letter');
+        return $pdf->stream('Reporte de diseño.pdf');
+    }
 }

@@ -38,6 +38,8 @@
 
                                         <a href="{{ route('produccion.arte.edit', $orden->id) }}"
                                             class="btn btn-warning btn-sm">Procesar Diseño</a>
+                                             <a href="{{ route('ordenes.reporteOrdenDisehno', $orden->id) }}" target="_blank"
+                                            class="btn btn-warning btn-sm">Reporte</a>
                                     </td>
                                 </tr>
                             @endforeach
