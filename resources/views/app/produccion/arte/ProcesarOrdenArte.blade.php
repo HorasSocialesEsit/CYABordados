@@ -108,6 +108,11 @@
                                             <input type="text" class="form-control" name="detalles[0][tamaño_cuello]"
                                                 value="{{ $detalle->tamaño_cuello ?? '' }}" readonly>
                                         </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Cantidad</label>
+                                            <input type="text" class="form-control" name="detalles[0][cantidad]"
+                                                value="{{ $detalle->cantidad ?? '' }}" readonly>
+                                        </div>
 
                                         {{-- CAMPOS DE CÁLCULO --}}
                                         <div class="col-md-6">
@@ -133,7 +138,7 @@
 
                                         <div class="col-12">
                                             <label class="form-label">Notas adicionales</label>
-                                            <textarea class="form-control" name="detalles[0][notas]" rows="3">{{ $detalle->notas ?? '' }}</textarea>
+                                            <textarea class="form-control" name="detalles[0][notas]" rows="3"></textarea>
                                         </div>
 
                                     </div>
