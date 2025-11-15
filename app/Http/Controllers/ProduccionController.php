@@ -56,7 +56,11 @@ class ProduccionController extends Controller
     public function edit(string $id)
     {
         //
+        Orden::where('id', $id)->update([
+            'estado' => 'en_diseño',
+        ]);
         $orden = Orden::with('detalles')->findOrFail($id);
+
         $clientes = Cliente::where('estado', 'Activo')->get();
 
         return view('app.produccion.arte.ProcesarOrdenArte', compact('orden', 'clientes'));

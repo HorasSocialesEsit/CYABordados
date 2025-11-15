@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>@yield('title')</title>
-    <link rel="shortcut icon" href="{{ asset('faviconEdunotas.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('cyabordados.png') }}" type="image/x-icon">
 
     <!-- Bootstrap 4.6 CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
@@ -154,7 +154,8 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center"
                 href="{{ route('index.dashboardGeneral') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fa-solid fa-scissors"></i>
+
+                    <img src="{{ asset('cyabordados.png') }}" style="width: 100%" alt="">
                 </div>
                 <div class="sidebar-brand-text mx-3">CYABordados</div>
             </a>
