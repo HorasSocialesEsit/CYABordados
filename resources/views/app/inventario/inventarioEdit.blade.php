@@ -8,7 +8,7 @@
             <h4>Editar Hilo</h4>
         </div>
         <div class="card-body">
-            @include('app.administrador.inventario.formInventario', ['tiposHilo' => $tiposHilo, 'hilo' => $hilo])
+            @include('app.inventario.formInventario', ['tiposHilo' => $tiposHilo, 'hilo' => $hilo])
         </div>
     </div>
 @endsection
