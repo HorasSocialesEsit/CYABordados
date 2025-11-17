@@ -40,10 +40,10 @@
                                             @csrf
                                             @method('PUT')
 
-                                            <button type="submit" class="btn btn-warning btn-sm">Iniciar</button>
+                                            <button type="submit" class="btn btn-success btn-sm">Iniciar</button>
                                         </form>
                                         <a href="{{ route('ordenProceso.edit', $orden->id) }}"
-                                            class="btn btn-warning btn-sm">Detalles</a>
+                                            class="btn btn-primary btn-sm">Detalles</a>
                                     </td>
                                 </tr>
                             @endforeach

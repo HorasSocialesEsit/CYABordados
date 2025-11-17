@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edunotas Alumnos')
+@section('title', 'CYABordados Admin Ordenes')
 
 @section('contenido')
     <div class="container-fluid">
@@ -11,6 +11,15 @@
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary">Detalle de Ordenes</h6>
             </div>
+
+
+                <div class="card-header py-3 d-flex justify-content-between align-items-center" style="gap: .3rem;">
+                    <a href="{{ route('ordenes.create') }}" class="btn btn-success">
+                        <i class="fa-solid fa-circle-plus"></i>Nueva Orden
+                    </a>
+
+                </div>
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
@@ -38,10 +47,11 @@
                                     <td>
 
                                         <a href="{{ route('ordenes.edit', $orden->id) }}"
-                                            class="btn btn-warning btn-sm">Editar</a>
+                                            class="btn btn-secondary btn-sm"><i class="fa-regular fa-pen-to-square"></i></a>
                                         <a href="{{ route('ordenes.reporteOrden', $orden->id) }}" target="_blank"
-                                            class="btn btn-warning btn-sm">Reporte</a>
+                                            class="btn btn-warning btn-sm"><i class="fa-solid fa-print"></i></a>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -55,7 +65,7 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Inicializar DataTables
             $('#dataTable').DataTable({
                 "pageLength": 10,
@@ -67,7 +77,7 @@
         });
 
         // Mensajes SweetAlert2
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -85,6 +95,6 @@
                     text: '{{ session('error') }}'
                 });
             @endif
-            });
+        });
     </script>
 @endsection

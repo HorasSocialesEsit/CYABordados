@@ -183,8 +183,9 @@
                         <div id="collapseRecepcion" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Recepción de Órdenes:</h6>
-                                <a class="collapse-item" href="{{ route('ordenes.create') }}">Crear Orden</a>
-                                <a class="collapse-item" href="{{ route('ordenes.index') }}">Ver Órdenes</a>
+                                <a class="collapse-item" href="{{ route('ordenes.index') }}">
+                                   <i class="fa-regular fa-file-lines" style="color: #74C0FC;"></i>
+                                    Ordenes</a>
                             </div>
                         </div>
                     </li>

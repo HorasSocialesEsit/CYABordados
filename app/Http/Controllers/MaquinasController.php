@@ -33,7 +33,8 @@ class MaquinasController extends Controller
     {
         $request->validate([
             'nombre'    => 'required|string|max:100|unique:maquinas,nombre',
-            'cabezales' => 'required|integer|min:1'
+            'cabezales' => 'required|integer|min:1',
+            'rpm' => 'integer'
         ], [
             'nombre.unique' => 'El nombre de la máquina ya está registrado.'
         ]);
@@ -41,7 +42,8 @@ class MaquinasController extends Controller
         try {
             Maquinas::create([
                 'nombre'    => $request->nombre,
-                'cabezales' => $request->cabezales
+                'cabezales' => $request->cabezales,
+                'rpm' => $request->rpm
             ]);
 
             return redirect()
@@ -83,14 +85,17 @@ class MaquinasController extends Controller
     {
         $request->validate([
             'nombre'    => 'required|string|max:100',
-            'cabezales' => 'required|integer|min:1'
+            'cabezales' => 'required|integer|min:1',
+            'rpm'       => 'integer'
+
         ]);
 
         $maquina = Maquinas::findOrFail($id);
 
         $maquina->update([
             'nombre'    => $request->nombre,
-            'cabezales' => $request->cabezales
+            'cabezales' => $request->cabezales,
+            'rpm'       => $request->rpm
         ]);
 
         return redirect()->route('maquinas.index')

@@ -24,7 +24,19 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
+         <div class="col-md-6 mb-3">
+            <label for="rpm" class="form-label">RPM</label>
+            <input type="text" name="rpm" id="rpm"
+                class="form-control @error('rpm') is-invalid @enderror"
+                value="{{ old('rpm', default: $maquina->rpm ?? '') }}" required>
+            @error('rpm')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
     </div>
+
+
         <div class="d-flex justify-content-end mt-4" style="gap: 1rem;">
         <a href="{{ route('maquinas.index') }}" class="btn btn-secondary me-2">Cancelar</a>
         <button type="submit" class="btn btn-primary">

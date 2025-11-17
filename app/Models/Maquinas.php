@@ -11,6 +11,7 @@ class Maquinas extends Model
     // campos que se pueden editar
     protected $fillable = [
         'nombre',
-        'cabezales'
+        'cabezales',
+        'rpm'
     ];
 }

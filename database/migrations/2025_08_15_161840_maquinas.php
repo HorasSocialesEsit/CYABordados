@@ -15,6 +15,7 @@ return new class extends Migration
                 $table->id();
                 $table->string('nombre')->unique()->nullable();
                 $table->integer('cabezales');
+                $table->integer('rpm')->default(500);
                 $table->timestamps();
             });
     }
