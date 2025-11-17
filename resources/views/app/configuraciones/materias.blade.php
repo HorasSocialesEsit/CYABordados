@@ -22,6 +22,7 @@
                             <tr>
                                 <th>Materias</th>
                                 <th>Acciones</th>
+                                <th>RPM</th>
 
 
                             </tr>
@@ -32,7 +33,7 @@
                                     <td>{{ $materia->nombre }}</td>
                                     <td>
                                         <a class="btn btn-primary btn-sm">Editar</a>
-                                   
+
                                     </td>
 
                                 </tr>

@@ -183,8 +183,9 @@
                         <div id="collapseRecepcion" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Recepción de Órdenes:</h6>
-                                <a class="collapse-item" href="{{ route('ordenes.create') }}">Crear Orden</a>
-                                <a class="collapse-item" href="{{ route('ordenes.index') }}">Ver Órdenes</a>
+                                <a class="collapse-item" href="{{ route('ordenes.index') }}">
+                                   <i class="fa-regular fa-file-lines" style="color: #74C0FC;"></i>
+                                    Ordenes</a>
                             </div>
                         </div>
                     </li>
@@ -203,7 +204,7 @@
                                 <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Ordenes Nuevas</a>
                                 <a class="collapse-item" href="#">Asignar Orden</a>
                                 <a class="collapse-item" href="#">Tiempos Estimados</a>
-                                <a class="collapse-item" href="#">Órdenes en Proceso</a>
+                                <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Orden en Proceso</a>
                             </div>
                         </div>
                     </li>
@@ -237,6 +238,7 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Configuraciones:</h6>
                                 <a class="collapse-item" href="{{ route('clientes.index') }}">Clientes</a>
+                                <a class="collapse-item" href="{{ route('maquinas.index') }}">Maquinas</a>
                                 <a class="collapse-item" href="#">Materias</a>
                                 <a class="collapse-item" href="#">Medidas</a>
                                 <a class="collapse-item" href="#">Código de Hilos</a>

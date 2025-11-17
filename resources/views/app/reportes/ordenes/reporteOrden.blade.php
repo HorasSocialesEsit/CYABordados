@@ -96,12 +96,27 @@
         </div>
         <div class="info">
             <h2>REPORTE DE DETALLES DE ORDEN</h2>
-            <p><strong>Fecha:</strong> {{ $fecha }}</p>
+            <p>{{ $fecha }}</p>
         </div>
     </header>
 
     <div class="container">
+        <div class="container-imagenes" style="margin: 5px 0;padding: 10px;border: 1px solid #ccc;">
+            <div class="card-header" style="background: #5A5C69;color: #fff; padding: 5px; margin: 5px 0;">
+                DISEÑO
+            </div>
+
+            <div class="container-img-arte" style="text-align: center;">
+                <div
+                    style="width: 160px;height: 160px;margin-bottom: 10px;border: 1px solid #ddd;background-color: #f9f9f9;">
+                    <img src="{{ public_path('lOGOCYABORDADOS.png') }}" alt="foto del arte"
+                        style="width: 100%;height: 100%;object-fit: contain;">
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
         <div class="" style="max-width: 1200px;">
+
             <div class="card-body">
                 <div class="card">
                     <div class="card-header" style="background: #4E73DF; color: #fff; padding: 5px;">

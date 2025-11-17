@@ -37,7 +37,12 @@
                                     <td>
 
                                         <a href="{{ route('produccion.arte.edit', $orden->id) }}"
-                                            class="btn btn-warning btn-sm">Procesar Diseño</a>
+                                            class="btn btn-success btn-sm">
+
+                                            Procesar Diseño</a>
+
+                                             <a href="{{ route('ordenes.reporteOrdenDisehno', $orden->id) }}" target="_blank"
+                                            class="btn btn-secondary btn-sm"><i class="fa-solid fa-print"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
