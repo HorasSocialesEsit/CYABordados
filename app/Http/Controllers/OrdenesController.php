@@ -19,9 +19,17 @@ class OrdenesController extends Controller
      */
     public function index()
     {
-        $ordenes = Orden::with('cliente', 'usuario')->latest()->get();
+        $ordenes = Orden::with(['cliente', 'usuario'])
+            ->where('estado', 'nueva')
+            ->selectRaw('ordenes.*, DATEDIFF(fecha_entrega, CURRENT_DATE()) as dias_atraso')
+            ->orderByRaw('DATEDIFF(fecha_entrega, CURRENT_DATE()) ASC')
+            ->get();
 
-        return view('app.recepcion.ListaOrdenes', compact('ordenes'));
+        // Agregar calculo de días restantes para cada orden
+        foreach ($ordenes as $orden) {
+
+            return view('app.recepcion.ListaOrdenes', compact('ordenes'));
+        }
     }
 
     /**
@@ -53,7 +61,7 @@ class OrdenesController extends Controller
 
         try {
             // Generar código único para la orden
-            $codigo = 'ORD-' . strtoupper(Str::random(6));
+            $codigo = 'ORD-'.strtoupper(Str::random(6));
 
             // Crear orden principal
             $orden = Orden::create([
@@ -118,7 +126,7 @@ class OrdenesController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            return back()->with('error', 'Error al crear la orden: ' . $e->getMessage());
+            return back()->with('error', 'Error al crear la orden: '.$e->getMessage());
         }
     }
 
@@ -208,41 +216,44 @@ class OrdenesController extends Controller
             'cliente',
             'usuario',
             'detalles.hilos.material',
-            'pagos'
+            'pagos',
         ])->findOrFail($id);
-        $fecha = (new Componentes())->fechaActual();
+        $fecha = (new Componentes)->fechaActual();
         $pdf = PDF::loadView('app.reportes.ordenes.reporteOrden', compact('orden_buscada', 'fecha'));
         $pdf->setPaper('letter');
+
         return $pdf->stream('Reporte de orden.pdf');
     }
+
     public function reporteOrdenDisehno($id)
     {
         $orden_buscada = Orden::with([
-            'detalles'
+            'detalles',
         ])->findOrFail($id);
 
         $detalle = $orden_buscada->detalles->first();
         $data = [
-            'id'             => $orden_buscada->id,
-            'codigo_orden'   => $orden_buscada->codigo_orden,
-            'estado'         => $orden_buscada->estado,
-            'tipo'           => $orden_buscada->tipo,
-            'precioTotal'    => $orden_buscada->PrecioTotal,
+            'id' => $orden_buscada->id,
+            'codigo_orden' => $orden_buscada->codigo_orden,
+            'estado' => $orden_buscada->estado,
+            'tipo' => $orden_buscada->tipo,
+            'precioTotal' => $orden_buscada->PrecioTotal,
 
-            'nombre_arte'    => $detalle->nombre_arte,
-            'tamano_diseno'  => $detalle->tamaño_diseño,
-            'color_hilo'     => $detalle->color_hilo,
+            'nombre_arte' => $detalle->nombre_arte,
+            'tamano_diseno' => $detalle->tamaño_diseño,
+            'color_hilo' => $detalle->color_hilo,
             'ubicacion_prenda' => $detalle->ubicacion_prenda,
-            'tamano_cuello'  => $detalle->tamaño_cuello,
-            'cantidad'       => $detalle->cantidad,
+            'tamano_cuello' => $detalle->tamaño_cuello,
+            'cantidad' => $detalle->cantidad,
             'precio_unitario' => $detalle->precio_unitario,
-            'total'          => $detalle->total,
-            'notas'          => $detalle->notas
+            'total' => $detalle->total,
+            'notas' => $detalle->notas,
         ];
 
-        $fecha = (new Componentes())->fechaActual();
+        $fecha = (new Componentes)->fechaActual();
         $pdf = PDF::loadView('app.reportes.ordenes.reporteOrdenDisehno', compact('data', 'fecha'));
         $pdf->setPaper('letter');
+
         return $pdf->stream('Reporte de diseño.pdf');
     }
 }

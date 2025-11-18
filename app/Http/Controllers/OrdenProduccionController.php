@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Orden;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class OrdenProduccionController extends Controller
 {
@@ -17,18 +17,16 @@ class OrdenProduccionController extends Controller
             'asignada_maquina',
             'en_proceso_maquina',
             'completada',
-            'entregada_cliente'
+            'entregada_cliente',
         ])
             ->orderByRaw("
-        CASE 
+        CASE
             WHEN estado = 'asignada_maquina' THEN 1
             WHEN estado = 'en_proceso_maquina' THEN 2
             WHEN estado = 'completada' THEN 3
             WHEN estado = 'entregada_cliente' THEN 4
         END
     ")->get();
-
-
 
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
     }
@@ -56,6 +54,7 @@ class OrdenProduccionController extends Controller
     {
         //
     }
+
     private function obtenerMinutosTrabajadosDias()
     {
         $dia = Carbon::now()->dayOfWeek;
@@ -80,10 +79,9 @@ class OrdenProduccionController extends Controller
             $minutos_calculados = $horas_laboradas * 60;
         }
 
-
         return [
             'horas' => $horas_laboradas,
-            'minutos' => $minutos_calculados
+            'minutos' => $minutos_calculados,
         ];
     }
 
@@ -93,11 +91,10 @@ class OrdenProduccionController extends Controller
     public function edit(string $id)
     {
         $orden_buscada = Orden::with([
-            'detalles'
+            'detalles',
         ])->findOrFail($id);
 
         $detalle = $orden_buscada->detalles->first();
-
 
         $data = [
             'id' => $orden_buscada->id,
@@ -111,10 +108,10 @@ class OrdenProduccionController extends Controller
             // datos por default pero en la interfaz se puede editar
             'rmp_maquina' => 500,
             'puntadas_maquina' => 12520,
-            'secuencia_maquina' => 12
-
+            'secuencia_maquina' => 12,
 
         ];
+
         return view('app.produccion.arte.OrdenesEnProcesoForm', compact('data'));
     }
 
@@ -126,7 +123,7 @@ class OrdenProduccionController extends Controller
         $request->validate([
             'producido' => 'required|integer|min:1',
             'cabezales' => 'required|integer|min:1',
-            'minutos_ciclo' => 'required|numeric|min:1'
+            'minutos_ciclo' => 'required|numeric|min:1',
         ]);
 
         return redirect()->route('ordenProceso.index')
@@ -144,6 +141,7 @@ class OrdenProduccionController extends Controller
             if ($orden) {
                 $orden->estado = 'en_proceso_maquina';
                 $orden->save();
+
                 return redirect()->route('ordenProceso.index')->with('success', 'Tu orden se encuentra en estado de procesar');
             }
         } catch (\Throwable $th) {

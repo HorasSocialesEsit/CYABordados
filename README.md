@@ -40,7 +40,7 @@ php artisan key:generate
 
 # 6️⃣ Configurar la base de datos en el archivo .env
 # (Editar los valores DB_DATABASE, DB_USERNAME, DB_PASSWORD)
-
+php artisan migrate:fresh --seed
 # 7️⃣ Ejecutar migraciones
 php artisan migrate
 

@@ -15,7 +15,7 @@ class ProduccionController extends Controller
     public function index()
     {
         //
-        $ordenes = Orden::where('estado', 'nueva')->get(); // Estado '1' para nuevas ordenes
+        $ordenes = Orden::where('estado', 'en_diseño')->get(); // Estado '1' para nuevas ordenes
 
         return view('app.produccion.arte.OrdenesNuevas', compact('ordenes'));
     }

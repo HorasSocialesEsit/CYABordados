@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\OrdenCalculoArte;
+use App\Models\Orden;
+use App\Models\OrdenDetalle;
+use Illuminate\Http\Request;
+
+class OrdenCalculoArteController extends Controller
+{
+    // Crear un cálculo por arte
+    public function store(Request $request, $ordenId)
+    {
+        $request->validate([
+            'detalle_id' => 'required',
+            'puntadas' => 'nullable|integer',
+            'secuencias' => 'nullable|integer',
+            'rpm' => 'nullable|integer',
+            'tiempo_ciclo' => 'nullable|numeric',
+            'notas' => 'nullable|string|max:255',
+            'imagen_arte' => 'nullable|image|max:4096',
+        ]);
+
+        $rutaImagen = null;
+
+        if ($request->hasFile('imagen_arte')) {
+            $rutaImagen = $request->file('imagen_arte')->store('arte', 'public');
+        }
+
+        OrdenCalculoArte::create([
+            'orden_id' => $ordenId,
+            'detalle_id' => $request->detalle_id,
+            'puntadas' => $request->puntadas,
+            'secuencias' => $request->secuencias,
+            'rpm' => $request->rpm,
+            'tiempo_ciclo' => $request->tiempo_ciclo,
+            'notas' => $request->notas,
+            'ruta_arte' => $rutaImagen
+        ]);
+
+        return back()->with('success', 'Cálculo guardado correctamente.');
+    }
+
+    // Actualizar
+    public function update(Request $request, $id)
+    {
+        $calculo = OrdenCalculoArte::findOrFail($id);
+
+        if ($request->hasFile('imagen_arte')) {
+            $calculo->ruta_arte = $request->file('imagen_arte')->store('arte', 'public');
+        }
+
+        $calculo->update($request->except('imagen_arte'));
+
+        return back()->with('success', 'Cálculo actualizado.');
+    }
+
+    // Eliminar
+    public function destroy($id)
+    {
+        $calculo = OrdenCalculoArte::findOrFail($id);
+        $calculo->delete();
+
+        return back()->with('success', 'Cálculo eliminado.');
+    }
+}

@@ -132,10 +132,10 @@
                             <div class="col-md-3">
                                 <label class="form-label">Tipo de Pago</label>
                                 <select name="pago[tipo]" class="form-select">
-                                    <option value="anticipo" {{ $pago->tipo == 'anticipo' ? 'selected' : '' }}>Anticipo
+                                    <option value="anticipo" {{ $pago?->tipo == 'anticipo' ? 'selected' : '' }}>Anticipo
                                     </option>
-                                    <option value="abono" {{ $pago->tipo == 'abono' ? 'selected' : '' }}>Abono</option>
-                                    <option value="saldo" {{ $pago->tipo == 'saldo' ? 'selected' : '' }}>Saldo Final
+                                    <option value="abono" {{ $pago?->tipo == 'abono' ? 'selected' : '' }}>Abono</option>
+                                    <option value="saldo" {{ $pago?->tipo == 'saldo' ? 'selected' : '' }}>Saldo Final
                                     </option>
                                 </select>
                             </div>

@@ -22,11 +22,14 @@
                     <div class="alert alert-danger shadow-sm">{{ session('error') }}</div>
                 @endif
 
-                <form method="POST" action="{{ route('ordenes.update', $orden->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('ordenesCalculosArte.store', $orden->id) }}"
+                    enctype="multipart/form-data">
                     @csrf
-                    @method('PUT')
-
                     @php $detalle = $orden->detalles->first(); @endphp
+                    {{-- ID del arte/detalle --}}
+                    <input type="hidden" name="detalle_id" value="{{ $detalle->orden_id ?? '' }}">
+
+
 
                     <div class="row g-4 align-items-start">
 
@@ -70,8 +73,10 @@
 
                                 <div class="mt-3">
                                     <label class="form-label fw-semibold">Agregar nuevas imágenes (opcional)</label>
-                                    <input type="file" name="imagenes[]" class="form-control" multiple accept="image/*">
-                                    <small class="text-muted">Puedes subir varias imágenes del nuevo arte o boceto.</small>
+                                    <input type="file" id="imagenes" name="imagenes[]" class="form-control" multiple
+                                        accept="image/*">
+                                    <div id="preview" class="mt-3"></div>
+                                    <small class="text-muted">Esta es a imagen a subir</small>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +128,8 @@
 
                                         <div class="col-md-6">
                                             <label class="form-label">Cantidad de Secuencias</label>
-                                            <input type="number" class="form-control" id="secuencias" placeholder="Ej: 10">
+                                            <input type="number" class="form-control" id="secuencias"
+                                                placeholder="Ej: 10">
                                         </div>
 
                                         <div class="col-md-6">
@@ -183,6 +189,22 @@
                 const secuencias = parseFloat(document.getElementById('secuencias').value);
                 const tiempo = calcularTiempoBordado(puntadas, rpm, secuencias);
                 document.getElementById('resultado').value = tiempo > 0 ? `${tiempo.toFixed(2)} min` : '';
+            });
+        });
+
+        document.getElementById('imagenes').addEventListener('change', function(event) {
+            const preview = document.getElementById('preview');
+            preview.innerHTML = '';
+
+            [...event.target.files].forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.innerHTML += `
+                    <img src="${e.target.result}" class="img-fluid rounded mb-2"
+                         style="max-height: 180px; object-fit: contain;">
+                `;
+                };
+                reader.readAsDataURL(file);
             });
         });
     </script>

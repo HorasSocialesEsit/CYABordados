@@ -13,12 +13,12 @@
             </div>
 
 
-                <div class="card-header py-3 d-flex justify-content-between align-items-center" style="gap: .3rem;">
-                    <a href="{{ route('ordenes.create') }}" class="btn btn-success">
-                        <i class="fa-solid fa-circle-plus"></i>Nueva Orden
-                    </a>
+            <div class="card-header py-3 d-flex justify-content-between align-items-center" style="gap: .3rem;">
+                <a href="{{ route('ordenes.create') }}" class="btn btn-success">
+                    <i class="fa-solid fa-circle-plus"></i>Nueva Orden
+                </a>
 
-                </div>
+            </div>
 
             <div class="card-body">
                 <div class="table-responsive">
@@ -41,10 +41,14 @@
                                     <td>{{ $orden->estado }}</td>
                                     <td>${{ number_format($orden->PrecioTotal, 2) }}</td>
                                     <td>{{ $orden->fecha_entrega->format('d/m/Y') }}</td>
-                                    <td>{{ today()->diffInDays($orden->fecha_entrega, false) . '  Dias' }}</td>
+                                    <td> {{ $orden->dias_atraso }} días</td>
                                     <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
 
                                     <td>
+                                        <a href="{{ route('produccion.arte.edit', $orden->id) }}"
+                                            class="btn btn-success btn-sm">
+                                            <i class="fa-solid fa-play"></i>
+                                            Iniciar Diseño</a>
 
                                         <a href="{{ route('ordenes.edit', $orden->id) }}"
                                             class="btn btn-secondary btn-sm"><i class="fa-regular fa-pen-to-square"></i></a>
@@ -68,6 +72,7 @@
         $(document).ready(function() {
             // Inicializar DataTables
             $('#dataTable').DataTable({
+                'ordering': false, // falso para que respete el orden del servidor
                 "pageLength": 10,
                 "lengthMenu": [20, 50, 20, 10, 10, 30],
                 "language": {

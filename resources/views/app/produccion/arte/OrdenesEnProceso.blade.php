@@ -35,8 +35,9 @@
                                     <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
 
                                     <td>
-                                        <form action="{{ route('ordenProceso.inicio', ['id' => $orden->id, 'estado' => $orden->estado]) }}" method="POST"
-                                            style="display:inline;">
+                                        <form
+                                            action="{{ route('ordenProceso.inicio', ['id' => $orden->id, 'estado' => $orden->estado]) }}"
+                                            method="POST" style="display:inline;">
                                             @csrf
                                             @method('PUT')
 
@@ -58,7 +59,7 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Inicializar DataTables
             $('#dataTable').DataTable({
                 "pageLength": 10,
@@ -70,7 +71,7 @@
         });
 
         // Mensajes SweetAlert2
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -88,6 +89,6 @@
                     text: '{{ session('error') }}'
                 });
             @endif
-                });
+        });
     </script>
 @endsection

@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Orden;
-use App\Models\OrdenDetalle;
 use App\Models\Cliente;
 use App\Models\Municipios;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
+use App\Models\Orden;
+use App\Models\OrdenDetalle;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class OrdenSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class OrdenSeeder extends Seeder
     {
         // 🔹 Verificar si hay municipios
         $municipioId = Municipios::value('id');
-        if (!$municipioId) {
+        if (! $municipioId) {
             $this->command->warn('⚠️ No hay municipios. Creando uno de ejemplo...');
             $municipio = Municipios::create([
                 'nombre' => 'San Salvador',
@@ -32,12 +32,12 @@ class OrdenSeeder extends Seeder
 
             for ($i = 1; $i <= 10; $i++) {
                 Cliente::create([
-                    'codigo' => 'CLI-' . strtoupper(Str::random(5)),
-                    'nombre' => 'Cliente ' . $i,
-                    'correo' => 'cliente' . $i . '@correo.com',
+                    'codigo' => 'CLI-'.strtoupper(Str::random(5)),
+                    'nombre' => 'Cliente '.$i,
+                    'correo' => 'cliente'.$i.'@correo.com',
                     'telefono' => rand(60000000, 79999999),
                     'telefono_alt' => rand(70000000, 79999999),
-                    'direccion' => 'Colonia Ejemplo #' . $i,
+                    'direccion' => 'Colonia Ejemplo #'.$i,
                     'id_municipio' => $municipioId,
                     'pais' => 'El Salvador',
                     'estado' => 'Activo',
@@ -55,14 +55,14 @@ class OrdenSeeder extends Seeder
         $clientes = Cliente::pluck('id')->toArray();
 
         DB::transaction(function () use ($clientes) {
-            for ($i = 1; $i <= 100; $i++) {
+            for ($i = 1; $i <= 10; $i++) {
                 $fechaOrden = Carbon::now()->subDays(rand(1, 180));
                 $fechaEntrega = (clone $fechaOrden)->addDays(rand(3, 15));
 
                 $orden = Orden::create([
                     'cliente_id' => $clientes[array_rand($clientes)],
                     'fecha_orden' => $fechaOrden,
-                    'codigo_orden' => 'ORD-' . strtoupper(Str::random(6)),
+                    'codigo_orden' => 'ORD-'.strtoupper(Str::random(6)),
                     'fecha_entrega' => $fechaEntrega,
                     'usuario_id' => 1,
                 ]);
@@ -76,8 +76,8 @@ class OrdenSeeder extends Seeder
 
                     OrdenDetalle::create([
                         'orden_id' => $orden->id,
-                        'nombre_arte' => 'Diseño #' . rand(1, 1000),
-                        'tamaño_diseño' => rand(5, 20) . 'x' . rand(5, 20) . ' cm',
+                        'nombre_arte' => 'Diseño #'.rand(1, 1000),
+                        'tamaño_diseño' => rand(5, 20).'x'.rand(5, 20).' cm',
                         'color_hilo' => ['Rojo', 'Azul', 'Verde', 'Negro', 'Blanco'][array_rand(['Rojo', 'Azul', 'Verde', 'Negro', 'Blanco'])],
                         'ubicacion_prenda' => ['Pecho', 'Espalda', 'Manga'][array_rand(['Pecho', 'Espalda', 'Manga'])],
                         'cantidad' => $cantidad,
@@ -94,4 +94,3 @@ class OrdenSeeder extends Seeder
         $this->command->info('✅ Se generaron 100 órdenes aleatorias con detalles.');
     }
 }
-
