@@ -82,6 +82,7 @@ Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin'])->gro
     Route::get('/ordenProceso/{id}/edit', [OrdenProduccionController::class, 'edit'])->name('ordenProceso.edit');
     Route::put('/ordenProceso/{id}/update', [OrdenProduccionController::class, 'update'])->name('ordenProceso.update');
 });
+
 Route::prefix('maquinas')->middleware(['auth', 'active', 'role:admin'])->group(function () {
     Route::get('/', [MaquinasController::class, 'index'])->name('maquinas.index');
     Route::get('/create', [MaquinasController::class, 'create'])->name('maquinas.create');
@@ -92,7 +93,12 @@ Route::prefix('maquinas')->middleware(['auth', 'active', 'role:admin'])->group(f
     Route::delete('/{id}', [MaquinasController::class, 'destroy'])->name('maquinas.destroy');
 });
 
-
+// calculos por arte
+Route::prefix('ordenes-calculos-arte')->middleware(['auth', 'active', 'role:admin'])->group(function () {
+    Route::post('/store/{ordenId}', [App\Http\Controllers\OrdenCalculoArteController::class, 'store'])->name('ordenesCalculosArte.store');
+    Route::put('/update/{id}', [App\Http\Controllers\OrdenCalculoArteController::class, 'update'])->name('ordenesCalculosArte.update');
+    Route::delete('/destroy/{id}', [App\Http\Controllers\OrdenCalculoArteController::class, 'destroy'])->name('ordenesCalculosArte.destroy');
+});
 
 // rutas libres
 Route::get('/municipios/{id}', [Componentes::class, 'getMunicipiosDepartamento']);

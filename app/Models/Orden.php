@@ -53,7 +53,8 @@ class Orden extends Model
     // Una orden puede tener muchos detalles (productos, artes, materiales, etc.)
     public function detalles()
     {
-        return $this->hasMany(OrdenDetalle::class);
+        //  return $this->hasMany(OrdenDetalle::class);
+        return $this->hasMany(OrdenDetalle::class)->orderBy('id', 'asc');
     }
 
     // Una orden puede tener muchas imágenes de arte (si implementas esa tabla)

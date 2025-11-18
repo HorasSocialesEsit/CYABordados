@@ -184,7 +184,7 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Recepción de Órdenes:</h6>
                                 <a class="collapse-item" href="{{ route('ordenes.index') }}">
-                                   <i class="fa-regular fa-file-lines" style="color: #74C0FC;"></i>
+                                    <i class="fa-regular fa-file-lines" style="color: #74C0FC;"></i>
                                     Ordenes</a>
                             </div>
                         </div>
@@ -201,9 +201,8 @@
                         <div id="collapseBodega" class="collapse" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Producción:</h6>
-                                <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Ordenes Nuevas</a>
-                                <a class="collapse-item" href="#">Asignar Orden</a>
-                                <a class="collapse-item" href="#">Tiempos Estimados</a>
+                                <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Artes en Proceso</a>
+
                                 <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Orden en Proceso</a>
                             </div>
                         </div>
