@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Orden;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class OrdenProduccionController extends Controller
 {
@@ -12,8 +13,6 @@ class OrdenProduccionController extends Controller
      */
     public function index()
     {
-        //
-        // $ordenes = Orden::where('estado', 'asignada_maquina')->get();
         $ordenes = Orden::whereIn('estado', [
             'asignada_maquina',
             'en_proceso_maquina',
@@ -57,6 +56,36 @@ class OrdenProduccionController extends Controller
     {
         //
     }
+    private function obtenerMinutosTrabajadosDias()
+    {
+        $dia = Carbon::now()->dayOfWeek;
+        $horas_laboradas = 0;
+        $minutos_calculados = 0;       // en caso que sea domingo, ya que solo ese dia queda
+
+        // obtenemos los rangos de dias de lunes a jueves
+        if ($dia >= 1 && $dia <= 4) {
+            $horas_laboradas = 8.5;
+            $minutos_calculados = $horas_laboradas * 60;
+        }
+
+        // si el dia es viernes
+        if ($dia === 5) {
+            $horas_laboradas = 7.5;
+            $minutos_calculados = $horas_laboradas * 60;
+        }
+
+        // si el dia es sabado
+        if ($dia === 6) {
+            $horas_laboradas = 6;
+            $minutos_calculados = $horas_laboradas * 60;
+        }
+
+
+        return [
+            'horas' => $horas_laboradas,
+            'minutos' => $minutos_calculados
+        ];
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -73,17 +102,18 @@ class OrdenProduccionController extends Controller
         $data = [
             'id' => $orden_buscada->id,
             'cantidad' => $detalle->cantidad,
-            'n_maquina' => 1,
-            'cabezales' => 6,
-            'minutos_ciclo' => 17,
-        ];
-       
-        $data = [
-            'id' => $orden_buscada->id,
-            'cantidad' => 100,
-            'n_maquina' => 1,
-            'cabezales' => 6,
-            'minutos_ciclo' => 17,
+            'cabezales' => 8,
+            'eficiencia' => 0.85,
+            'tiempo_de_cambio' => 20,
+            'horas_laboradas' => $this->obtenerMinutosTrabajadosDias()['horas'],
+            'minutos_laboradas' => $this->obtenerMinutosTrabajadosDias()['minutos'],
+
+            // datos por default pero en la interfaz se puede editar
+            'rmp_maquina' => 500,
+            'puntadas_maquina' => 12520,
+            'secuencia_maquina' => 12
+
+
         ];
         return view('app.produccion.arte.OrdenesEnProcesoForm', compact('data'));
     }

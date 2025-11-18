@@ -13,24 +13,30 @@
             <form action="{{ route('ordenProceso.update', $data['id']) }}" method="POST">
                 @csrf
                 @method('PUT')
-
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Horas Trabajadas</label>
-                        <input type="number" id="horas" name="horas" class="form-control" value="8" min="1" max="8">
+                        <label class="form-label">RPM</label>
+                        <input type="text" id="rpm" name="rpm" class="form-control" value="{{ $data['rmp_maquina'] }}">
                     </div>
-
-                    {{-- mostramos la cantidad del pedido --}}
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Unidades Totales</label>
-                        <input type="number" id="cantidad_total" name="cantidad_total" class="form-control"
-                            value="{{ $data['cantidad'] ?? 0 }}" readonly>
+                        <label class="form-label">Puntadas</label>
+                        <input type="text" id="puntadas" name="puntadas" class="form-control"
+                            value="{{ $data['puntadas_maquina'] }}">
                     </div>
-
-                    {{-- solicitamos todo lo que se producio --}}
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Secuencias</label>
+                        <input type="text" id="secuencia" name="secuencia" class="form-control"
+                            value="{{ $data['secuencia_maquina'] }}">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Unidades</label>
+                        <input type="text" id="unidades" name="unidades" class="form-control"
+                            value="{{ $data['cantidad'] }}">
+                    </div>
+                    {{-- Unidades producidas hoy --}}
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Unidades producidas ahora</label>
-                        <input type="number" id="producido" name="producido"
+                        <input type="text" id="producido" name="producido"
                             class="form-control @error('producido') is-invalid @enderror" min="1"
                             max="{{ $data['cantidad'] }}">
                         @error('producido')
@@ -38,53 +44,52 @@
                         @enderror
                     </div>
 
-                    {{-- mostramos el pendiente es decir total - realizado --}}
+
+                    {{-- Pendiente --}}
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Pendiente</label>
-                        <input type="number" id="pendiente" class="form-control" readonly>
+                        <input type="text" id="pendiente" class="form-control" readonly>
                     </div>
 
                 </div>
 
                 <div class="row">
-
-                    {{-- Máquinas --}}
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">N° de máquinas</label>
-                        <input type="number" id="maquinas" name="maquinas" class="form-control"
-                            value="{{ $data['n_maquina'] }}" min="1" readonly>
+                        <label class="form-label">Horas</label>
+                        <input type="text" id="horas" class="form-control" value="{{ $data['horas_laboradas'] }}" readonly>
                     </div>
-
-                    {{-- Cabezales --}}
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Cabezales por máquina</label>
-                        <input type="number" id="cabezales" name="cabezales" class="form-control"
-                            value="{{ $data['cabezales'] }}" min="1" readonly>
+                        <label class="form-label">Minutos</label>
+                        <input type="text" id="minutos" class="form-control" value="{{ $data['minutos_laboradas'] }}"
+                            readonly>
                     </div>
-
-                    {{-- Minutos por ciclo --}}
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Minutos por ciclo</label>
-                        <input type="number" id="minutos_ciclo" name="minutos_ciclo" class="form-control"
-                            value="{{ $data['minutos_ciclo'] }}" min="1">
+                        <label class="form-label">Cabezales</label>
+                        <input type="text" id="cabezales" class="form-control" value="{{ $data['cabezales'] }}" readonly>
                     </div>
-
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Tiempo de Cambio</label>
+                        <input type="text" id="tiempo_cambio" class="form-control" value="{{ $data['tiempo_de_cambio'] }}"
+                            readonly>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Eficiencia</label>
+                        <input type="text" id="eficiencia" class="form-control" value="{{ $data['eficiencia'] }}" readonly>
+                    </div>
                 </div>
+                <h2>Resumen Calculado</h2>
                 <div class="row">
-
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Ciclos necesarios</label>
-                        <input type="number" id="ciclos" class="form-control" readonly>
+                        <label class="form-label">Ciclos</label>
+                        <input type="text" id="ciclos_calculo" class="form-control" value="" readonly>
                     </div>
-
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Minutos totales</label>
-                        <input type="number" id="minutos_totales" class="form-control" readonly>
+                        <label class="form-label">Minutos Calculados de Orden</label>
+                        <input type="text" id="minutos_calculo" class="form-control" value="" readonly>
                     </div>
-
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Horas Invertidas</label>
-                        <input type="text" id="horas_final" class="form-control" readonly>
+                        <label class="form-label">Dias Calculados de Orden</label>
+                        <input type="text" id="dias_calculo" class="form-control" value="" readonly>
                     </div>
 
                 </div>
@@ -100,38 +105,65 @@
     </div>
 
     <script>
-        const campos = ['producido', 'maquinas', 'cabezales', 'minutos_ciclo', 'horas'];
-        campos.forEach(id => {
-            document.getElementById(id).addEventListener("keyup", calcular);
-        });
+        const calculoOrden = () => {
+            const cantidad = parseInt(document.getElementById('unidades').value)
+            const cantidad_digitada = parseInt(document.getElementById('producido').value)
 
-        function calcular() {
-            const total = parseInt(document.getElementById('cantidad_total').value);
-            const producido = parseInt(document.getElementById('producido').value || 0);
-            const maquinas = parseInt(document.getElementById('maquinas').value);
-            const cabezales = parseInt(document.getElementById('cabezales').value);
-            const minCiclo = parseFloat(document.getElementById('minutos_ciclo').value);
-            const horas = parseFloat(document.getElementById('horas').value);
-
-            const minutos_invertido =
-                horas > 8 ? 8 * 60 :
-                    horas < 1 ? 1 * 60 :
-                        horas * 60;
-
-            let pendiente = total - producido;
-            document.getElementById('pendiente').value = pendiente;
-
-            let ciclos = Math.ceil(total / cabezales);
-            document.getElementById('ciclos').value = ciclos;
+            const produccion_pendiente = cantidad - cantidad_digitada;
+            document.getElementById('pendiente').value = produccion_pendiente
 
 
-            const minutosTotales = ciclos * minutos_invertido;
-            document.getElementById('minutos_totales').value = minutosTotales;
+            const cabezales = parseInt(document.getElementById('cabezales').value) // recuperamos cabezales
+            const eficiencia = parseFloat(document.getElementById('eficiencia').value) // recuperamos eficiencia
 
-            let dias = (minutosTotales / 60).toFixed(2);
-            document.getElementById('horas_final').value = dias;
+            const tiempo_cambio = parseFloat(document.getElementById('tiempo_cambio').value) // recuperamos tiempo de cambio
+            const rpm_maquina = parseInt(document.getElementById('rpm').value) // recuperamos rpm
+            const puntadas_maquina = parseFloat(document.getElementById('puntadas').value) // recuperamos puntdas
+            const secuencia_maquina = parseFloat(document.getElementById('secuencia').value) // recuperamos secuencia
+
+            // recuperamos el tiempo
+            const minutos = parseFloat(document.getElementById('minutos').value) // recuperamos tiempo en minutos
+            // console.log({
+            //     cabezales,
+            //     eficiencia,
+            //     tiempo_cambio,
+            //     puntadas_maquina,
+            //     secuencia_maquina,
+            //     minutos
+            // });
+
+            // calculamos los ciclos
+            const ciclos = parseFloat(cantidad_digitada / cabezales)
+            // calculamos el tiempo base
+            const tiempo_base = parseFloat(puntadas_maquina / rpm_maquina)
+            // calculamos el tiempo secuencial
+            const cal_tiempo_secuencial = tiempo_cambio / 60
+            const tiempo_secuencial = parseFloat(secuencia_maquina * cal_tiempo_secuencial)
+            // sacamos el total de minutos
+            const total_minutos = (tiempo_base / eficiencia) + tiempo_secuencial;
+
+            const total_minutos_orden_completa = total_minutos * ciclos;
+
+            const dias_calculado = total_minutos_orden_completa / minutos;
+
+            // console.log({
+            //     ciclos,
+            //     tiempo_base,
+            //     cal_tiempo_secuencial,
+            //     tiempo_secuencial,
+            //     total_minutos,
+            //     total_minutos_orden_completa,
+            //     dias_calculado
+            // });
+
+            document.getElementById('ciclos_calculo').value = Math.ceil(ciclos)
+            document.getElementById('minutos_calculo').value = total_minutos_orden_completa.toFixed()
+            document.getElementById('dias_calculo').value = dias_calculado.toFixed(2)
         }
-
+        const campos = ['producido','rpm','puntadas','secuencia','unidades'];
+        campos.forEach(id => {
+            document.getElementById(id).addEventListener("input", calculoOrden);
+        });
+        calculoOrden()
     </script>
-
 @endsection
