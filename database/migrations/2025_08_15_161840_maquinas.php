@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-              Schema::create('maquinas', function (Blueprint $table) {
-                $table->id();
-                $table->string('nombre')->unique()->nullable();
-                $table->integer('cabezales');
-                $table->integer('rpm')->default(500);
-                $table->timestamps();
-            });
+        Schema::create('maquinas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre')->unique()->nullable();
+            $table->integer('cabezales');
+            $table->integer('rpm')->default(500);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-          Schema::dropIfExists('maquinas');
+        Schema::dropIfExists('maquinas');
     }
 };
