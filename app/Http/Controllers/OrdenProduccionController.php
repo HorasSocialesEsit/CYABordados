@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HistorialOrden;
 use App\Models\Orden;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -96,9 +97,17 @@ class OrdenProduccionController extends Controller
 
         $detalle = $orden_buscada->detalles->first();
 
+        // obtenemos el último restante del historial de la orden
+        $restante = HistorialOrden::where('orden_id', $id)
+            ->orderByDesc('id')
+            ->value('restante');
+
+        // en caso de que exista cambiamos el valor original del pedido
+        $cantidad = $restante !== null ? $restante : $detalle->cantidad;
+
         $data = [
             'id' => $orden_buscada->id,
-            'cantidad' => $detalle->cantidad,
+            'cantidad' => $cantidad,
             'cabezales' => 8,
             'eficiencia' => 0.85,
             'tiempo_de_cambio' => 20,
@@ -120,15 +129,78 @@ class OrdenProduccionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'producido' => 'required|integer|min:1',
-            'cabezales' => 'required|integer|min:1',
-            'minutos_ciclo' => 'required|numeric|min:1',
-        ]);
+        // claves a almacenar
+        // rpm
+        // puntadas
+        // secuencia
+        // cabezales
+        // tiempo_cambio
+        // eficiencia
+        // ciclos
+        // horas
+        // minutos
+        // cantidad
+        // realizada
+        // restante
 
-        return redirect()->route('ordenProceso.index')
-            ->with('success', 'Producción registrada correctamente.');
+        $request->validate([
+            'rpm' => 'required|min:1',
+            'puntadas' => 'required|min:1',
+            'secuencia' => 'required|min:1',
+            'cabezales' => 'required|min:1',
+            'tiempo_cambio' => 'required|min:1',
+            'eficiencia' => 'required|min:1',
+            'ciclos_calculo' => 'required|min:1',
+            'horas' => 'required|min:1',
+            'minutos_calculo' => 'required|min:1',
+            'dias_calculo' => 'required|min:1',
+            'unidades' => 'required|min:1',
+            'producido' => 'required|min:1',
+            'pendiente' => 'required|min:1',
+        ]);
+        try {
+
+            HistorialOrden::create([
+                'rpm'           => $request->rpm,
+                'puntadas'      => $request->puntadas,
+                'secuencias'    => $request->secuencia,
+                'cabezales'     => $request->cabezales,
+                'tiempo_cambio' => $request->tiempo_cambio,
+                'eficiencia'    => $request->eficiencia,
+
+                'ciclos'        => $request->ciclos_calculo,
+                'horas'         => $request->horas,
+                'minutos'       => $request->horas*60,
+
+                'cantidad'      => $request->unidades,
+                'realizada'     => $request->producido,
+                'restante'      => $request->pendiente,
+
+                'orden_id'      => $id
+            ]);
+
+            // aqui cuando el restante sea cero actualizamos la orden a completada el estado
+            if ($request->pendiente == 0) {
+                Orden::where('id', $id)->update([
+                    'estado' => 'completada'
+                ]);
+            }
+
+
+            return redirect()->route('ordenProceso.index')
+                ->with('success', 'Producción registrada correctamente.');
+        } catch (\Throwable $th) {
+            return redirect()->route('ordenProceso.index')
+                ->with('error', 'Error al registrar.');
+        }
     }
+
+
+
+
+
+
+
 
     public function iniciarProceso(string $id, string $estado)
     {

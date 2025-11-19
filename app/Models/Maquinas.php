@@ -8,7 +8,6 @@ class Maquinas extends Model
 {
     protected $table = 'maquinas';
 
-    // campos que se pueden editar
     protected $fillable = [
         'nombre',
         'cabezales',
