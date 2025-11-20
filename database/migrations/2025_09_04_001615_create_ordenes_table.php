@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('fecha_orden');
             $table->string('codigo_orden')->unique();
             $table->date('fecha_entrega')->nullable();
-            $table->enum('estado', ['nueva', 'en_diseño', 'asignada_maquina', 'en_proceso_maquina', 'completada', 'entregada_cliente', 'cancelada'])->default('nueva');
+            $table->enum('estado', ['nueva', 'en_arte', 'arte_aprobado', 'asignada_maquina', 'en_proceso_maquina', 'completada', 'entregada_cliente', 'cancelada'])->default('nueva');
             $table->enum('tipo', ['venta'])->default('venta');
 
             // Totales de la orden
