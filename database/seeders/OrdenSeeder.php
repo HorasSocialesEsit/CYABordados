@@ -59,11 +59,14 @@ class OrdenSeeder extends Seeder
                 $fechaOrden = Carbon::now()->subDays(rand(1, 180));
                 $fechaEntrega = (clone $fechaOrden)->addDays(rand(3, 15));
 
+            
+                $estados = ['nueva', 'asignada_maquina'];
                 $orden = Orden::create([
                     'cliente_id' => $clientes[array_rand($clientes)],
                     'fecha_orden' => $fechaOrden,
                     'codigo_orden' => 'ORD-'.strtoupper(Str::random(6)),
                     'fecha_entrega' => $fechaEntrega,
+                    'estado' =>  $estados[rand(0,1)],
                     'usuario_id' => 1,
                 ]);
 
