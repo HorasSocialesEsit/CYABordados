@@ -6,6 +6,7 @@ use App\Http\Controllers\Componentes;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\MaquinasController;
+use App\Http\Controllers\OrdenCalculoArteController;
 use App\Http\Controllers\OrdenesController;
 use App\Http\Controllers\OrdenProduccionController;
 use App\Http\Controllers\PerfilController;
@@ -95,9 +96,9 @@ Route::prefix('maquinas')->middleware(['auth', 'active', 'role:admin'])->group(f
 
 // calculos por arte
 Route::prefix('ordenes-calculos-arte')->middleware(['auth', 'active', 'role:admin'])->group(function () {
-    Route::post('/store/{ordenId}', [App\Http\Controllers\OrdenCalculoArteController::class, 'store'])->name('ordenesCalculosArte.store');
-    Route::put('/update/{id}', [App\Http\Controllers\OrdenCalculoArteController::class, 'update'])->name('ordenesCalculosArte.update');
-    Route::delete('/destroy/{id}', [App\Http\Controllers\OrdenCalculoArteController::class, 'destroy'])->name('ordenesCalculosArte.destroy');
+    Route::post('/store/{ordenId}', [OrdenCalculoArteController::class, 'store'])->name('ordenesCalculosArte.store');
+    Route::put('/update/{id}', [OrdenCalculoArteController::class, 'update'])->name('ordenesCalculosArte.update');
+    Route::delete('/destroy/{id}', [OrdenCalculoArteController::class, 'destroy'])->name('ordenesCalculosArte.destroy');
 });
 
 // rutas libres

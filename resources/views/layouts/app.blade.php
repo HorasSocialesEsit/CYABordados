@@ -202,7 +202,7 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Producción:</h6>
                                 <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Artes en Proceso</a>
-
+                                <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Artes Aprobados</a>
                                 <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Orden en Proceso</a>
                             </div>
                         </div>

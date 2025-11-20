@@ -15,7 +15,7 @@ class ProduccionController extends Controller
     public function index()
     {
         //
-        $ordenes = Orden::where('estado', 'en_diseño')->get(); // Estado '1' para nuevas ordenes
+        $ordenes = Orden::where('estado', 'en_arte')->get(); // Estado '1' para nuevas ordenes
 
         return view('app.produccion.arte.OrdenesNuevas', compact('ordenes'));
     }
@@ -57,7 +57,7 @@ class ProduccionController extends Controller
     {
         //
         Orden::where('id', $id)->update([
-            'estado' => 'en_diseño',
+            'estado' => 'en_arte',
         ]);
         $orden = Orden::with('detalles')->findOrFail($id);
 
