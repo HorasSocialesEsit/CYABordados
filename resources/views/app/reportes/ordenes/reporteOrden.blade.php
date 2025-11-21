@@ -135,7 +135,7 @@
                                 <tr>
                                     <td>{{ $orden_buscada->cliente->nombre }}</td>
                                     <td>{{ \Carbon\Carbon::parse($orden_buscada->fecha_entrega)->format('d/m/Y') }}</td>
-                                    <td>{{ $orden_buscada->cliente->tipo_cliente }}</td>
+                                    <td>{{ $orden_buscada->cliente->tipoCliente }}</td>
                                 </tr>
 
                             </tbody>

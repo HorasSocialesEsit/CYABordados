@@ -14,20 +14,7 @@ class OrdenProduccionController extends Controller
      */
     public function index()
     {
-        $ordenes = Orden::whereIn('estado', [
-            'asignada_maquina',
-            'en_proceso_maquina',
-            'completada',
-            'entregada_cliente',
-        ])
-            ->orderByRaw("
-        CASE
-            WHEN estado = 'asignada_maquina' THEN 1
-            WHEN estado = 'en_proceso_maquina' THEN 2
-            WHEN estado = 'completada' THEN 3
-            WHEN estado = 'entregada_cliente' THEN 4
-        END
-    ")->get();
+        $ordenes = Orden::where('estado_orden_id', '3')->get();
 
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
     }
@@ -170,7 +157,7 @@ class OrdenProduccionController extends Controller
 
                 'ciclos'        => $request->ciclos_calculo,
                 'horas'         => $request->horas,
-                'minutos'       => $request->horas*60,
+                'minutos'       => $request->horas * 60,
 
                 'cantidad'      => $request->unidades,
                 'realizada'     => $request->producido,

@@ -17,8 +17,16 @@ return new class extends Migration
             $table->string('codigo')->unique(); // Ej: MAT101
             $table->text('descripcion')->nullable();
             $table->integer('stock');
-            $table->enum('tipoHilo', ['Poliester', 'Algodon']);
+           $table->unsignedBigInteger('tipo_hilo_id');
+
             $table->timestamps();
+
+            // relacion a municipios
+            $table->foreign('tipo_hilo_id')
+                ->references('id')
+                ->on('tipos_hilos')
+                ->onDelete('cascade');
+
         });
     }
 

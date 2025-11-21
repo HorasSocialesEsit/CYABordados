@@ -125,7 +125,7 @@
                     <td>{{ $hilo->codigo }}</td>
                     <td>{{ $hilo->descripcion }}</td>
                     <td style="text-align: center;">{{ $hilo->stock }}</td>
-                    <td>{{ $hilo->tipoHilo }}</td>
+                    <td>{{ $hilo->tipoHilo->nombre_tipo_hilo }}</td>
                 </tr>
             @endforeach
         </tbody>

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\EstadoOrden;
 use App\Models\Material;
 use App\Models\Orden;
 use App\Models\OrdenDetalle;
+use App\Models\TipoPago;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,18 +21,15 @@ class OrdenesController extends Controller
      */
     public function index()
     {
-        $ordenes = Orden::with(['cliente', 'usuario'])
-            ->where('estado', 'nueva')
+        $ordenes = Orden::with(['cliente', 'usuario', 'estado'])
+            ->where('estado_orden_id', 1)
             ->selectRaw('ordenes.*, DATEDIFF(fecha_entrega, CURRENT_DATE()) as dias_atraso')
             ->orderByRaw('DATEDIFF(fecha_entrega, CURRENT_DATE()) ASC')
             ->get();
 
-        // Agregar calculo de días restantes para cada orden
-        foreach ($ordenes as $orden) {
-
-            return view('app.recepcion.ListaOrdenes', compact('ordenes'));
-        }
+        return view('app.recepcion.ListaOrdenes', compact('ordenes'));
     }
+
 
     /**
      * Mostrar formulario de creación.
@@ -61,7 +60,7 @@ class OrdenesController extends Controller
 
         try {
             // Generar código único para la orden
-            $codigo = 'ORD-'.strtoupper(Str::random(6));
+            $codigo = 'ORD-' . strtoupper(Str::random(6));
 
             // Crear orden principal
             $orden = Orden::create([
@@ -76,10 +75,10 @@ class OrdenesController extends Controller
             foreach ($request->detalles as $detalleData) {
                 $detalle = $orden->detalles()->create([
                     'nombre_arte' => $detalleData['nombre_arte'],
-                    'tamaño_diseño' => $detalleData['tamaño_diseño'] ?? null,
+                    'tamano_diseño' => $detalleData['tamaño_diseño'] ?? null,
                     'color_hilo' => $detalleData['color_hilo'] ?? null,
                     'ubicacion_prenda' => $detalleData['ubicacion_prenda'] ?? null,
-                    'tamaño_cuello' => $detalleData['tamaño_cuello'] ?? null,
+                    'tamano_cuello' => $detalleData['tamaño_cuello'] ?? null,
                     'cantidad' => $detalleData['cantidad'],
                     'precio_unitario' => $detalleData['precio_unitario'],
                     'total' => $detalleData['cantidad'] * $detalleData['precio_unitario'],
@@ -126,7 +125,7 @@ class OrdenesController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            return back()->with('error', 'Error al crear la orden: '.$e->getMessage());
+            return back()->with('error', 'Error al crear la orden: ' . $e->getMessage());
         }
     }
 
@@ -145,10 +144,15 @@ class OrdenesController extends Controller
      */
     public function edit($id)
     {
-        $orden = Orden::with('detalles')->findOrFail($id);
+        $orden = Orden::with('detalles','pagos','pagos.tipoPago')->findOrFail($id);
         $clientes = Cliente::where('estado', 'Activo')->get();
+        $tipos_pago = TipoPago::get();
 
-        return view('app.recepcion.EditarOrden', compact('orden', 'clientes'));
+
+        // return response()->json($orden->pagos->last());
+        // return response()->json($orden);
+
+        return view('app.recepcion.EditarOrden', compact('orden', 'clientes','tipos_pago'));
     }
 
     /**
@@ -166,16 +170,16 @@ class OrdenesController extends Controller
         $orden->update([
             'cliente_id' => $request->cliente_id,
             'fecha_entrega' => $request->fecha_entrega,
-            'PrecioTotal' => $request->input('pago.saldo_restante'),
+            'Precio_total' => $request->input('pago.saldo_restante'),
 
         ]);
         $detalleData = $request->detalles[0];
         $ordenDetalle = OrdenDetalle::where('orden_id', $id)->first();
         $ordenDetalle->update([
             'nombre_arte' => $detalleData['nombre_arte'] ?? null,
-            'tamaño_diseño' => $detalleData['tamaño_diseño'] ?? null,
+            'tamano_diseño' => $detalleData['tamaño_diseño'] ?? null,
             'ubicacion_prenda' => $detalleData['ubicacion_prenda'] ?? null,
-            'tamaño_cuello' => $detalleData['tamaño_cuello'] ?? null,
+            'tamano_cuello' => $detalleData['tamaño_cuello'] ?? null,
             'cantidad' => $detalleData['cantidad'] ?? 1,
             'precio_unitario' => $detalleData['precio_unitario'] ?? 0,
             'total' => ($detalleData['cantidad'] ?? 1) * ($detalleData['precio_unitario'] ?? 0),
@@ -237,13 +241,13 @@ class OrdenesController extends Controller
             'codigo_orden' => $orden_buscada->codigo_orden,
             'estado' => $orden_buscada->estado,
             'tipo' => $orden_buscada->tipo,
-            'precioTotal' => $orden_buscada->PrecioTotal,
+            'precio_total' => $orden_buscada->PrecioTotal,
 
             'nombre_arte' => $detalle->nombre_arte,
-            'tamano_diseno' => $detalle->tamaño_diseño,
+            'tamano_diseno' => $detalle->tamano_diseño,
             'color_hilo' => $detalle->color_hilo,
             'ubicacion_prenda' => $detalle->ubicacion_prenda,
-            'tamano_cuello' => $detalle->tamaño_cuello,
+            'tamano_cuello' => $detalle->tamano_cuello,
             'cantidad' => $detalle->cantidad,
             'precio_unitario' => $detalle->precio_unitario,
             'total' => $detalle->total,

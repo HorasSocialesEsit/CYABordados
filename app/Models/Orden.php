@@ -12,25 +12,27 @@ class Orden extends Model
     protected $table = 'ordenes';
 
     protected $fillable = [
-        'cliente_id',
         'fecha_orden',
         'codigo_orden',
         'fecha_entrega',
-        'estado',
         'tipo',
-        'PrecioTotal',
-
-        'usuario_id',
-
+        'precio_total',
+        'estado_orden_id',
+        'cliente_id',
+        'usuario_id'
     ];
 
     protected $casts = [
         'fecha_orden' => 'datetime',
         'fecha_entrega' => 'date',
     ];
+    public function estado()
+    {
+        return $this->belongsTo(EstadoOrden::class, 'estado_orden_id');
+    }
 
     protected $attributes = [
-        'estado' => 'nueva',
+        // 'estado' => 'nueva',
         'tipo' => 'venta',
     ];
 
@@ -80,7 +82,7 @@ class Orden extends Model
             return $detalle->cantidad * $detalle->precio_unitario;
         });
 
-        $this->precioTotal = $subtotal;
+        $this->precio_total = $subtotal;
         //   $this->impuestos = $subtotal * 0.13; // IVA 13%
         // $this->total = $this->subtotal;
         $this->save();

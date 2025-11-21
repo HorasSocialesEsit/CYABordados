@@ -41,7 +41,7 @@
                                     <td>{{ $material->codigo }}</td>
                                     <td>{{ $material->descripcion }}</td>
                                     <td>{{ $material->stock }}</td>
-                                    <td>{{ $material->tipoHilo }}</td>
+                                    <td>{{ $material->tipoHilo->nombre_tipo_hilo }}</td>
                                     <td>
                                         @php
                                             $badgeClass = 'bg-success';

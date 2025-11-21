@@ -17,8 +17,7 @@
 
         <div class="col-md-6 mb-3">
             <label for="codigo" class="form-label">Código</label>
-            <input type="text" name="codigo" id="codigo"
-                class="form-control @error('codigo') is-invalid @enderror"
+            <input type="text" name="codigo" id="codigo" class="form-control @error('codigo') is-invalid @enderror"
                 value="{{ old('codigo', $hilo->codigo ?? '') }}" required>
             @error('codigo')
                 <div class="invalid-feedback">{{ $message }}</div>
@@ -28,26 +27,28 @@
 
     <div class="row">
         <div class="col-md-6 mb-3">
-            <label for="tipoHilo" class="form-label">Tipo de Hilo</label>
-            <select name="tipoHilo" id="tipoHilo" class="form-control @error('tipoHilo') is-invalid @enderror"
-                required>
-                <option value="">Selecciona un tipo</option>
+            <label for="tipo_hilo_id" class="form-label">Tipo de Hilo</label>
+            <select name="tipo_hilo_id" id="tipo_hilo_id" class="form-control @error('tipo_hilo_id') is-invalid @enderror" required>
+
+                @if (isset($hilo))
+                    <option value="{{ $hilo->tipo_hilo_id }}" selected>{{ $hilo->tipoHilo->nombre_tipo_hilo }}</option>
+                @else
+                    <option value="">Selecciona un tipo</option>
+                @endif
+
+
                 @foreach ($tiposHilo as $tipo)
-                    <option value="{{ $tipo }}"
-                        {{ old('tipoHilo', $hilo->tipoHilo ?? '') == $tipo ? 'selected' : '' }}>
-                        {{ ucfirst($tipo) }}
-                    </option>
+                    <option value="{{ $tipo->id }}">{{ $tipo->nombre_tipo_hilo }}</option>
                 @endforeach
             </select>
-            @error('tipoHilo')
+            @error('tipo_hilo_id')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
         <div class="col-md-6 mb-3">
             <label for="stock" class="form-label">Stock</label>
-            <input type="number" name="stock" id="stock"
-                class="form-control @error('stock') is-invalid @enderror" value="{{ old('stock', $hilo->stock ?? '') }}"
-                required min="0">
+            <input type="number" name="stock" id="stock" class="form-control @error('stock') is-invalid @enderror"
+                value="{{ old('stock', $hilo->stock ?? '') }}" required min="0">
             @error('stock')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -59,7 +60,8 @@
         <div class="col-md-6 mb-3">
             <label for="descripcion" class="form-label">Descripción</label>
             <textarea name="descripcion" id="descripcion" rows="3"
-                class="form-control @error('descripcion') is-invalid @enderror" required>{{ old('descripcion', $hilo->descripcion ?? '') }}</textarea>
+                class="form-control @error('descripcion') is-invalid @enderror"
+                required>{{ old('descripcion', $hilo->descripcion ?? '') }}</textarea>
             @error('descripcion')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror

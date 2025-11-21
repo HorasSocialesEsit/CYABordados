@@ -13,20 +13,21 @@ return new class extends Migration
     {
         Schema::create('ordenes_calculos_por_arte', function (Blueprint $table) {
             $table->id();
+            // Campos específicos para los cálculos por arte
+            $table->integer('puntadas');
+            $table->integer('secuencias');
+            $table->integer('rpm');
+            $table->decimal('tiempo_ciclo', 10, 2);
+            $table->string('nota_adicional', 255);
+            $table->string('ruta_arte', 255);
+
             // Relación con la orden principal
             $table->unsignedBigInteger('orden_id_calculo');
             $table->foreign('orden_id_calculo')->references('id')->on('ordenes')->onDelete('cascade');
             // Relación con el arte asociado
             $table->unsignedBigInteger('arte_id');
             $table->foreign('arte_id')->references('id')->on('orden_detalles')->onDelete('cascade');
-            // Campos específicos para los cálculos por arte
 
-            $table->integer('puntadas');
-            $table->integer('secuencias');
-            $table->integer('rpm');
-            $table->decimal('tiempo_ciclo', 10, 2);
-            $table->string('notaadicional', 255);
-            $table->string('rutaarte', 255);
 
             $table->timestamps();
         });

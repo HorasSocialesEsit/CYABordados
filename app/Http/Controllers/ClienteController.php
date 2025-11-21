@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Departamentos;
+use App\Models\TipoCliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -25,7 +26,8 @@ class ClienteController extends Controller
     public function create()
     {
         $departamentos = Departamentos::all();
-        return view('app.clientes.create', compact('departamentos'));
+        $tipos_cliente = TipoCliente::all();
+        return view('app.clientes.create', compact('departamentos', 'tipos_cliente'));
     }
 
     /**
@@ -106,9 +108,22 @@ class ClienteController extends Controller
 
         $codigo = 'CLI-' . strtoupper(Str::random(5));
 
-        Cliente::create(array_merge($request->all(), [
+
+
+        Cliente::create([
+            'nombre' => $request->nombre,
+            'correo' => $request->correo,
+            'telefono' => $request->telefono,
+            'telefono_alt' => $request->telefono_alt,
+            'direccion' => $request->direccion,
+            'pais' => $request->pais,
             'codigo' => $codigo,
-        ]));
+            'nit' => $request->nit,
+            'dui' => $request->dui,
+            'nrc' => $request->nrc,
+            'id_municipio' => $request->id_municipio,
+            'tipo_cliente_id' => $request->tipo_cliente
+        ]);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente registrado correctamente.');
     }

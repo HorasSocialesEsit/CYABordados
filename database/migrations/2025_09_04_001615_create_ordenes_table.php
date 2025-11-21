@@ -13,21 +13,22 @@ return new class extends Migration
     {
         Schema::create('ordenes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cliente_id')->nullable();
-            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('set null');
-
+            
             $table->date('fecha_orden');
             $table->string('codigo_orden')->unique();
             $table->date('fecha_entrega')->nullable();
-            $table->enum('estado', ['nueva', 'en_diseño', 'asignada_maquina', 'en_proceso_maquina', 'completada', 'entregada_cliente', 'cancelada'])->default('nueva');
             $table->enum('tipo', ['venta'])->default('venta');
-
+            
             // Totales de la orden
-            $table->decimal('PrecioTotal', 12, 2)->default(0);
-
-            // Control y trazabilidad
+            $table->decimal('precio_total', 12, 2)->default(0);
+            
+            $table->unsignedBigInteger('estado_orden_id')->default(1);
+            $table->unsignedBigInteger('cliente_id')->nullable();
             $table->unsignedBigInteger('usuario_id')->nullable(); // quién registró la orden
+
             $table->foreign('usuario_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('estado_orden_id')->references('id')->on('estado_orden')->onDelete('cascade');
+            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('set null');
 
             $table->timestamps();
         });

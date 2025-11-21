@@ -52,8 +52,9 @@
                     <label class="form-label">Tipo de cliente</label>
                     <select name="tipo_cliente" class="form-select @error('tipo_cliente') is-invalid @enderror" required>
                         <option value="">Seleccione tipo</option>
-                        <option value="Persona" {{ old('tipo_cliente') == 'Persona' ? 'selected' : '' }}>Persona</option>
-                        <option value="Empresa" {{ old('tipo_cliente') == 'Empresa' ? 'selected' : '' }}>Empresa</option>
+                        @foreach ($tipos_cliente as $tipo)
+                            <option value="{{ $tipo->id }}"> {{ $tipo->nombre_tipo_cliente }}</option>
+                        @endforeach
                     </select>
                     @error('tipo_cliente')
                         <div class="invalid-feedback">{{ $message }}</div>

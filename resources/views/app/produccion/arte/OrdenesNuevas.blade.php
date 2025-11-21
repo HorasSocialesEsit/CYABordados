@@ -28,7 +28,7 @@
                             @foreach ($ordenes as $orden)
                                 <tr>
                                     <td>{{ $orden->codigo_orden }}</td>
-                                    <td>{{ $orden->estado }}</td>
+                                    <td>{{ $orden->estado->nombre_estado_orden }}</td>
 
                                     <td>{{ $orden->fecha_entrega->format('d/m/Y') }}</td>
                                     <td>{{ today()->diffInDays($orden->fecha_entrega, false) . '  Dias' }}</td>
