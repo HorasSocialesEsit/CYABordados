@@ -15,17 +15,18 @@ class OrdenCalculoArte extends Model
         'tiempo_ciclo',
         'nota_adicional',
         'ruta_arte',
-        'orden_id',
-        'detalle_id',
+        'orden_id_calculo',
+        'arte_id',
+        // 'detalle_id',
     ];
 
     public function orden()
     {
-        return $this->belongsTo(Orden::class);
+        return $this->belongsTo(Orden::class, 'orden_id_calculo');
     }
 
     public function detalle()
     {
-        return $this->belongsTo(OrdenDetalle::class);
+        return $this->belongsTo(OrdenDetalle::class, 'arte_id');
     }
 }

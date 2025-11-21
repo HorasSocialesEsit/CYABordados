@@ -148,31 +148,30 @@ class OrdenProduccionController extends Controller
         try {
 
             HistorialOrden::create([
-                'rpm'           => $request->rpm,
-                'puntadas'      => $request->puntadas,
-                'secuencias'    => $request->secuencia,
-                'cabezales'     => $request->cabezales,
+                'rpm' => $request->rpm,
+                'puntadas' => $request->puntadas,
+                'secuencias' => $request->secuencia,
+                'cabezales' => $request->cabezales,
                 'tiempo_cambio' => $request->tiempo_cambio,
-                'eficiencia'    => $request->eficiencia,
+                'eficiencia' => $request->eficiencia,
 
                 'ciclos'        => $request->ciclos_calculo,
                 'horas'         => $request->horas,
                 'minutos'       => $request->horas * 60,
 
-                'cantidad'      => $request->unidades,
-                'realizada'     => $request->producido,
-                'restante'      => $request->pendiente,
+                'cantidad' => $request->unidades,
+                'realizada' => $request->producido,
+                'restante' => $request->pendiente,
 
-                'orden_id'      => $id
+                'orden_id' => $id,
             ]);
 
             // aqui cuando el restante sea cero actualizamos la orden a completada el estado
             if ($request->pendiente == 0) {
                 Orden::where('id', $id)->update([
-                    'estado' => 'completada'
+                    'estado' => 'completada',
                 ]);
             }
-
 
             return redirect()->route('ordenProceso.index')
                 ->with('success', 'Producción registrada correctamente.');
@@ -181,13 +180,6 @@ class OrdenProduccionController extends Controller
                 ->with('error', 'Error al registrar.');
         }
     }
-
-
-
-
-
-
-
 
     public function iniciarProceso(string $id, string $estado)
     {
