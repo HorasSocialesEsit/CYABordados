@@ -39,7 +39,7 @@ class InventarioController extends Controller
             'nombre' => 'required|string|max:255',
             'codigo' => 'required|string|max:50|unique:materiales,codigo',
             'descripcion' => 'nullable|string',
-            'tipoHilo' => 'required',
+            'tipo_hilo_id' => 'required',
             'stock' => 'required|integer|min:1',
         ], [
             'nombre.required' => 'El nombre del material es obligatorio.',
@@ -53,7 +53,7 @@ class InventarioController extends Controller
 
             'descripcion.string' => 'La descripción debe ser un texto válido.',
 
-            'tipoHilo.required' => 'Debe seleccionar un tipo de hilo.',
+            'tipo_hilo_id.required' => 'Debe seleccionar un tipo de hilo.',
 
             'stock.required' => 'Debe especificar el stock del material.',
             'stock.integer' => 'El stock debe ser un número entero.',

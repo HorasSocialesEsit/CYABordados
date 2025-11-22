@@ -72,7 +72,7 @@ class Orden extends Model
     // Mostrar el código formateado
     public function getCodigoFormateadoAttribute()
     {
-        return strtoupper($this->codigo_orden);
+        // return strtoupper($this->codigo_orden);
     }
 
     // Calcular total automáticamente si quieres manejarlo en el modelo
