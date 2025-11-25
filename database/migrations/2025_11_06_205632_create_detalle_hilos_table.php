@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('detalle_hilos', function (Blueprint $table) {
             $table->id();
+            // Cantidad opcional si más adelante la deseas usar
+            $table->integer('cantidad')->default(1);
             // Relación al detalle de la orden
             $table->unsignedBigInteger('orden_detalle_id');
             $table->foreign('orden_detalle_id')
@@ -27,8 +29,6 @@ return new class extends Migration
                 ->on('materiales')
                 ->onDelete('cascade');
 
-            // Cantidad opcional si más adelante la deseas usar
-            $table->integer('cantidad')->default(1);
 
             $table->timestamps();
         });

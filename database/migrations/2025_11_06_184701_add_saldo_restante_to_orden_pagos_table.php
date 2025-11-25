@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orden_pagos', function (Blueprint $table) {
-            //
-            $table->decimal('saldo_restante', 12, 2)->nullable()->after('nota');
-        });
+        // Schema::table('orden_pagos', function (Blueprint $table) {
+        //     //
+        //     $table->decimal('saldo_restante', 12, 2)->nullable()->after('nota');
+        // });
     }
 
     /**
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orden_pagos', function (Blueprint $table) {
-            //
-            $table->dropColumn('saldo_restante');
-        });
+        // Schema::table('orden_pagos', function (Blueprint $table) {
+        //     //
+        //     $table->dropColumn('saldo_restante');
+        // });
     }
 };

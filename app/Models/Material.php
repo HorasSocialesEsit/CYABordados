@@ -18,9 +18,13 @@ class Material extends Model
         'codigo',
         'descripcion',
         'stock',
-        'tipoHilo',
+        'tipo_hilo_id',
     ];
 
+    public function tipoHilo()
+    {
+        return $this->belongsTo(TiposHilos::class);
+    }
     public function ordenDetalles()
     {
         return $this->hasMany(OrdenDetalle::class);

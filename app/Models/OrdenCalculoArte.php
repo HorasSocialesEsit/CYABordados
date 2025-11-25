@@ -9,14 +9,14 @@ class OrdenCalculoArte extends Model
     protected $table = 'ordenes_calculos_por_arte';
 
     protected $fillable = [
-        'orden_id_calculo',
-        'arte_id',
         'puntadas',
         'secuencias',
         'rpm',
         'tiempo_ciclo',
-        'notaadicional',
-        'rutaarte',
+        'nota_adicional',
+        'ruta_arte',
+        'orden_id_calculo',
+        'arte_id',
     ];
 
     public function orden()

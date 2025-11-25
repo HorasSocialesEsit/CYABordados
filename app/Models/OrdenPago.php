@@ -12,15 +12,21 @@ class OrdenPago extends Model
     protected $table = 'orden_pagos';
 
     protected $fillable = [
-        'orden_id',
         'monto',
-        'tipo',
         'metodo',
-        'nota',
-        'usuario_id',
-        'saldo_restante',
         'fecha_pago',
+        'nota',
+        'saldo_restante',
+        'orden_id',
+        'usuario_id',
+        'tipo_pago_id',
     ];
+
+    public function tipoPago()
+    {
+        return $this->belongsTo(TipoPago::class, 'tipo_pago_id');
+    }
+
 
     public function orden()
     {

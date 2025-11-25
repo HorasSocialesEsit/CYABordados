@@ -6,6 +6,7 @@ use App\Models\Orden;
 use App\Models\OrdenCalculoArte;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
 class OrdenCalculoArteController extends Controller
 {
     /**
@@ -21,15 +22,16 @@ class OrdenCalculoArteController extends Controller
             'rpm' => 'nullable|integer',
             'tiempo_ciclo' => 'nullable|numeric',
             'notaadicional' => 'nullable|string|max:255',
-            'imagen_arte' => 'nullable|image|max:4096',
+            // 'imagen_arte' => 'nullable|image|max:4096',
         ]);
 
+        // DB::transaction();
         try {
             // 2️⃣ Subida de imagen opcional
-            $rutaImagen = null;
-            if ($request->hasFile('imagen_arte')) {
-                $rutaImagen = $request->file('imagen_arte')->store('arte', 'public');
-            }
+            $rutaImagen = 'asdfsa';
+            // if ($request->hasFile('imagen_arte')) {
+            //     $rutaImagen = $request->file('imagen_arte')->store('arte', 'public');
+            // }
 
             // 3️⃣ Crear registro del cálculo
             $calculo = OrdenCalculoArte::create([
@@ -38,9 +40,9 @@ class OrdenCalculoArteController extends Controller
                 'puntadas' => $request->puntadas,
                 'secuencias' => $request->secuencias,
                 'rpm' => $request->rpm,
-                'tiempo_ciclo' => $request->tiempo_ciclo,
-                'notaadicional' => $request->notaadicional,
-                'rutaarte' => $rutaImagen,
+                'tiempo_ciclo' =>  10,
+                'nota_adicional' => "qadicional",
+                'ruta_arte' => $rutaImagen,
             ]);
 
             if (! $calculo) {
@@ -50,14 +52,19 @@ class OrdenCalculoArteController extends Controller
             // 4️⃣ Actualizar estado de la orden de forma segura
             $orden = Orden::find($ordenId);
 
-            if (! $orden) {
+            if (!$orden) {
                 throw new \Exception('Orden no encontrada.');
             }
 
+            
             // Opcional: si tu columna es ENUM, asegúrate que el valor exista
-            $orden->estado = 'arte_aprobado';
+            $orden->estado_orden_id = 3;
             $orden->save();
 
+            //    $orden = Orden::find($ordenId);
+            
+            //    DB::commit();
+            // return response()->json($orden);
             // 5️⃣ Retornar con éxito
             return back()->with([
                 'success' => 'Cálculo guardado y estado actualizado correctamente.',
@@ -65,6 +72,7 @@ class OrdenCalculoArteController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            // DB::rollback();
             // 6️⃣ Capturar cualquier error
             return back()->with('error', 'Error al guardar: '.$e->getMessage());
         }
@@ -82,7 +90,7 @@ class OrdenCalculoArteController extends Controller
             'secuencias' => 'nullable|integer',
             'rpm' => 'nullable|integer',
             'tiempo_ciclo' => 'nullable|numeric',
-            'notaadicional' => 'nullable|string|max:255',
+            // 'notaadicional' => 'nullable|string|max:255',
             'imagen_arte' => 'nullable|image|max:4096',
         ]);
 
@@ -95,7 +103,7 @@ class OrdenCalculoArteController extends Controller
         $calculo->secuencias = $request->secuencias;
         $calculo->rpm = $request->rpm;
         $calculo->tiempo_ciclo = $request->tiempo_ciclo;
-        $calculo->notaadicional = $request->notaadicional;
+        // $calculo->nota_adicional = $request->notaadicional;
 
         $calculo->save();
 

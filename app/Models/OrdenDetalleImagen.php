@@ -12,9 +12,9 @@ class OrdenDetalleImagen extends Model
     protected $table = 'orden_detalle_imagenes';
 
     protected $fillable = [
-        'orden_detalle_id',
         'ruta_imagen',
         'descripcion',
+        'orden_detalle_id',
     ];
 
     /**

@@ -32,17 +32,31 @@ class MaquinasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre'    => 'required|string|max:100|unique:maquinas,nombre',
-            'cabezales' => 'required|integer|min:1',
-            'rpm' => 'integer'
+            'nombre'           => 'required|string|max:100|unique:maquinas,nombre',
+            'cabezales'        => 'required|integer|min:1',
+            'cabezales_danado' => 'nullable|integer|min:0|lte:cabezales',
+            'rpm'              => 'nullable|integer'
         ], [
-            'nombre.unique' => 'El nombre de la máquina ya está registrado.'
+            'rpm.integer' => 'Los rmp deben ser un número entero.',
+
+
+            'nombre.unique' => 'El nombre de la máquina ya está registrado.',
+
+            'cabezales.required' => 'Debe ingresar la cantidad total de cabezales.',
+            'cabezales.integer'  => 'Los cabezales deben ser un número entero.',
+            'cabezales.min'      => 'Debe haber al menos un cabezal.',
+
+            'cabezales_danado.integer' => 'Los cabezales dañados deben ser un número entero.',
+            'cabezales_danado.min'     => 'Los cabezales dañados no pueden ser negativos.',
+            'cabezales_danado.lte'     => 'Los cabezales dañados no pueden ser mayores que los cabezales totales.'
         ]);
+
 
         try {
             Maquinas::create([
                 'nombre'    => $request->nombre,
                 'cabezales' => $request->cabezales,
+                'cabezales_danado' => $request->cabezales_danado ?? 0,
                 'rpm' => $request->rpm
             ]);
 
@@ -86,8 +100,18 @@ class MaquinasController extends Controller
         $request->validate([
             'nombre'    => 'required|string|max:100',
             'cabezales' => 'required|integer|min:1',
+            'cabezales_danado' => 'nullable|integer|min:0|lte:cabezales',
             'rpm'       => 'integer'
+        ], [
+            'rpm.integer' => 'Los rmp deben ser un número entero.',
 
+            'cabezales.required' => 'Debe ingresar la cantidad total de cabezales.',
+            'cabezales.integer'  => 'Los cabezales deben ser un número entero.',
+            'cabezales.min'      => 'Debe haber al menos un cabezal.',
+
+            'cabezales_danado.integer' => 'Los cabezales dañados deben ser un número entero.',
+            'cabezales_danado.min'     => 'Los cabezales dañados no pueden ser negativos.',
+            'cabezales_danado.lte'     => 'Los cabezales dañados no pueden ser mayores que los cabezales totales.'
         ]);
 
         $maquina = Maquinas::findOrFail($id);
@@ -95,6 +119,7 @@ class MaquinasController extends Controller
         $maquina->update([
             'nombre'    => $request->nombre,
             'cabezales' => $request->cabezales,
+            'cabezales_danado' => $request->cabezales_danado,
             'rpm'       => $request->rpm
         ]);
 

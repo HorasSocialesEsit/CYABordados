@@ -18,27 +18,29 @@ class Cliente extends Model
         'telefono',
         'telefono_alt',
         'direccion',
-        // 'municipio',
-        // 'departamento',
         'pais',
         'codigo',
-        'tipo_cliente',
         'nit',
         'dui',
         'nrc',
         'estado',
-        'id_municipio'
+        'id_municipio',
+        'tipo_cliente_id',
     ];
 
     // Valores por defecto (opcional)
     protected $attributes = [
         'pais' => 'El Salvador',
         'estado' => 'Activo',
-        'tipo_cliente' => 'Persona',
+        // 'tipo_cliente' => 'Persona',
     ];
 
     public function ordenes()
     {
         return $this->hasMany(Orden::class);
+    }
+    public function tipoCliente()
+    {
+        return $this->belongsTo(TipoCliente::class, 'tipo_cliente_id');
     }
 }

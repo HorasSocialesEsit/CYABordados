@@ -26,6 +26,7 @@
                                 <th>ID</th>
                                 <th>Nombre</th>
                                 <th>Cabezales</th>
+                                <th>Cabezales Dañados</th>
                                 <th>RPM</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
@@ -36,6 +37,7 @@
                                     <td>{{ $maquina->id }}</td>
                                     <td>{{ $maquina->nombre }}</td>
                                     <td>{{ $maquina->cabezales }}</td>
+                                    <td>{{ $maquina->cabezales_danado }}</td>
                                     <td>{{ $maquina->rpm }}</td>
 
 

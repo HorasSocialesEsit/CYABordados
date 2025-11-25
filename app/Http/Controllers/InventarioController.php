@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Material;
+use App\Models\TiposHilos;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -24,9 +25,9 @@ class InventarioController extends Controller
      */
     public function create()
     {
-        $tiposHilo = ['Algodon', 'Poliester'];
+        $tiposHilo = TiposHilos::all();
 
-        return view('app.inventario.inventarioCreate', compact('tiposHilo'));
+        return view('app.inventario.inventarioCreate', compact('tiposHilo', 'tiposHilo'));
     }
 
     /**
@@ -38,7 +39,7 @@ class InventarioController extends Controller
             'nombre' => 'required|string|max:255',
             'codigo' => 'required|string|max:50|unique:materiales,codigo',
             'descripcion' => 'nullable|string',
-            'tipoHilo' => 'required|in:Algodon,Poliester',
+            'tipo_hilo_id' => 'required',
             'stock' => 'required|integer|min:1',
         ], [
             'nombre.required' => 'El nombre del material es obligatorio.',
@@ -52,14 +53,19 @@ class InventarioController extends Controller
 
             'descripcion.string' => 'La descripción debe ser un texto válido.',
 
-            'tipoHilo.required' => 'Debe seleccionar un tipo de hilo.',
-            'tipoHilo.in' => 'El tipo de hilo seleccionado no es válido.',
+            'tipo_hilo_id.required' => 'Debe seleccionar un tipo de hilo.',
 
             'stock.required' => 'Debe especificar el stock del material.',
             'stock.integer' => 'El stock debe ser un número entero.',
             'stock.min' => 'El stock debe ser al menos 1 unidad.',
         ]);
-        Material::create($validated);
+        Material::create([
+            'nombre' => $request->nombre,
+            'codigo' => $request->codigo,
+            'descripcion' => $request->descripcion,
+            'stock' => $request->stock,
+            'tipo_hilo_id' => $request->tipo_hilo_id,
+        ]);
 
         return redirect()->route('inventario.index')->with('success', 'Hilo agregado correctamente.');
     }
@@ -77,7 +83,7 @@ class InventarioController extends Controller
      */
     public function edit(string $id)
     {
-        $tiposHilo = ['Algodon', 'Poliester'];
+        $tiposHilo = TiposHilos::all();
         $hilo = Material::findOrFail($id);
 
         return view('app.inventario.inventarioEdit', compact('tiposHilo', 'hilo'));
@@ -100,7 +106,7 @@ class InventarioController extends Controller
                 Rule::unique('materiales', 'codigo')->ignore($material->id),
             ],
             'descripcion' => 'nullable|string',
-            'tipoHilo' => 'required|in:Algodon,Poliester',
+            'tipo_hilo_id' => 'required',
             'stock' => 'required|integer|min:1',
         ], [
             'nombre.required' => 'El nombre del material es obligatorio.',
@@ -114,8 +120,7 @@ class InventarioController extends Controller
 
             'descripcion.string' => 'La descripción debe ser un texto válido.',
 
-            'tipoHilo.required' => 'Debe seleccionar un tipo de hilo.',
-            'tipoHilo.in' => 'El tipo de hilo seleccionado no es válido.',
+            'tipo_hilo_id.required' => 'Debe seleccionar un tipo de hilo.',
 
             'stock.required' => 'Debe especificar el stock del material.',
             'stock.integer' => 'El stock debe ser un número entero.',

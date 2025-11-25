@@ -12,16 +12,17 @@ class OrdenDetalle extends Model
     protected $table = 'orden_detalles';
 
     protected $fillable = [
-        'orden_id',
         'nombre_arte',
-        'tamaño_diseño',
+        'tamano_diseno',
         'color_hilo',
         'ubicacion_prenda',
-        'tamaño_cuello',
+        'tamano_cuello',
         'cantidad',
         'precio_unitario',
         'total',
         'notas',
+        'orden_id',
+        'maquina_id'
     ];
 
     /**
@@ -33,7 +34,10 @@ class OrdenDetalle extends Model
     {
         return $this->belongsTo(Orden::class);
     }
-
+    public function maquinaAsignada()
+    {
+        return $this->belongsTo(Maquinas::class, 'maquina_id');
+    }
     // Si un detalle puede tener muchas imágenes de arte (como dijimos antes)
     public function imagenes()
     {

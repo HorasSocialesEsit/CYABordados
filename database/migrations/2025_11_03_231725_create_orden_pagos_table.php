@@ -13,26 +13,20 @@ return new class extends Migration
     {
         Schema::create('orden_pagos', function (Blueprint $table) {
             $table->id();
-            // Relación con la orden principal
+            $table->decimal('monto', 12, 2);  // Monto del pago
+            $table->string('metodo')->nullable(); // Método de pago (efectivo)
+            $table->timestamp('fecha_pago')->useCurrent();    // Fecha y usuario que registró el pago
+            $table->text('nota')->nullable();
+            $table->decimal('saldo_restante', 12, 2);  // Monto del pago
+
             $table->unsignedBigInteger('orden_id');
-            $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
-
-            // Monto del pago
-            $table->decimal('monto', 12, 2);
-
-            // Tipo de pago (anticipo, abono, saldo final)
-            $table->enum('tipo', ['anticipo', 'abono', 'saldoFinal'])->default('anticipo');
-
-            // Método de pago (efectivo)
-            $table->string('metodo')->nullable();
-
-            // Fecha y usuario que registró el pago
-            $table->timestamp('fecha_pago')->useCurrent();
             $table->unsignedBigInteger('usuario_id')->nullable();
-            $table->foreign('usuario_id')->references('id')->on('users')->onDelete('set null');
+            $table->unsignedBigInteger('tipo_pago_id')->default(1);
 
             // Nota opcional
-            $table->text('nota')->nullable();
+            $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('tipo_pago_id')->references('id')->on('tipo_pago')->onDelete('cascade');
             $table->timestamps();
         });
     }

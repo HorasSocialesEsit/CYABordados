@@ -17,7 +17,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label">RPM</label>
                         <input type="text" id="rpm" name="rpm" class="form-control @error('rpm') is-invalid @enderror"
-                            value="{{ $data['rmp_maquina'] }}">
+                            value="{{ $data['rmp_maquina'] }}" readonly>
                         @error('rpm')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -26,7 +26,7 @@
                         <label class="form-label">Puntadas</label>
                         <input type="text" id="puntadas" name="puntadas"
                             class="form-control @error('puntadas') is-invalid @enderror"
-                            value="{{ $data['puntadas_maquina'] }}">
+                            value="{{ $data['puntadas_maquina'] }}" readonly>
                         @error('puntadas')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -35,7 +35,7 @@
                         <label class="form-label">Secuencias</label>
                         <input type="text" id="secuencia" name="secuencia"
                             class="form-control @error('secuencia') is-invalid @enderror"
-                            value="{{ $data['secuencia_maquina'] }}">
+                            value="{{ $data['secuencia_maquina'] }}" readonly>
                         @error('secuencia')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -43,7 +43,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Unidades</label>
                         <input type="text" id="unidades" name="unidades"
-                            class="form-control @error('unidades') is-invalid @enderror" value="{{ $data['cantidad'] }}">
+                            class="form-control @error('unidades') is-invalid @enderror" value="{{ $data['cantidad'] }}" readonly>
                         @error('unidades')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -53,7 +53,7 @@
                         <label class="form-label">Unidades producidas ahora</label>
                         <input type="text" id="producido" name="producido"
                             class="form-control @error('producido') is-invalid @enderror" min="1"
-                            max="{{ $data['cantidad'] }}">
+                            max="{{ $data['cantidad'] }}" >
                         @error('producido')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -76,7 +76,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Horas</label>
                         <input type="text" id="horas" name="horas" class="form-control @error('horas') is-invalid @enderror"
-                            value="{{ $data['horas_laboradas'] }}">
+                            value="{{ $data['horas_laboradas'] }}" readonly>
                         @error('horas')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

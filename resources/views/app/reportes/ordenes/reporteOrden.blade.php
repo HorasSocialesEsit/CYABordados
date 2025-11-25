@@ -135,7 +135,7 @@
                                 <tr>
                                     <td>{{ $orden_buscada->cliente->nombre }}</td>
                                     <td>{{ \Carbon\Carbon::parse($orden_buscada->fecha_entrega)->format('d/m/Y') }}</td>
-                                    <td>{{ $orden_buscada->cliente->tipo_cliente }}</td>
+                                    <td>{{ $orden_buscada->cliente->tipoCliente->nombre_tipo_cliente }}</td>
                                 </tr>
 
                             </tbody>
@@ -159,86 +159,88 @@
                     </div>
                 </div>
 
-                @foreach ($orden_buscada->detalles as $detalle)
-                    <div class="card">
-                        <div class="card-header" style="background: #5A5C69;color: #fff; padding: 5px;">
-                            Detalle del Diseño / Bordado
-                        </div>
-                        <div class="">
-                            <table class="table ">
-                                <thead class="">
-                                    <tr>
-                                        <th>Nombre del Arte</th>
-                                        <th>Tamaño del Diseño</th>
-                                        <th>Ubicación en la Prenda</th>
-                                        <th>Tamaño de Cuello</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ $detalle->nombre_arte }}</td>
-                                        <td>{{ $detalle->tamaño_diseño ?? '—' }}</td>
-                                        <td>{{ $detalle->ubicacion_prenda ?? '—' }}</td>
-                                        <td>{{ $detalle->tamaño_cuello ?? '—' }}</td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
-
-                            <table class="table ">
-                                <thead class="">
-                                    <tr>
-                                        <th>Cantidad</th>
-                                        <th>Precio Unitario</th>
-                                        <th>Total</th>
-                                        <th>Notas adicionales</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{ $detalle->cantidad }}</td>
-                                        <td>${{ number_format($detalle->precio_unitario, 2) }}</td>
-                                        <td>${{ number_format($detalle->total, 2) }}</td>
-                                        <td>{{ $detalle->notas ?? '—' }}</td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="card">
+                    <div class="card-header" style="background: #5A5C69;color: #fff; padding: 5px;">
+                        Detalle del Diseño / Bordado
                     </div>
-                    <div class="card">
-                        <div class="card-header " style="background: #36B9CC;color: #fff; padding: 5px;">
-                            Hilos Utilizados en el Diseño
-                        </div>
-                        <div class="card-body">
-                            <table class="table ">
-                                <thead class="">
-                                    <tr>
-                                        <th>Código</th>
-                                        <th>Nombre del Hilo</th>
-                                        <th>Tipo</th>
-                                        <th>Stock</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($detalle->hilos as $hilo)
-                                        <tr>
-                                            <td>{{ $hilo->material->codigo }}</td>
-                                            <td>{{ $hilo->material->nombre }}</td>
-                                            <td>{{ $hilo->material->tipoHilo }}</td>
-                                            <td>{{ $hilo->material->stock }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="">No se registraron hilos.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="">
+                        <table class="table ">
+                            <thead class="">
+                                <tr>
+                                    <th>Nombre del Arte</th>
+                                    <th>Tamaño del Diseño</th>
+                                    <th>Ubicación en la Prenda</th>
+                                    <th>Tamaño de Cuello</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ $detalle->nombre_arte }}</td>
+                                    <td>{{ $detalle->tamano_diseno ?? '—' }}</td>
+                                    <td>{{ $detalle->ubicacion_prenda ?? '—' }}</td>
+                                    <td>{{ $detalle->tamano_cuello ?? '—' }}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+
+                        <table class="table ">
+                            <thead class="">
+                                <tr>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Total</th>
+                                    <th>Notas adicionales</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ $detalle->cantidad }}</td>
+                                    <td>${{ number_format($detalle->precio_unitario, 2) }}</td>
+                                    <td>${{ number_format($detalle->total, 2) }}</td>
+                                    <td>{{ $detalle->notas ?? '—' }}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
                     </div>
-                @endforeach
+                </div>
+
+                <div class="card">
+                    <div class="card-header " style="background: #36B9CC;color: #fff; padding: 5px;">
+                        Hilos Utilizados en el Diseño
+                    </div>
+                    <div class="card-body">
+                        <table class="table ">
+                            <thead class="">
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre del Hilo</th>
+                                    <th>Tipo</th>
+                                    <th>Stock</th>
+                                    <th>cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($hilos_asociados as $hilo)
+                                    <tr>
+                                        <td>{{ $hilo['codigo'] }}</td>
+                                        <td>{{ $hilo['nombre'] }}</td>
+                                        <td>{{ $hilo['tipo'] }}</td>
+                                        <td>{{ $hilo['stock'] }}</td>
+                                        <td>{{ $hilo['cantidad'] }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="">No se registraron hilos.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-header" style="background: #1CC88A; color: #fff; padding: 5px;">
                         Datos del Pago

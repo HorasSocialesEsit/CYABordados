@@ -12,9 +12,9 @@ class DetalleHilo extends Model
     protected $table = 'detalle_hilos';
 
     protected $fillable = [
+        'cantidad',
         'orden_detalle_id',
         'material_id',
-        'cantidad',
     ];
 
     // Relación con el detalle de orden

@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orden_detalle_imagenes', function (Blueprint $table) {
+        Schema::create('tipo_cliente', function (Blueprint $table) {
             $table->id();
-            $table->string('ruta_imagen');
-            $table->string('descripcion')->nullable();
-            $table->unsignedBigInteger('orden_detalle_id');
+            // persona o empresa
+            $table->string('nombre_tipo_cliente')->unique();
             $table->timestamps();
-            $table->foreign('orden_detalle_id')->references('id')->on('orden_detalles')->onDelete('cascade');
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orden_detalle_imagenes');
+        Schema::dropIfExists('tipo_cliente');
     }
 };

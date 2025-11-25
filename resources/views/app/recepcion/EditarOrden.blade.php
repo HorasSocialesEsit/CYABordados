@@ -120,6 +120,7 @@
 3️⃣ DATOS DEL PAGO
 ============================ --}}
                     @php $pago = $orden->pagos->last(); @endphp
+                    
                     <div class="card mb-4 border-success">
                         <div class="card-header bg-success text-white fw-bold">Datos del Pago</div>
                         <div class="card-body row g-3">
@@ -132,11 +133,12 @@
                             <div class="col-md-3">
                                 <label class="form-label">Tipo de Pago</label>
                                 <select name="pago[tipo]" class="form-select">
-                                    <option value="anticipo" {{ $pago?->tipo == 'anticipo' ? 'selected' : '' }}>Anticipo
+                                    <option value="{{ $pago?->tipoPago?->id ?? '' }}" selected>
+                                        {{ $pago?->tipoPago?->nombre_tipo_pago ?? 'Selecciona' }}
                                     </option>
-                                    <option value="abono" {{ $pago?->tipo == 'abono' ? 'selected' : '' }}>Abono</option>
-                                    <option value="saldo" {{ $pago?->tipo == 'saldo' ? 'selected' : '' }}>Saldo Final
-                                    </option>
+                                    @foreach ($tipos_pago as $tipo)
+                                         <option value="{{ $tipo->id }}">{{ $tipo->nombre_tipo_pago }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
