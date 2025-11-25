@@ -8,11 +8,23 @@
                 <h4 class="text-center mb-4 fw-bold">Registro de Nueva Orden de Bordado</h4>
 
                 @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
+                    <div id="alert-success" class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                    </div>
                 @endif
+
                 @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
+                    <div id="alert-error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                    </div>
                 @endif
+
 
                 <form method="POST" action="{{ route('ordenes.store') }}" enctype="multipart/form-data">
                     @csrf
@@ -224,7 +236,10 @@
                 </div>
 
                 <div class="modal-body">
-                    @include('app.clientes.modalcliente')
+                    @include('app.clientes.modalcliente', [
+                        'tipoClientes' => $tipoclientes,
+                        'departamentos' => $departamentos,
+                    ])
                 </div>
 
 
@@ -310,5 +325,9 @@
                 });
             }
         });
+        setTimeout(function() {
+            $('#alert-success').alert('close');
+            $('#alert-error').alert('close');
+        }, 5000); // 30 segundos
     </script>
 @endsection

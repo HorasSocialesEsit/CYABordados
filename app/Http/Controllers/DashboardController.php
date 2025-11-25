@@ -12,9 +12,12 @@ class DashboardController extends Controller
     {
 
         // Contamos todas las ordenes nuevas
-        //  $alumnos = Alumno::withCount('matriculas')->get();
+
         $ordenesNuevas = Orden::where('estado_orden_id', '1')->count();
+        //  $ordenesNuevas = Orden::where('estado', 'nueva')->count();
+
         $ordenesCompletadas = Orden::where('estado_orden_id', '5')->count();
+
         // $hoy = now()->toDateString();
 
         $hoy = carbon::today();

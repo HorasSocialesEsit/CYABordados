@@ -7,6 +7,7 @@ use App\Models\Departamentos;
 use App\Models\Material;
 use App\Models\Orden;
 use App\Models\OrdenDetalle;
+use App\Models\TipoCliente;
 use App\Models\TipoPago;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -38,8 +39,9 @@ class OrdenesController extends Controller
         $clientes = Cliente::where('estado', 'Activo')->get();
         $hilos = Material::all();
         $departamentos = Departamentos::all();
+        $tipoclientes = TipoCliente::all();
 
-        return view('app.recepcion.CrearOrden', compact('clientes', 'hilos', 'departamentos'));
+        return view('app.recepcion.CrearOrden', compact('clientes', 'hilos', 'departamentos', 'tipoclientes'));
     }
 
     /**

@@ -27,10 +27,13 @@
 
         <div class="col-md-4">
             <label class="form-label">Tipo de cliente</label>
-            <select name="tipo_cliente" class="form-select" required>
+            <select name="tipo_cliente_id" class="form-select" required>
                 <option value="">Seleccione tipo</option>
-                <option value="Persona">Persona</option>
-                <option value="Empresa">Empresa</option>
+                @foreach ($tipoclientes as $tipo)
+                    <option value="{{ $tipo->id }}">{{ $tipo->nombre_tipo_cliente }}</option>)
+                @endforeach
+
+
             </select>
         </div>
 

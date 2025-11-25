@@ -57,7 +57,7 @@ class ClienteController extends Controller
             'direccion' => 'nullable|string|max:255',
             'id_municipio' => 'required|exists:municipios,id',
             'pais' => 'nullable|string|max:100',
-            'tipo_cliente' => 'required|string|max:50',
+            'tipo_cliente_id' => 'required|string|max:50',
 
             'nit' => [
                 'nullable',
@@ -94,7 +94,7 @@ class ClienteController extends Controller
             'id_municipio.required' => 'Debe seleccionar un municipio.',
             'id_municipio.exists' => 'El municipio seleccionado no es válido.',
 
-            'tipo_cliente.required' => 'Debe seleccionar el tipo de cliente.',
+            'tipo_cliente_id.required' => 'Debe seleccionar el tipo de cliente.',
 
             'nit.digits' => 'El NIT debe contener exactamente 14 dígitos sin guiones.',
             'nit.regex' => 'El NIT solo debe contener números, sin letras ni guiones.',
@@ -123,7 +123,7 @@ class ClienteController extends Controller
             'dui' => $request->dui,
             'nrc' => $request->nrc,
             'id_municipio' => $request->id_municipio,
-            'tipo_cliente_id' => $request->tipo_cliente,
+            'tipo_cliente_id' => $request->tipo_cliente_id,
         ]);
 
         if ($request->OrigenCrearOrdenes == 'ordenesCrearOrden') {
