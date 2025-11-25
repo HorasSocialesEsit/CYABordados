@@ -191,23 +191,27 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->hasRole(['admin', 'supervisor']))
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBodega"
-                            aria-expanded="false" aria-controls="collapseBodega">
-                            <i class="fa-solid fa-book-open-reader text-success"></i>
-                            <span>Producción</span>
-                        </a>
-                        <div id="collapseBodega" class="collapse" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Producción:</h6>
-                                <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Artes en Proceso</a>
+
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBodega"
+                        aria-expanded="false" aria-controls="collapseBodega">
+                        <i class="fa-solid fa-book-open-reader text-success"></i>
+                        <span>Producción</span>
+                    </a>
+                    <div id="collapseBodega" class="collapse" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Producción:</h6>
+                            @if (auth()->user()->hasRole(['admin', 'supervisor']))
+                                <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Artes en
+                                    Proceso</a>
                                 <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Artes Aprobados</a>
-                                <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Orden en Proceso</a>
-                            </div>
+                            @endif
+
+                            <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Orden en Proceso</a>
                         </div>
-                    </li>
-                @endif
+                    </div>
+                </li>
+
 
                 @if (auth()->user()->hasRole(['admin', 'supervisor']))
                     <li class="nav-item">

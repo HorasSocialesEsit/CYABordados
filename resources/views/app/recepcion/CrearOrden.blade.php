@@ -35,8 +35,13 @@
                                         @endforeach
                                     </select>
 
-                                    <a href="{{ route('clientes.create') }}" class="btn btn-outline-success"
-                                        type="button">Nuevo</a>
+
+
+                                    <button class="btn btn-outline-success" data-toggle="modal"
+                                        data-target="#modalRegistrarCliente">
+                                        Registrar Cliente
+                                    </button>
+
                                 </div>
                             </div>
 
@@ -206,6 +211,29 @@
         </div>
     </div>
 
+    <!-- Modal Registrar Cliente -->
+    <div class="modal fade" id="modalRegistrarCliente" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary fw-bold">Registrar Nuevo Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    @include('app.clientes.modalcliente')
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
     {{-- ===========================
     JAVASCRIPT
 =========================== --}}
@@ -250,6 +278,37 @@
 
             tabla.appendChild(row);
             select.value = '';
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const departamentoModal = document.getElementById('modal_departamento');
+            const municipioModal = document.getElementById('modal_municipio');
+
+            if (departamentoModal) {
+                departamentoModal.addEventListener('change', function() {
+                    const idDepartamento = this.value;
+
+                    municipioModal.innerHTML = '<option>Cargando...</option>';
+                    municipioModal.disabled = true;
+
+                    if (!idDepartamento) {
+                        municipioModal.innerHTML = '<option>Seleccione un municipio</option>';
+                        return;
+                    }
+
+                    fetch(`/municipios/${idDepartamento}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            municipioModal.innerHTML =
+                                '<option value="">Seleccione un municipio</option>';
+                            data.forEach(m => {
+                                municipioModal.innerHTML +=
+                                    `<option value="${m.id}">${m.nombre_municipio}</option>`;
+                            });
+                            municipioModal.disabled = false;
+                        });
+                });
+            }
         });
     </script>
 @endsection

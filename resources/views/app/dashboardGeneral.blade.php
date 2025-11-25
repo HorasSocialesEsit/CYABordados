@@ -50,20 +50,20 @@
                     </div>
                 </div>
             </div>
+            @if (auth()->user()->hasRole(['admin', 'supervisor']))
+                <!-- Reprobados (ejemplo) -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body text-center">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Ventas</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
 
-            <!-- Reprobados (ejemplo) -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body text-center">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Ventas</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
-
-                        <i class="fa-solid fa-money-check-dollar fa-2xl mt-2" style="color: #44a854;"></i>
+                            <i class="fa-solid fa-money-check-dollar fa-2xl mt-2" style="color: #44a854;"></i>
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
-
+        @endif
 
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-warning shadow h-100 py-2">

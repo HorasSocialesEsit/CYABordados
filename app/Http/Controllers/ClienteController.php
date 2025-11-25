@@ -25,6 +25,7 @@ class ClienteController extends Controller
     public function create()
     {
         $departamentos = Departamentos::all();
+
         return view('app.clientes.create', compact('departamentos'));
     }
 
@@ -41,12 +42,12 @@ class ClienteController extends Controller
             'telefono' => [
                 'nullable',
                 'digits:8',
-                'regex:/^[0-9]{8}$/'
+                'regex:/^[0-9]{8}$/',
             ],
             'telefono_alt' => [
                 'nullable',
                 'digits:8',
-                'regex:/^[0-9]{8}$/'
+                'regex:/^[0-9]{8}$/',
             ],
 
             'direccion' => 'nullable|string|max:255',
@@ -58,19 +59,19 @@ class ClienteController extends Controller
                 'nullable',
                 'digits:14',
                 'unique:clientes,nit',
-                'regex:/^[0-9]{14}$/'
+                'regex:/^[0-9]{14}$/',
             ],
             'dui' => [
                 'nullable',
                 'digits:9',
                 'unique:clientes,dui',
-                'regex:/^[0-9]{9}$/'
+                'regex:/^[0-9]{9}$/',
             ],
             'nrc' => [
                 'nullable',
                 'digits:14',
                 'unique:clientes,nrc',
-                'regex:/^[0-9]{14}$/'
+                'regex:/^[0-9]{14}$/',
             ],
         ], [
             'nombre.required' => 'El nombre del cliente es obligatorio.',
@@ -104,11 +105,15 @@ class ClienteController extends Controller
             'nrc.unique' => 'Este NRC ya está registrado en el sistema.',
         ]);
 
-        $codigo = 'CLI-' . strtoupper(Str::random(5));
+        $codigo = 'CLI-'.strtoupper(Str::random(5));
 
         Cliente::create(array_merge($request->all(), [
             'codigo' => $codigo,
         ]));
+
+        if ($request->OrigenCrearOrdenes == 'ordenesCrearOrden') {
+            return redirect()->route('ordenes.create')->with('success', 'Cliente registrado correctamente.');
+        }
 
         return redirect()->route('clientes.index')->with('success', 'Cliente registrado correctamente.');
     }
@@ -132,7 +137,7 @@ class ClienteController extends Controller
 
         $request->validate([
             'nombre' => 'required|string|max:100',
-            'correo' => 'required|email|unique:clientes,correo,' . $cliente->id,
+            'correo' => 'required|email|unique:clientes,correo,'.$cliente->id,
             'telefono' => 'nullable|string|max:25',
             'telefono_alt' => 'nullable|string|max:25',
             'direccion' => 'nullable|string|max:255',

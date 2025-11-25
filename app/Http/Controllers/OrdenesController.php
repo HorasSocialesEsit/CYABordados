@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Departamentos;
 use App\Models\Material;
 use App\Models\Orden;
 use App\Models\OrdenDetalle;
@@ -39,8 +40,9 @@ class OrdenesController extends Controller
     {
         $clientes = Cliente::where('estado', 'Activo')->get();
         $hilos = Material::all();
+        $departamentos = Departamentos::all();
 
-        return view('app.recepcion.CrearOrden', compact('clientes', 'hilos'));
+        return view('app.recepcion.CrearOrden', compact('clientes', 'hilos', 'departamentos'));
     }
 
     /**
