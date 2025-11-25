@@ -11,6 +11,13 @@ class Maquinas extends Model
     protected $fillable = [
         'nombre',
         'cabezales',
-        'rpm'
+        'cabezales_danado',
+        'rpm',
+        'en_uso'
     ];
+
+    public function maquinasOrdenDetalle()
+    {
+        return $this->hasMany(OrdenDetalle::class, 'maquina_id');
+    }
 }

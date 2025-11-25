@@ -52,6 +52,10 @@ class Orden extends Model
         return $this->belongsTo(User::class, 'usuario_id');
     }
 
+    public function ordenCalculoArte()
+    {
+        return $this->hasMany(OrdenCalculoArte::class, 'orden_id_calculo');
+    }
     // Una orden puede tener muchos detalles (productos, artes, materiales, etc.)
     public function detalles()
     {

@@ -29,9 +29,11 @@ return new class extends Migration
             // Control adicional
             $table->text('notas')->nullable(); // observaciones específicas del diseño
             $table->unsignedBigInteger('orden_id');
+            $table->unsignedBigInteger('maquina_id')->nullable();
             $table->timestamps();
             // Relación con la orden principal
             $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
+            $table->foreign('maquina_id')->references('id')->on('maquinas')->onDelete('cascade');
         });
     }
 

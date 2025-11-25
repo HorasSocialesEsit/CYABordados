@@ -14,7 +14,7 @@ class OrdenProduccionController extends Controller
      */
     public function index()
     {
-        $ordenes = Orden::where('estado_orden_id', '3')->get();
+        $ordenes = Orden::where('estado_orden_id', '4')->get();
 
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
     }
@@ -49,21 +49,16 @@ class OrdenProduccionController extends Controller
         $horas_laboradas = 0;
         $minutos_calculados = 0;       // en caso que sea domingo, ya que solo ese dia queda
 
-        // obtenemos los rangos de dias de lunes a jueves
-        if ($dia >= 1 && $dia <= 4) {
-            $horas_laboradas = 8.5;
+        // obtenemos los rangos de dias de lunes a viernes
+        if ($dia >= 1 && $dia <= 5) {
+            $horas_laboradas = 8;
             $minutos_calculados = $horas_laboradas * 60;
         }
 
-        // si el dia es viernes
-        if ($dia === 5) {
-            $horas_laboradas = 7.5;
-            $minutos_calculados = $horas_laboradas * 60;
-        }
 
         // si el dia es sabado
         if ($dia === 6) {
-            $horas_laboradas = 6;
+            $horas_laboradas = 4.5;
             $minutos_calculados = $horas_laboradas * 60;
         }
 
@@ -80,9 +75,17 @@ class OrdenProduccionController extends Controller
     {
         $orden_buscada = Orden::with([
             'detalles',
+            'detalles.maquinaAsignada',
+            'ordenCalculoArte'
         ])->findOrFail($id);
 
+        // obtenemos la maquina asignada al detalle
+        $maquina_asignada = $orden_buscada->detalles->first()->maquinaAsignada;
+        // obtenemos el detalle de la orden
         $detalle = $orden_buscada->detalles->first();
+        // obtener el detalle de calculo del arte
+        $detalle_calculo_arte = $orden_buscada->ordenCalculoArte;
+
 
         // obtenemos el último restante del historial de la orden
         $restante = HistorialOrden::where('orden_id', $id)
@@ -92,19 +95,22 @@ class OrdenProduccionController extends Controller
         // en caso de que exista cambiamos el valor original del pedido
         $cantidad = $restante !== null ? $restante : $detalle->cantidad;
 
+        // en caso que la maquina asignada este dañada en algunos cabezales
+        $cabezales_reales = $maquina_asignada ? $maquina_asignada->cabezales - $maquina_asignada->cabezales_danado : 0;
+
         $data = [
             'id' => $orden_buscada->id,
             'cantidad' => $cantidad,
-            'cabezales' => 8,
+            'cabezales' => $cabezales_reales,
             'eficiencia' => 0.85,
             'tiempo_de_cambio' => 20,
             'horas_laboradas' => $this->obtenerMinutosTrabajadosDias()['horas'],
             'minutos_laboradas' => $this->obtenerMinutosTrabajadosDias()['minutos'],
 
             // datos por default pero en la interfaz se puede editar
-            'rmp_maquina' => 500,
-            'puntadas_maquina' => 12520,
-            'secuencia_maquina' => 12,
+            'rmp_maquina' => $detalle_calculo_arte->first()->rpm ?? 0,
+            'puntadas_maquina' => $detalle_calculo_arte->first()->puntadas ?? 0,
+            'secuencia_maquina' => $detalle_calculo_arte->first()->secuencias ?? 0,
 
         ];
 

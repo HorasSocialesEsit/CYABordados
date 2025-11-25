@@ -17,7 +17,6 @@ class OrdenCalculoArte extends Model
         'ruta_arte',
         'orden_id_calculo',
         'arte_id',
-        // 'detalle_id',
     ];
 
     public function orden()

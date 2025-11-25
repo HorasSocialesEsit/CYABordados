@@ -144,7 +144,7 @@ class OrdenesController extends Controller
      */
     public function edit($id)
     {
-        $orden = Orden::with('detalles','pagos','pagos.tipoPago')->findOrFail($id);
+        $orden = Orden::with('detalles', 'pagos', 'pagos.tipoPago')->findOrFail($id);
         $clientes = Cliente::where('estado', 'Activo')->get();
         $tipos_pago = TipoPago::get();
 
@@ -152,7 +152,7 @@ class OrdenesController extends Controller
         // return response()->json($orden->pagos->last());
         // return response()->json($orden);
 
-        return view('app.recepcion.EditarOrden', compact('orden', 'clientes','tipos_pago'));
+        return view('app.recepcion.EditarOrden', compact('orden', 'clientes', 'tipos_pago'));
     }
 
     /**
@@ -219,11 +219,29 @@ class OrdenesController extends Controller
         $orden_buscada = Orden::with([
             'cliente',
             'usuario',
-            'detalles.hilos.material',
+            'detalles.hilos.material.tipoHilo',
             'pagos',
         ])->findOrFail($id);
+
+        
+        $hilos_asociados = [];
+        foreach ($orden_buscada->detalles as $detalle) {
+            foreach ($detalle->hilos as $hilo) {
+                $hilos_asociados[] = [
+                    'cantidad' => $hilo->cantidad,
+                    'nombre' => $hilo->material->nombre,
+                    'codigo' => $hilo->material->codigo,
+                    'stock' => $hilo->material->stock,
+                    'tipo' => $hilo->material->tipoHilo->nombre_tipo_hilo,
+                ];
+            }
+        }
+
+        $detalle = $orden_buscada->detalles->first();
         $fecha = (new Componentes)->fechaActual();
-        $pdf = PDF::loadView('app.reportes.ordenes.reporteOrden', compact('orden_buscada', 'fecha'));
+
+
+        $pdf = PDF::loadView('app.reportes.ordenes.reporteOrden', compact('orden_buscada','hilos_asociados', 'fecha','detalle'));
         $pdf->setPaper('letter');
 
         return $pdf->stream('Reporte de orden.pdf');
@@ -242,7 +260,6 @@ class OrdenesController extends Controller
             'estado' => $orden_buscada->estado,
             'tipo' => $orden_buscada->tipo,
             'precio_total' => $orden_buscada->PrecioTotal,
-
             'nombre_arte' => $detalle->nombre_arte,
             'tamano_diseno' => $detalle->tamano_diseño,
             'color_hilo' => $detalle->color_hilo,

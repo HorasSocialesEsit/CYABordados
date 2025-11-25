@@ -22,6 +22,7 @@ class OrdenDetalle extends Model
         'total',
         'notas',
         'orden_id',
+        'maquina_id'
     ];
 
     /**
@@ -33,7 +34,10 @@ class OrdenDetalle extends Model
     {
         return $this->belongsTo(Orden::class);
     }
-
+    public function maquinaAsignada()
+    {
+        return $this->belongsTo(Maquinas::class, 'maquina_id');
+    }
     // Si un detalle puede tener muchas imágenes de arte (como dijimos antes)
     public function imagenes()
     {

@@ -7,6 +7,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\EstadoOrden;
+use App\Models\Maquinas;
 use App\Models\TipoCliente;
 use App\Models\TipoPago;
 use App\Models\TiposHilos;
@@ -48,6 +49,26 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
+        Maquinas::insert([
+            [
+                'nombre' => 'Maquina Industrial 1',
+                'cabezales' => 12,
+                'cabezales_danado' => 0,
+                'rpm' => 5000,
+            ],
+            [
+                'nombre' => 'Maquina Industrial 2',
+                'cabezales' => 4,
+                'cabezales_danado' => 1,
+                'rpm' => 6000,
+            ],
+            [
+                'nombre' => 'Maquina Industrial 3',
+                'cabezales' => 12,
+                'cabezales_danado' => 1,
+                'rpm' => 6500,
+            ],
+        ]);
 
 
 
@@ -56,8 +77,8 @@ class DatabaseSeeder extends Seeder
             MunicipiosSeeder::class,
             AdminUserSeeder::class,
             RoleSeeder::class,
+            MaterialSeeder::class,
             OrdenSeeder::class,
-            // MaterialSeeder::class,
         ]);
     }
 }

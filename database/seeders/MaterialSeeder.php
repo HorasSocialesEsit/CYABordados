@@ -34,7 +34,7 @@ class MaterialSeeder extends Seeder
                 'nombre' => $nombre,
                 'codigo' => 'MAT-' . strtoupper(Str::random(5)),
                 'descripcion' => 'Carrete de ' . strtolower($nombre) . ' tipo ' . strtolower($tipo) . '.',
-                'tipoHilo' => $tipo,
+                'tipo_hilo_id' => 1,
                 'stock' => rand(10, 200),
             ]);
         }
