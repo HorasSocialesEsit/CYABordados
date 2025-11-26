@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
         EstadoOrden::insert([
             ['nombre_estado_orden' => 'Nueva'],
             ['nombre_estado_orden' => 'En diseño'],
+            ['nombre_estado_orden' => 'Arte aprobado'],
             ['nombre_estado_orden' => 'Asignada a maquina'],
             ['nombre_estado_orden' => 'En proceso de maquina'],
             ['nombre_estado_orden' => 'Completada'],

@@ -19,13 +19,14 @@ class Orden extends Model
         'precio_total',
         'estado_orden_id',
         'cliente_id',
-        'usuario_id'
+        'usuario_id',
     ];
 
     protected $casts = [
         'fecha_orden' => 'datetime',
         'fecha_entrega' => 'date',
     ];
+
     public function estado()
     {
         return $this->belongsTo(EstadoOrden::class, 'estado_orden_id');
@@ -56,6 +57,7 @@ class Orden extends Model
     {
         return $this->hasMany(OrdenCalculoArte::class, 'orden_id_calculo');
     }
+
     // Una orden puede tener muchos detalles (productos, artes, materiales, etc.)
     public function detalles()
     {

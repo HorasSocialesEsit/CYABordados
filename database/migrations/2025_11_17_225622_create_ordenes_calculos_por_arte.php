@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('secuencias');
             $table->integer('rpm');
             $table->decimal('tiempo_ciclo', 10, 2);
-            $table->string('nota_adicional', 255);
-            $table->string('ruta_arte', 255);
+            $table->string('nota_adicional', 255)->nullable();
+            $table->string('ruta_arte', 255)->nullable();
 
             // Relación con la orden principal
             $table->unsignedBigInteger('orden_id_calculo');
@@ -27,7 +27,6 @@ return new class extends Migration
             // Relación con el arte asociado
             $table->unsignedBigInteger('arte_id');
             $table->foreign('arte_id')->references('id')->on('orden_detalles')->onDelete('cascade');
-
 
             $table->timestamps();
         });

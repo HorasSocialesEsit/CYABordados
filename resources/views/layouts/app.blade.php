@@ -204,10 +204,11 @@
                             @if (auth()->user()->hasRole(['admin', 'supervisor']))
                                 <a class="collapse-item" href="{{ route('produccion.arte.index') }}">Artes en
                                     Proceso</a>
-                                <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Artes Aprobados</a>
+                                <a class="collapse-item" href="{{ route('ordenProceso.ArtesAProbados') }}">Artes
+                                    Aprobados</a>
                             @endif
 
-                            <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Orden en Proceso</a>
+                            <a class="collapse-item" href="{{ route('ordenProceso.index') }}">Orden Proceso de Maquina</a>
                         </div>
                     </div>
                 </li>

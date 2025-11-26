@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HistorialOrden;
 use App\Models\Orden;
+use App\Models\OrdenCalculoArte;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -17,6 +18,18 @@ class OrdenProduccionController extends Controller
         $ordenes = Orden::where('estado_orden_id', '4')->get();
 
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
+    }
+
+    public function ArtesAprobados()
+    {
+        // $ordenes = Orden::where('estado_orden_id', '3')->get();
+        $ordenes = OrdenCalculoArte::with('orden')
+            ->whereHas('orden', function ($query) {
+                $query->where('estado_orden_id', 3);
+            })
+            ->get();
+
+        return view('app.produccion.arte.OrdenesArteApronado', compact('ordenes'));
     }
 
     /**
@@ -55,7 +68,6 @@ class OrdenProduccionController extends Controller
             $minutos_calculados = $horas_laboradas * 60;
         }
 
-
         // si el dia es sabado
         if ($dia === 6) {
             $horas_laboradas = 4.5;
@@ -76,7 +88,7 @@ class OrdenProduccionController extends Controller
         $orden_buscada = Orden::with([
             'detalles',
             'detalles.maquinaAsignada',
-            'ordenCalculoArte'
+            'ordenCalculoArte',
         ])->findOrFail($id);
 
         // obtenemos la maquina asignada al detalle
@@ -85,7 +97,6 @@ class OrdenProduccionController extends Controller
         $detalle = $orden_buscada->detalles->first();
         // obtener el detalle de calculo del arte
         $detalle_calculo_arte = $orden_buscada->ordenCalculoArte;
-
 
         // obtenemos el último restante del historial de la orden
         $restante = HistorialOrden::where('orden_id', $id)
@@ -161,9 +172,9 @@ class OrdenProduccionController extends Controller
                 'tiempo_cambio' => $request->tiempo_cambio,
                 'eficiencia' => $request->eficiencia,
 
-                'ciclos'        => $request->ciclos_calculo,
-                'horas'         => $request->horas,
-                'minutos'       => $request->horas * 60,
+                'ciclos' => $request->ciclos_calculo,
+                'horas' => $request->horas,
+                'minutos' => $request->horas * 60,
 
                 'cantidad' => $request->unidades,
                 'realizada' => $request->producido,
