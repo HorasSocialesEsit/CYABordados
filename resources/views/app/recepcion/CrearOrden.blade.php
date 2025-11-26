@@ -200,7 +200,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Saldo Pendiente</label>
-                                <input type="number" class="form-control" id="saldoPendiente" name="saldoPendiente"
+                                <input type="text" class="form-control" id="saldoPendiente" name="saldoPendiente"
                                     placeholder="0.00">
                             </div>
                             <div class="col-md-12">

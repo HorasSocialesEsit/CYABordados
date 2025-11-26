@@ -145,16 +145,29 @@
                                             </h5>
 
                                             <div class="row g-3">
-                                                @foreach ($orden->detalles->pluck('color_hilo')->unique() as $color)
-                                                    <div class="col-12">
-                                                        <div class="card shadow-sm border-0 rounded-3 p-2 text-center">
-                                                            <span class="fw-semibold"
-                                                                style="color: {{ $color }}; font-size:18px;">
-                                                                {{ $color }}
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                @foreach ($orden->detalles as $detalle)
+                                                    <h3>Detalle: {{ $detalle->nombre_arte }}</h3>
+
+                                                    <table class="table  table-bordered table-hover text-center">
+                                                        <thead class="bg-dark text-white">
+                                                            <tr>
+                                                                <th>Nombre</th>
+                                                                <th>Código</th>
+                                                                <th>Conos Disponibles</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($detalle->hilos as $h)
+                                                                <tr>
+                                                                    <td>{{ $h->material->nombre }}</td>
+                                                                    <td>{{ $h->material->codigo }}</td>
+                                                                    <td>{{ $h->material->stock }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
                                                 @endforeach
+
                                             </div>
                                         </div>
 

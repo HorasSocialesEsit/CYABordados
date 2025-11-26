@@ -77,8 +77,8 @@ class OrdenesController extends Controller
             foreach ($request->detalles as $detalleData) {
                 $detalle = $orden->detalles()->create([
                     'nombre_arte' => $detalleData['nombre_arte'],
-                    'tamano_diseño' => $detalleData['tamaño_diseño'] ?? null,
-                    'color_hilo' => $detalleData['color_hilo'] ?? null,
+                    'tamano_diseno' => $detalleData['tamaño_diseño'] ?? null,
+
                     'ubicacion_prenda' => $detalleData['ubicacion_prenda'] ?? null,
                     'tamano_cuello' => $detalleData['tamaño_cuello'] ?? null,
                     'cantidad' => $detalleData['cantidad'],
@@ -178,7 +178,7 @@ class OrdenesController extends Controller
         $ordenDetalle = OrdenDetalle::where('orden_id', $id)->first();
         $ordenDetalle->update([
             'nombre_arte' => $detalleData['nombre_arte'] ?? null,
-            'tamano_diseño' => $detalleData['tamaño_diseño'] ?? null,
+            'tamano_diseno' => $detalleData['tamaño_diseño'] ?? null,
             'ubicacion_prenda' => $detalleData['ubicacion_prenda'] ?? null,
             'tamano_cuello' => $detalleData['tamaño_cuello'] ?? null,
             'cantidad' => $detalleData['cantidad'] ?? 1,

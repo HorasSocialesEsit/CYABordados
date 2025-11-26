@@ -39,7 +39,7 @@
                                 <tr>
                                     <td>{{ $orden->codigo_orden }}</td>
                                     <td>{{ $orden->estado->nombre_estado_orden }}</td>
-                                    <td>${{ number_format($orden->PrecioTotal, 2) }}</td>
+                                    <td>${{ number_format($orden->precio_total, 2) }}</td>
                                     <td>{{ $orden->fecha_entrega->format('d/m/Y') }}</td>
                                     <td> {{ $orden->dias_atraso }} días</td>
                                     <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
