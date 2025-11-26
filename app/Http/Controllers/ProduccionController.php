@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\Material;
 use App\Models\Orden;
+use App\Models\OrdenDetalle;
 use Illuminate\Http\Request;
+use Nette\Utils\Json;
 
 class ProduccionController extends Controller
 {
@@ -15,6 +17,7 @@ class ProduccionController extends Controller
     public function index()
     {
         $ordenes = Orden::where('estado_orden_id', '2')->get(); // Estado '1' para nuevas ordenes
+
         return view('app.produccion.arte.OrdenesNuevas', compact('ordenes'));
     }
 
@@ -57,9 +60,16 @@ class ProduccionController extends Controller
         Orden::where('id', $id)->update([
             'estado_orden_id' => '2',
         ]);
-        $orden = Orden::with('detalles')->findOrFail($id);
+
+        // $orden = Orden::with('detalles')->findOrFail($id);
+        $orden = Orden::with('detalles.hilos.material')->findOrFail($id);
+
+        // return Json::encode($orden);
+        //  $id_detalles = OrdenDetalle::where('orden_id', $id)->get();
 
         $clientes = Cliente::where('estado', 'Activo')->get();
+
+        //  $detallehilo = OrdenDetalle::with('hilos.material')->findOrFail($id_detalles);
 
         return view('app.produccion.arte.ProcesarOrdenArte', compact('orden', 'clientes'));
     }

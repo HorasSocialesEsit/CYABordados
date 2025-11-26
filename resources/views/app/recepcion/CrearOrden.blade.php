@@ -8,11 +8,23 @@
                 <h4 class="text-center mb-4 fw-bold">Registro de Nueva Orden de Bordado</h4>
 
                 @if (session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
+                    <div id="alert-success" class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                    </div>
                 @endif
+
                 @if (session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
+                    <div id="alert-error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                    </div>
                 @endif
+
 
                 <form method="POST" action="{{ route('ordenes.store') }}" enctype="multipart/form-data">
                     @csrf
@@ -35,8 +47,13 @@
                                         @endforeach
                                     </select>
 
-                                    <a href="{{ route('clientes.create') }}" class="btn btn-outline-success"
-                                        type="button">Nuevo</a>
+
+
+                                    <button class="btn btn-outline-success" data-toggle="modal"
+                                        data-target="#modalRegistrarCliente">
+                                        Registrar Cliente
+                                    </button>
+
                                 </div>
                             </div>
 
@@ -183,7 +200,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Saldo Pendiente</label>
-                                <input type="number" class="form-control" id="saldoPendiente" name="saldoPendiente"
+                                <input type="text" class="form-control" id="saldoPendiente" name="saldoPendiente"
                                     placeholder="0.00">
                             </div>
                             <div class="col-md-12">
@@ -205,6 +222,32 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Registrar Cliente -->
+    <div class="modal fade" id="modalRegistrarCliente" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary fw-bold">Registrar Nuevo Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    @include('app.clientes.modalcliente', [
+                        'tipoClientes' => $tipoclientes,
+                        'departamentos' => $departamentos,
+                    ])
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
 
     {{-- ===========================
     JAVASCRIPT
@@ -251,5 +294,40 @@
             tabla.appendChild(row);
             select.value = '';
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const departamentoModal = document.getElementById('modal_departamento');
+            const municipioModal = document.getElementById('modal_municipio');
+
+            if (departamentoModal) {
+                departamentoModal.addEventListener('change', function() {
+                    const idDepartamento = this.value;
+
+                    municipioModal.innerHTML = '<option>Cargando...</option>';
+                    municipioModal.disabled = true;
+
+                    if (!idDepartamento) {
+                        municipioModal.innerHTML = '<option>Seleccione un municipio</option>';
+                        return;
+                    }
+
+                    fetch(`/municipios/${idDepartamento}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            municipioModal.innerHTML =
+                                '<option value="">Seleccione un municipio</option>';
+                            data.forEach(m => {
+                                municipioModal.innerHTML +=
+                                    `<option value="${m.id}">${m.nombre_municipio}</option>`;
+                            });
+                            municipioModal.disabled = false;
+                        });
+                });
+            }
+        });
+        setTimeout(function() {
+            $('#alert-success').alert('close');
+            $('#alert-error').alert('close');
+        }, 5000); // 30 segundos
     </script>
 @endsection

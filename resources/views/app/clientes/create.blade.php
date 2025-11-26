@@ -41,8 +41,8 @@
 
                 <div class="col-md-4">
                     <label class="form-label">Teléfono alternativo</label>
-                    <input type="text" name="telefono_alt" class="form-control @error('telefono_alt') is-invalid @enderror"
-                        value="{{ old('telefono_alt') }}">
+                    <input type="text" name="telefono_alt"
+                        class="form-control @error('telefono_alt') is-invalid @enderror" value="{{ old('telefono_alt') }}">
                     @error('telefono_alt')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -50,7 +50,7 @@
 
                 <div class="col-md-4">
                     <label class="form-label">Tipo de cliente</label>
-                    <select name="tipo_cliente" class="form-select @error('tipo_cliente') is-invalid @enderror" required>
+                    <select name="tipo_cliente_id" class="form-select @error('tipo_cliente') is-invalid @enderror" required>
                         <option value="">Seleccione tipo</option>
                         @foreach ($tipos_cliente as $tipo)
                             <option value="{{ $tipo->id }}"> {{ $tipo->nombre_tipo_cliente }}</option>
@@ -77,7 +77,8 @@
                         class="form-select @error('id_departamento') is-invalid @enderror" required>
                         <option value="">Seleccione un departamento</option>
                         @foreach ($departamentos as $dep)
-                            <option value="{{ $dep->id }}" {{ old('id_departamento') == $dep->id ? 'selected' : '' }}>
+                            <option value="{{ $dep->id }}"
+                                {{ old('id_departamento') == $dep->id ? 'selected' : '' }}>
                                 {{ $dep->nombre_departamento }}
                             </option>
                         @endforeach
@@ -90,7 +91,8 @@
                 <div class="col-md-4">
                     <label class="form-label">Municipio</label>
                     <select name="id_municipio" id="municipio"
-                        class="form-select @error('id_municipio') is-invalid @enderror" required {{ old('id_departamento') ? '' : 'disabled' }}>
+                        class="form-select @error('id_municipio') is-invalid @enderror" required
+                        {{ old('id_departamento') ? '' : 'disabled' }}>
                         <option value="">Seleccione un municipio</option>
                     </select>
                     @error('id_municipio')
@@ -151,13 +153,13 @@
 @endsection
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // recuperamos los select de departamento y municipio
         const departamentoSelect = document.getElementById('departamento');
         const municipioSelect = document.getElementById('municipio');
 
         // por cada departamento seleccionado buscamos sus municipio
-        departamentoSelect.addEventListener('change', function () {
+        departamentoSelect.addEventListener('change', function() {
             const idDepartamento = this.value;
 
             municipioSelect.innerHTML = '<option value="">Cargando...</option>';
@@ -191,4 +193,9 @@
                 });
         });
     });
+
+    setTimeout(function() {
+        $('#alert-success').alert('close');
+        $('#alert-error').alert('close');
+    }, 5000); // 30 segundos
 </script>

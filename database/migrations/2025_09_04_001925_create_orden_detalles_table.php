@@ -17,7 +17,7 @@ return new class extends Migration
             // Información del arte / diseño
             $table->string('nombre_arte')->nullable(); // opcional, para identificar el diseño
             $table->string('tamano_diseno')->nullable(); // ej. "10x12 cm"
-            $table->string('color_hilo')->nullable(); // ej. "Rojo, Dorado"
+            //  $table->string('color_hilo')->nullable(); // ej. "Rojo, Dorado"
             $table->string('ubicacion_prenda')->nullable(); // ej. "pecho izquierdo", "espalda", etc.
             $table->enum('tamano_cuello', ['12', '14', '16'])->nullable(); // disponible para camisas
 
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->timestamps();
             // Relación con la orden principal
             $table->foreign('orden_id')->references('id')->on('ordenes')->onDelete('cascade');
-            $table->foreign('maquina_id')->references('id')->on('maquinas')->onDelete('cascade');
+            //   $table->foreign('maquina_id')->references('id')->on('maquinas')->onDelete('cascade');
         });
     }
 

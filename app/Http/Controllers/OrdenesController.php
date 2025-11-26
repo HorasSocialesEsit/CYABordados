@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
-use App\Models\EstadoOrden;
+use App\Models\Departamentos;
 use App\Models\Material;
 use App\Models\Orden;
 use App\Models\OrdenDetalle;
+use App\Models\TipoCliente;
 use App\Models\TipoPago;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -30,7 +31,6 @@ class OrdenesController extends Controller
         return view('app.recepcion.ListaOrdenes', compact('ordenes'));
     }
 
-
     /**
      * Mostrar formulario de creación.
      */
@@ -38,8 +38,10 @@ class OrdenesController extends Controller
     {
         $clientes = Cliente::where('estado', 'Activo')->get();
         $hilos = Material::all();
+        $departamentos = Departamentos::all();
+        $tipoclientes = TipoCliente::all();
 
-        return view('app.recepcion.CrearOrden', compact('clientes', 'hilos'));
+        return view('app.recepcion.CrearOrden', compact('clientes', 'hilos', 'departamentos', 'tipoclientes'));
     }
 
     /**
@@ -60,7 +62,7 @@ class OrdenesController extends Controller
 
         try {
             // Generar código único para la orden
-            $codigo = 'ORD-' . strtoupper(Str::random(6));
+            $codigo = 'ORD-'.strtoupper(Str::random(6));
 
             // Crear orden principal
             $orden = Orden::create([
@@ -75,8 +77,8 @@ class OrdenesController extends Controller
             foreach ($request->detalles as $detalleData) {
                 $detalle = $orden->detalles()->create([
                     'nombre_arte' => $detalleData['nombre_arte'],
-                    'tamano_diseño' => $detalleData['tamaño_diseño'] ?? null,
-                    'color_hilo' => $detalleData['color_hilo'] ?? null,
+                    'tamano_diseno' => $detalleData['tamaño_diseño'] ?? null,
+
                     'ubicacion_prenda' => $detalleData['ubicacion_prenda'] ?? null,
                     'tamano_cuello' => $detalleData['tamaño_cuello'] ?? null,
                     'cantidad' => $detalleData['cantidad'],
@@ -125,7 +127,7 @@ class OrdenesController extends Controller
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            return back()->with('error', 'Error al crear la orden: ' . $e->getMessage());
+            return back()->with('error', 'Error al crear la orden: '.$e->getMessage());
         }
     }
 
@@ -147,7 +149,6 @@ class OrdenesController extends Controller
         $orden = Orden::with('detalles', 'pagos', 'pagos.tipoPago')->findOrFail($id);
         $clientes = Cliente::where('estado', 'Activo')->get();
         $tipos_pago = TipoPago::get();
-
 
         // return response()->json($orden->pagos->last());
         // return response()->json($orden);
@@ -177,7 +178,7 @@ class OrdenesController extends Controller
         $ordenDetalle = OrdenDetalle::where('orden_id', $id)->first();
         $ordenDetalle->update([
             'nombre_arte' => $detalleData['nombre_arte'] ?? null,
-            'tamano_diseño' => $detalleData['tamaño_diseño'] ?? null,
+            'tamano_diseno' => $detalleData['tamaño_diseño'] ?? null,
             'ubicacion_prenda' => $detalleData['ubicacion_prenda'] ?? null,
             'tamano_cuello' => $detalleData['tamaño_cuello'] ?? null,
             'cantidad' => $detalleData['cantidad'] ?? 1,
@@ -223,7 +224,6 @@ class OrdenesController extends Controller
             'pagos',
         ])->findOrFail($id);
 
-        
         $hilos_asociados = [];
         foreach ($orden_buscada->detalles as $detalle) {
             foreach ($detalle->hilos as $hilo) {
@@ -240,8 +240,7 @@ class OrdenesController extends Controller
         $detalle = $orden_buscada->detalles->first();
         $fecha = (new Componentes)->fechaActual();
 
-
-        $pdf = PDF::loadView('app.reportes.ordenes.reporteOrden', compact('orden_buscada','hilos_asociados', 'fecha','detalle'));
+        $pdf = PDF::loadView('app.reportes.ordenes.reporteOrden', compact('orden_buscada', 'hilos_asociados', 'fecha', 'detalle'));
         $pdf->setPaper('letter');
 
         return $pdf->stream('Reporte de orden.pdf');
