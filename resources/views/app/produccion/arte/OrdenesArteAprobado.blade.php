@@ -18,8 +18,9 @@
                             <tr>
                                 <th>Orden</th>
                                 <th>Estado</th>
-                                <th>Fecha de Entrega</th>
-                                <th>Entregar</th>
+                                <th>Fecha Entrega</th>
+                                <th>puntadas</th>
+                                <th>Tiempos</th>
                                 <th>Arte</th>
                                 <th>Acciones</th>
                             </tr>
@@ -29,7 +30,16 @@
                                 <tr>
                                     <td>{{ $calculo->orden->codigo_orden }}</td>
                                     <td>{{ $calculo->orden->estado->nombre_estado_orden }}</td>
+                                    <td>{{ $calculo->orden->fecha_entrega }}</td>
                                     <td>{{ $calculo->puntadas }}</td>
+                                    <td>{{ $calculo->tiempo_ciclo }}</td>
+                                    <td>
+                                        @if ($calculo->ruta_arte)
+                                            <img src="{{ asset('storage/' . $calculo->ruta_arte) }}" alt=""
+                                                class="img-fluid" style="max-width: 100px; max-height: 100px;">
+                                        @endif
+
+                                    <td><a href="" class="btn btn-primary btn-sm">Iniciar proceso</a></td>
 
                                 </tr>
                             @endforeach

@@ -29,7 +29,7 @@ class OrdenProduccionController extends Controller
             })
             ->get();
 
-        return view('app.produccion.arte.OrdenesArteApronado', compact('ordenes'));
+        return view('app.produccion.arte.OrdenesArteAprobado', compact('ordenes'));
     }
 
     /**
