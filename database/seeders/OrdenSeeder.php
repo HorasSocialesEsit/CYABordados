@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Cliente;
 use App\Models\DetalleHilo;
-use App\Models\Municipios;
 use App\Models\Orden;
 use App\Models\OrdenCalculoArte;
 use App\Models\OrdenDetalle;
@@ -18,20 +17,19 @@ class OrdenSeeder extends Seeder
     public function run(): void
     {
 
-
         // 🔹 Crear clientes de ejemplo si no existen
         if (Cliente::count() === 0) {
             $this->command->warn('⚠️ No hay clientes. Generando 10 clientes de ejemplo...');
 
             for ($i = 1; $i <= 10; $i++) {
                 Cliente::create([
-                    'nombre' => 'Cliente ' . $i,
-                    'correo' => 'cliente' . $i . '@correo.com',
+                    'nombre' => 'Cliente '.$i,
+                    'correo' => 'cliente'.$i.'@correo.com',
                     'telefono' => rand(60000000, 79999999),
                     'telefono_alt' => rand(70000000, 79999999),
-                    'direccion' => 'Colonia Ejemplo #' . $i,
+                    'direccion' => 'Colonia Ejemplo #'.$i,
                     'pais' => 'El Salvador',
-                    'codigo' => 'CLI-' . strtoupper(Str::random(5)),
+                    'codigo' => 'CLI-'.strtoupper(Str::random(5)),
                     'nit' => str_pad(rand(10000000000000, 99999999999999), 14, '0', STR_PAD_LEFT),
                     'dui' => str_pad(rand(100000000, 999999999), 9, '0', STR_PAD_LEFT),
                     'nrc' => str_pad(rand(10000000000000, 99999999999999), 14, '0', STR_PAD_LEFT),
@@ -55,9 +53,9 @@ class OrdenSeeder extends Seeder
                 $orden = Orden::create([
                     'cliente_id' => $clientes[array_rand($clientes)],
                     'fecha_orden' => $fechaOrden,
-                    'codigo_orden' => 'ORD-' . strtoupper(Str::random(6)),
+                    'codigo_orden' => 'ORD-'.strtoupper(Str::random(6)),
                     'fecha_entrega' => $fechaEntrega,
-                    'estado_orden_id' =>  1,
+                    'estado_orden_id' => 1,
                     'usuario_id' => 1,
                 ]);
 
@@ -69,20 +67,16 @@ class OrdenSeeder extends Seeder
 
                 $orden_detall = OrdenDetalle::create([
                     'orden_id' => $orden->id,
-                    'nombre_arte' => 'Diseño #' . rand(1, 1000),
-                    'tamano_diseno' => rand(5, 20) . 'x' . rand(5, 20) . ' cm',
-                    'color_hilo' => ['Rojo', 'Azul', 'Verde', 'Negro', 'Blanco'][array_rand(['Rojo', 'Azul', 'Verde', 'Negro', 'Blanco'])],
+                    'nombre_arte' => 'Diseño #'.rand(1, 1000),
+                    'tamano_diseno' => rand(5, 20).'x'.rand(5, 20).' cm',
+
                     'ubicacion_prenda' => ['Pecho', 'Espalda', 'Manga'][array_rand(['Pecho', 'Espalda', 'Manga'])],
                     'cantidad' => $cantidad,
                     'precio_unitario' => $precio,
                     'total' => $total,
                     'notas' => fake()->sentence(),
-                    'maquina_id' => 1
+                    'maquina_id' => 1,
                 ]);
-
-
-
-
 
                 OrdenCalculoArte::create([
                     'puntadas' => 2500,
@@ -101,7 +95,6 @@ class OrdenSeeder extends Seeder
                     'material_id' => 1,
                 ]);
 
-           
                 $orden->actualizarTotales();
             }
         });

@@ -27,9 +27,9 @@
                             <tr>
                                 <th>Orden</th>
                                 <th>Estado</th>
-                                <th>Precio</th>
+                                <th>Cliente</th>
                                 <th>Fecha de Entrega</th>
-                                <th>Entregar</th>
+                                <th>Dias de Entrega</th>
                                 <th>Arte</th>
                                 <th>Acciones</th>
                             </tr>
@@ -39,7 +39,7 @@
                                 <tr>
                                     <td>{{ $orden->codigo_orden }}</td>
                                     <td>{{ $orden->estado->nombre_estado_orden }}</td>
-                                    <td>${{ number_format($orden->precio_total, 2) }}</td>
+                                    <th>{{ $orden->cliente->nombre }}</th>
                                     <td>{{ $orden->fecha_entrega->format('d/m/Y') }}</td>
                                     <td> {{ $orden->dias_atraso }} días</td>
                                     <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
@@ -72,9 +72,13 @@
         $(document).ready(function() {
             // Inicializar DataTables
             $('#dataTable').DataTable({
+                "order": [], //
                 'ordering': false, // falso para que respete el orden del servidor
                 "pageLength": 10,
-                "lengthMenu": [20, 50, 20, 10, 10, 30],
+                lengthMenu: [
+                    [10, 20, 50, -1],
+                    [10, 20, 50, "Todos"]
+                ],
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
                 }

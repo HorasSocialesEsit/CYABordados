@@ -79,7 +79,7 @@ Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group
 Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin,Operario'])->group(function () {
     // rutas de menu orden en proceso
     Route::get('/', [OrdenProduccionController::class, 'index'])->name('ordenProceso.index');
-    Route::put('/ordenProceso/{id}/inicio/{estado}', [OrdenProduccionController::class, 'iniciarProceso'])->name('ordenProceso.inicio');
+    Route::put('/ordenProceso/{id}', [OrdenProduccionController::class, 'iniciarProceso'])->name('ordenProceso.inicio');
     Route::get('/ordenProceso/{id}/edit', [OrdenProduccionController::class, 'edit'])->name('ordenProceso.edit');
     Route::put('/ordenProceso/{id}/update', [OrdenProduccionController::class, 'update'])->name('ordenProceso.update');
     Route::get('/ordenProceso/ArteAprobados', [OrdenProduccionController::class, 'ArtesAprobados'])->name('ordenProceso.ArtesAProbados');

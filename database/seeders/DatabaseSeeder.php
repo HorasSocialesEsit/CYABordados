@@ -73,8 +73,8 @@ class DatabaseSeeder extends Seeder
             MunicipiosSeeder::class,
             AdminUserSeeder::class,
             RoleSeeder::class,
-            //  MaterialSeeder::class,
-            // OrdenSeeder::class,
+            MaterialSeeder::class,
+            OrdenSeeder::class,
         ]);
     }
 }
