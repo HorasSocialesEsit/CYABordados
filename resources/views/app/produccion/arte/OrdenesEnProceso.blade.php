@@ -5,46 +5,48 @@
 @section('contenido')
     <div class="container-fluid">
 
-        <h1 class="h3 mb-2 text-gray-800">Ordenes en Proceso</h1>
+        <h1 class="h3 mb-2 text-gray-800">Estado: Ordenes en Proceso</h1>
 
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-primary">Ordenes para proceso</h6>
+                <button class="btn btn-primary">Reportar Hilo Terminado</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
                         <thead class="table-light">
                             <tr>
+                                <td>maquinas</td>
                                 <th>Orden</th>
-                                <th>Estado</th>
+
                                 <th>Fecha de Entrega</th>
-                                <th>Entregar</th>
+
                                 <th>Arte</th>
+                                <th>Tiempo para producir en minutos </th>
+                                <th>Tiempo restante en minutos </th>
+                                <th>Ingresar Cantidad produccion</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($ordenes as $orden)
                                 <tr>
+                                    <td>01</td>
                                     <td>{{ $orden->codigo_orden }}</td>
-                                    <td>{{ $orden->estado->nombre_estado_orden }}</td>
+
 
                                     <td>{{ $orden->fecha_entrega->format('d/m/Y') }}</td>
-                                    <td>{{ today()->diffInDays($orden->fecha_entrega, false) . '  Dias' }}</td>
+
                                     <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
+                                    <td>145</td>
+                                    <td>100</td>
+                                    <td><input type="number" name="cantidad_produccion" id="cantidad_produccion"></td>
 
                                     <td>
-                                        <form
-                                            action="{{ route('ordenProceso.inicio', ['id' => $orden->id, 'estado' => $orden->estado]) }}"
-                                            method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('PUT')
 
-                                            <button type="submit" class="btn btn-success btn-sm">Iniciar</button>
-                                        </form>
                                         <a href="{{ route('ordenProceso.edit', $orden->id) }}"
-                                            class="btn btn-primary btn-sm">Detalles</a>
+                                            class="btn btn-primary btn-sm">Ingresar</a>
                                     </td>
                                 </tr>
                             @endforeach

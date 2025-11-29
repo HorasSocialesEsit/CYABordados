@@ -15,7 +15,7 @@ class OrdenProduccionController extends Controller
      */
     public function index()
     {
-        $ordenes = Orden::where('estado_orden_id', '4')->get();
+        $ordenes = Orden::where('estado_orden_id', '5')->get();
 
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
     }
@@ -27,6 +27,10 @@ class OrdenProduccionController extends Controller
             ->whereHas('orden', function ($query) {
                 $query->where('estado_orden_id', 3);
             })
+            ->orderBy(
+                Orden::select('fecha_entrega')
+                    ->whereColumn('ordenes.id', 'ordenes_calculos_por_arte.orden_id_calculo')
+            )
             ->get();
 
         return view('app.produccion.arte.OrdenesArteAprobado', compact('ordenes'));
@@ -198,22 +202,27 @@ class OrdenProduccionController extends Controller
         }
     }
 
-    public function iniciarProceso(string $id, string $estado)
+    public function iniciarProceso(string $id)
     {
         try {
-            if ($estado != 'asignada_maquina') {
-                return redirect()->route('ordenProceso.index')->with('error', 'La orden ya fue iniciada o entregada');
-            }
+
             $orden = Orden::findOrFail($id);
-
-            if ($orden) {
-                $orden->estado = 'en_proceso_maquina';
-                $orden->save();
-
-                return redirect()->route('ordenProceso.index')->with('success', 'Tu orden se encuentra en estado de procesar');
+            // dd($orden);
+            // Validar que esté en el estado correcto (5 = por iniciar)
+            if ($orden->estado_orden_id >= 4) {
+                return redirect()->route('ordenProceso.index')
+                    ->with('error', 'La orden ya fue iniciada o entregada');
             }
+            // Actualizar el estado de la orden a "en proceso" (6 = en proceso)
+            $orden->estado_orden_id = 5; // ejemplo
+            $orden->save();
+
+            return redirect()->route('ordenProceso.index')
+                ->with('success', 'La orden se encuentra en estado de procesamiento');
+
         } catch (\Throwable $th) {
-            return redirect()->route('ordenProceso.index')->with('error', 'Error al iniciar orden');
+            return redirect()->route('ordenProceso.index')
+                ->with('error', 'Error al iniciar la orden');
         }
     }
 

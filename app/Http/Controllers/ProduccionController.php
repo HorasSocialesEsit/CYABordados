@@ -16,9 +16,14 @@ class ProduccionController extends Controller
      */
     public function index()
     {
-        $ordenes = Orden::where('estado_orden_id', '2')->get(); // Estado '1' para nuevas ordenes
+        // $ordenes = Orden::where('estado_orden_id', '2')->orderBy('fecha_entrega', 'asc')->get(); // Estado '1' para nuevas ordenes
 
-        return view('app.produccion.arte.OrdenesNuevas', compact('ordenes'));
+        $ordenes = Orden::with(['estado', 'cliente']) // agrega aquí las relaciones que usas en la vista
+            ->where('estado_orden_id', 2)
+            ->orderBy('fecha_entrega', 'asc')
+            ->get();
+
+        return view('app.produccion.arte.OrdenesPendienteArte', compact('ordenes'));
     }
 
     /**

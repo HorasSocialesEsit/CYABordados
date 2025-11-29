@@ -97,4 +97,8 @@ git checkout main
 # 🔄 Actualizar la rama principal localmente
 git pull origin main
 
+#para dar permisos a carpeta de storage en linux
+sudo chown -R $USER:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+
 ```
