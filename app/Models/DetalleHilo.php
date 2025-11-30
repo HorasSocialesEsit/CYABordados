@@ -18,7 +18,7 @@ class DetalleHilo extends Model
     ];
 
     // Relación con el detalle de orden
-    public function detalle()
+    public function ordenDetalle()
     {
         return $this->belongsTo(OrdenDetalle::class, 'orden_detalle_id');
     }

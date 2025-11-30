@@ -42,16 +42,6 @@ Route::prefix('administracion-usuarios')->middleware(['auth', 'active', 'role:ad
     Route::get('/', [UserController::class, 'index'])->name('usuarios.index');
 });
 
-// ////// administracion inventario   ///////////
-Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:admin'])->group(function () {
-    Route::get('/', [InventarioController::class, 'index'])->name('inventario.index');
-    Route::get('/inventario/create', [InventarioController::class, 'create'])->name('inventario.create');
-    Route::post('/inventario/store', [InventarioController::class, 'store'])->name('inventario.store');
-    Route::get('/inventario/{id}/edit', [InventarioController::class, 'edit'])->name('inventario.edit');
-    Route::put('/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
-    Route::delete('inventario/{id}/destroy', [InventarioController::class, 'destroy'])->name('inventario.destroy');
-    Route::get('inventario/reporte', [InventarioController::class, 'reporte'])->name('inventario.reporte');
-});
 
 Route::middleware(['auth', 'active', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class);
@@ -76,6 +66,8 @@ Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group
     Route::get('/crear', [ProduccionController::class, 'create'])->name('Produccion.arte.create');
     Route::get('/{id}/editar', [ProduccionController::class, 'edit'])->name('produccion.arte.edit');
 });
+
+
 Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin,Operario'])->group(function () {
     // rutas de menu orden en proceso
     Route::get('/', [OrdenProduccionController::class, 'index'])->name('ordenProceso.index');
@@ -83,6 +75,25 @@ Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin,Operari
     Route::get('/ordenProceso/{id}/edit', [OrdenProduccionController::class, 'edit'])->name('ordenProceso.edit');
     Route::put('/ordenProceso/{id}/update', [OrdenProduccionController::class, 'update'])->name('ordenProceso.update');
     Route::get('/ordenProceso/ArteAprobados', [OrdenProduccionController::class, 'ArtesAprobados'])->name('ordenProceso.ArtesAProbados');
+
+    Route::post('/ordenProceso/produccionRealizadaOrden/{id}/{cantidad}', [OrdenProduccionController::class, 'agregarCantidadProduccionOrden'])->name('ordenProceso.produccionRealizadaOrden');
+
+});
+
+
+// ////// administracion inventario   ///////////
+Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:admin'])->group(function () {
+    Route::get('/', [InventarioController::class, 'index'])->name('inventario.index');
+    Route::get('/inventario/create', [InventarioController::class, 'create'])->name('inventario.create');
+    Route::post('/inventario/store', [InventarioController::class, 'store'])->name('inventario.store');
+    Route::get('/inventario/{id}/edit', [InventarioController::class, 'edit'])->name('inventario.edit');
+    Route::put('/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
+    Route::delete('inventario/{id}/destroy', [InventarioController::class, 'destroy'])->name('inventario.destroy');
+    Route::get('inventario/reporte', [InventarioController::class, 'reporte'])->name('inventario.reporte');
+
+
+    Route::get('/inventario/orden/stock/{id}', [InventarioController::class, 'filtradoHilosOrden'])->name('inventario.ordenStock');
+    Route::post('/inventario/orden/stock/descuento', [InventarioController::class, 'descontarSalidaStockOrden'])->name('inventario.ordenStockDescuento');
 });
 
 Route::prefix('maquinas')->middleware(['auth', 'active', 'role:admin'])->group(function () {

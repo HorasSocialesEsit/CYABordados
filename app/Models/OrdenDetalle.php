@@ -24,6 +24,10 @@ class OrdenDetalle extends Model
         'orden_id',
         'maquina_id'
     ];
+    public function detalleHilo()
+    {
+        return $this->hasMany(DetalleHilo::class, 'orden_detalle_id');
+    }
 
     /**
      * 🔹 Relaciones
@@ -59,10 +63,5 @@ class OrdenDetalle extends Model
     public function getDescripcionCortaAttribute()
     {
         return "{$this->nombre_arte} - {$this->color_hilo} ({$this->cantidad}x)";
-    }
-
-    public function hilos()
-    {
-        return $this->hasMany(DetalleHilo::class, 'orden_detalle_id');
     }
 }

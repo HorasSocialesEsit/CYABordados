@@ -71,6 +71,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DepartamentosSeeder::class,
             MunicipiosSeeder::class,
+            ProveedorSedder::class,
             AdminUserSeeder::class,
             RoleSeeder::class,
             MaterialSeeder::class,

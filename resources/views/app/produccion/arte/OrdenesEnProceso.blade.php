@@ -40,13 +40,39 @@
 
                                     <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
                                     <td>145</td>
-                                    <td>100</td>
-                                    <td><input type="number" name="cantidad_produccion" id="cantidad_produccion"></td>
+                                    <td>100 - {{$orden->detalles->first()->cantidad}}</td>
+                                    <td>
+                                        <form method="POST"
+                                            action="{{ route('ordenProceso.produccionRealizadaOrden', [$orden->id, $orden->detalles->first()->cantidad]) }}">
+                                            @csrf
+
+                                            <div class="row g-2"> 
+                                                <!-- Input → 50% -->
+                                                <div class="col-6">
+                                                    <input type="number"
+                                                        name="cantidad_produccion"
+                                                        min="1"
+                                                        class="form-control form-control-sm"
+                                                        @if ($orden->estado_orden_id != 5) disabled @endif
+                                                        required>
+                                                </div>
+
+                                             
+                                                <div class="col-6">
+                                                    @if ($orden->estado_orden_id == 5)
+                                                        <button type="submit" class="btn btn-success btn-sm w-100">
+                                                            Enviar
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </td>
 
                                     <td>
-
-                                        <a href="{{ route('ordenProceso.edit', $orden->id) }}"
-                                            class="btn btn-primary btn-sm">Ingresar</a>
+                                        <a href="{{ route('inventario.ordenStock', $orden->id) }}"
+                                            class="btn btn-primary btn-sm">Control Hilos</a>
                                     </td>
                                 </tr>
                             @endforeach

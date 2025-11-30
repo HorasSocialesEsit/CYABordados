@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetalleHilo;
 use App\Models\Material;
+use App\Models\OrdenMaterialHistorial;
 use App\Models\TiposHilos;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class InventarioController extends Controller
@@ -158,5 +161,84 @@ class InventarioController extends Controller
         $pdf = PDF::loadView('app.reportes.inventario.inventarioHilos', compact('fecha', 'inventario', 'nombre_persona'));
         $pdf->setPaper('letter');
         return $pdf->stream('Inventario Hilos.pdf');
+    }
+    /**
+     * esta funcion se encarga de descontrar el stock de un hilo cuando una orden se finaliza, asi sabemos que hilos
+     * se utilizaron y en que orden
+     */
+
+    public function filtradoHilosOrden($id)
+    {
+        $inventario = Material::whereHas('detallesHilo.ordenDetalle', function ($q) use ($id) {
+            $q->where('orden_id', $id);
+        })
+            ->with(['detallesHilo' => function ($q) use ($id) {
+                $q->whereHas('ordenDetalle', fn($qq) => $qq->where('orden_id', $id));
+            }])
+            ->get();
+
+
+        return view('app.inventario.pageHilosOrden', compact('inventario', 'id'));
+    }
+
+    /**
+     * esta funcion se encarga de descontar el stock de los hilos utilizados en una orden de produccion
+     */
+    public function descontarSalidaStockOrden(Request $request)
+    {
+        // obtnemos el id de la orden
+        $ordenId = $request->input('orden_id');
+
+        // recuperamos los seleccionados y la cantidad
+        $seleccionados = $request->input('seleccionados', []);
+        $hilosFinalizados = $request->input('hilos_finalizados', []);
+
+
+        DB::beginTransaction();
+        try {
+            if (empty($seleccionados)) {
+                throw new \Exception("No se seleccionaron hilos para descontar.");
+            }
+            foreach ($seleccionados as $materialId) {
+
+                $cantidad = isset($hilosFinalizados[$materialId])
+                    ? intval($hilosFinalizados[$materialId])
+                    : 0;
+
+                // buscamos el hilo
+                $material = Material::find($materialId);
+
+
+                // validamos el material y la cantidad
+                if ($material && $cantidad > 0) {
+                    // validamos qque lo que quiere descontar no supere el stock
+                    if ($material->stock < $cantidad) {
+                        // creo una excepcion para que se deshagan todos los cambios
+                        throw new \Exception("Stock insuficiente para el material '{$material->nombre}'. " . "Stock actual: {$material->stock}, Cantidad solicitada: {$cantidad}");
+                    }
+                    // descontamos el stock la cantidad ingresada
+                    $material->stock -= $cantidad;
+                    $material->save();
+                    // si no se encuentra el material lanzamos un error
+                } else {
+                    throw new \Exception("Material no encontrado o cantidad inválida");
+                }
+
+                // guardamos el historial junto a la orden, material y la cantidad
+                OrdenMaterialHistorial::create([
+                    'orden_id' => $ordenId,
+                    'material_id' => $materialId,
+                    'cantidad' => $cantidad,
+                ]);
+            }
+
+            // confirmamos la transaccion
+            DB::commit();
+            return redirect()->route('ordenProceso.index')->with('success', "Stock descontado correctamente.");
+        } catch (\Exception $e) {
+            // desasemos todos los cambios que se insertaron
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

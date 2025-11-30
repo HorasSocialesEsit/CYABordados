@@ -15,8 +15,7 @@ class OrdenProduccionController extends Controller
      */
     public function index()
     {
-        $ordenes = Orden::where('estado_orden_id', '5')->get();
-
+        $ordenes = Orden::with('detalles')->where('estado_orden_id', 5)->get();
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
     }
 
@@ -219,7 +218,6 @@ class OrdenProduccionController extends Controller
 
             return redirect()->route('ordenProceso.index')
                 ->with('success', 'La orden se encuentra en estado de procesamiento');
-
         } catch (\Throwable $th) {
             return redirect()->route('ordenProceso.index')
                 ->with('error', 'Error al iniciar la orden');
@@ -232,5 +230,92 @@ class OrdenProduccionController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function agregarCantidadProduccionOrden(Request $request, string $id, string $cantidad)
+    {
+
+
+        $fecha_inicio = "30-11-2025";
+        $hora_inicio = "14:30";
+
+        $fecha_final = "30-11-2025";
+        $hora_final = "17:45";
+
+        // fecha y hora actual
+        $fecha_actual = Carbon::now()->format('d-m-Y');
+        $hora_actual = Carbon::now()->format('H:i');
+
+        $inicio = Carbon::createFromFormat('d-m-Y H:i', "$fecha_inicio $hora_inicio");
+        $final = Carbon::createFromFormat('d-m-Y H:i', "$fecha_final $hora_final");
+        $actual = Carbon::createFromFormat('d-m-Y H:i', "$fecha_actual $hora_actual");
+
+        //    calculamos el tiempo trabajado
+        $minutos_trabajados = $inicio->diffInMinutes($actual, false);
+
+        // calculamos el tiempo restante para la hora final
+        $minutos_restantes = $actual->diffInMinutes($final, false);
+
+        // verificamos si se ha pasado del tiempo final
+        $pasado = $actual->greaterThan($final);
+
+        // calculamos cuanto tiempo se ha excedido
+        $minutos_excedidos = $pasado ? $final->diffInMinutes($actual) : 0;
+
+        try {
+            // obtenemos el último restante del historial de la orden, validamos si ya se añadio
+            $restante = HistorialOrden::where('orden_id', $id)
+                ->orderByDesc('id')
+                ->value('restante');
+
+            // en caso de que exista cambiamos el valor original del pedido
+            $cantidad = $restante !== null ? $restante : $cantidad;
+
+            $restante_orden = $cantidad - $request->cantidad_produccion;
+
+            if ($request->cantidad_produccion > $restante_orden) {
+                return back()->with('error', "La cantidad producida no puede ser mayor a la pendiente.");
+            }
+
+            HistorialOrden::create([
+                'rpm' => 10,
+                'puntadas'  => 10,
+                'secuencias'  => 10,
+                'cabezales'  => 10,
+                'tiempo_cambio'  => 10,
+                'eficiencia'  => 10,
+
+                'ciclos'  => 10,
+                'horas' => 10,
+                'minutos' => 10,
+
+
+                'cantidad' => $cantidad,
+                'realizada' => $request->cantidad_produccion,
+                'restante' => $restante_orden,
+                'orden_id' => $id,
+            ]);
+
+            // aqui cuando el restante sea cero actualizamos la orden a completada el estado
+            if ($request->pendiente == 0) {
+                Orden::where('id', $id)->update([
+                    'estado_orden_id' => 6,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return back()->with('error', "Ocurrió un error al registrar la producción, intente nuevamente.");
+        }
+
+        if ($minutos_restantes > 0) {
+
+            return back()->with('success', "Tu produccion se ha registrado correctamente, te quedan $minutos_restantes minutos para finalizar, has trabajado $minutos_trabajados minutos.");
+        }
+
+        if ($pasado) {
+            return back()->with('success', "Tu produccion se ha registrado correctamente, pero has excedido el tiempo estimado por $minutos_excedidos minutos, has trabajado $minutos_trabajados minutos.");
+        }
+
+        return back()->with('success', "Tu produccion se ha registrado correctamente, has trabajado $minutos_trabajados minutos.");
     }
 }
