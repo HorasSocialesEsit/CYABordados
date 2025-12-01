@@ -28,7 +28,8 @@
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="tipo_hilo_id" class="form-label">Tipo de Hilo</label>
-            <select name="tipo_hilo_id" id="tipo_hilo_id" class="form-control @error('tipo_hilo_id') is-invalid @enderror" required>
+            <select name="tipo_hilo_id" id="tipo_hilo_id"
+                class="form-control @error('tipo_hilo_id') is-invalid @enderror" required>
 
                 @if (isset($hilo))
                     <option value="{{ $hilo->tipo_hilo_id }}" selected>{{ $hilo->tipoHilo->nombre_tipo_hilo }}</option>
@@ -63,6 +64,21 @@
                 class="form-control @error('descripcion') is-invalid @enderror"
                 required>{{ old('descripcion', $hilo->descripcion ?? '') }}</textarea>
             @error('descripcion')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Proveedores</label>
+            <select name="id_proveedor" id="id_proveedor"
+                class="form-select @error('id_proveedor') is-invalid @enderror" required>
+                <option value="">Seleccione un proveedor</option>
+                @foreach ($proveedores as $proveedor)
+                    <option value="{{ $proveedor->id }}" {{ old('id_departamento') == $proveedor->id ? 'selected' : '' }}>
+                        {{ $proveedor->nombre }}
+                    </option>
+                @endforeach
+            </select>
+            @error('id_proveedor')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>

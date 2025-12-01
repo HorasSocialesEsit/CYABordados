@@ -30,7 +30,7 @@ class MaterialSeeder extends Seeder
 
         foreach ($nombres as $nombre) {
             $tipo = $tiposHilo[array_rand($tiposHilo)];
-            $stock = rand(10, 200);
+            $stock = rand(13, 21);
 
             $material = Material::create([
                 'nombre' => $nombre,
@@ -46,7 +46,5 @@ class MaterialSeeder extends Seeder
                 'cantidad' => $stock,
             ]);
         }
-
-        $this->command->info('✅ Se insertaron materiales de ejemplo en el inventario.');
     }
 }

@@ -1,21 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Hilos de Orden')
+@section('title', 'Reabastecimiento de Stock')
 
 @section('contenido')
     <div class="container-fluid">
 
-        <h1 class="h3 mb-2 text-gray-800">Hilos de Orden</h1>
-        <p class="mb-4">La tabla mostrará los hilos ocupados en la orden</p>
+        <h1 class="h3 mb-2 text-gray-800">Reabastecer Hilo</h1>
+        <p class="mb-4">La tabla mostrará los hilos con stock menores a 21 unidades</p>
 
         <div class="card shadow mb-4">
 
             <div class="card-body">
 
-                <form action="{{ route('inventario.ordenStockDescuento') }}" method="POST">
+                <form action="{{ route('inventario.reabastecimiento') }}" method="POST">
                     @csrf
-
-                    <input type="text" hidden name="orden_id" value="{{ $id }}">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
                             <thead class="table-light">
@@ -23,7 +21,7 @@
                                     <th>Nombre</th>
                                     <th>Codigo</th>
                                     <th>Stock</th>
-                                    <th>Hilos Finalizados</th>
+                                    <th>Comprar (cantidad)</th>
                                     <th class="text-center">Accion</th>
                                 </tr>
                             </thead>
@@ -34,7 +32,7 @@
                                         <td>{{ $material->codigo }}</td>
                                         <td>{{ $material->stock }}</td>
                                         <td>
-                                            <input type="text" name="hilos_finalizados[{{ $material->id }}]"
+                                            <input type="text" name="hilos_reabastecer[{{ $material->id }}]"
                                                 class="form-control">
                                         </td>
                                         <td class="text-center">
@@ -48,9 +46,9 @@
 
 
                     <div class="mt-3 text-end">
-                          <a href="{{ route('ordenProceso.index') }}" class="btn btn-secondary me-2">Cancelar</a>
+                          <a href="{{ route('inventario.index') }}" class="btn btn-secondary me-2">Cancelar</a>
                         <button type="submit" class="btn btn-primary" id="btnEnviar" disabled>
-                            Procesar Descuento
+                            Procesar Reabastecimiento
                         </button>
 
                     </div>

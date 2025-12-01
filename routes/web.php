@@ -11,6 +11,7 @@ use App\Http\Controllers\OrdenesController;
 use App\Http\Controllers\OrdenProduccionController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProduccionController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -94,6 +95,22 @@ Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:
 
     Route::get('/inventario/orden/stock/{id}', [InventarioController::class, 'filtradoHilosOrden'])->name('inventario.ordenStock');
     Route::post('/inventario/orden/stock/descuento', [InventarioController::class, 'descontarSalidaStockOrden'])->name('inventario.ordenStockDescuento');
+
+    Route::get('/inventario/reabastecimiento/form', [InventarioController::class, 'reabastecimientoStock'])->name('inventario.reabastecimientoForm');
+    Route::post('/inventario/reabastecimiento/stock', [InventarioController::class, 'reabastecimientoStockUpdate'])->name('inventario.reabastecimiento');
+
+});
+
+Route::prefix('proveedor')->middleware(['auth', 'active', 'role:admin,Operario'])->group(function () {
+    Route::get('/', action: [ProveedorController::class, 'index'])->name('proveedor.index');
+    Route::get('/proveedor/create', [ProveedorController::class, 'create'])->name('proveedor.create');
+    Route::post('/proveedor/store', [ProveedorController::class, 'store'])->name('proveedor.store');
+    Route::get('/proveedor/{id}/edit', [ProveedorController::class, 'edit'])->name('proveedor.edit');
+    Route::put('/proveedor/{id}/update', [ProveedorController::class, 'update'])->name('proveedor.update');
+    Route::delete('proveedor/{id}/destroy', [ProveedorController::class, 'destroy'])->name('proveedor.destroy');
+    
+
+
 });
 
 Route::prefix('maquinas')->middleware(['auth', 'active', 'role:admin'])->group(function () {

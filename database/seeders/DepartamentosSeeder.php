@@ -12,7 +12,7 @@ class DepartamentosSeeder extends Seeder
      */
     public function run(): void
     {
-Departamentos::insert([
+        Departamentos::insert([
             ['nombre_departamento' => 'Ahuachapán'],
             ['nombre_departamento' => 'Santa Ana'],
             ['nombre_departamento' => 'Sonsonate'],

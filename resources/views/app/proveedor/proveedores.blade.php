@@ -1,25 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Inventario de Hilo')
+@section('title', 'Proveedores')
 
 @section('contenido')
     <div class="container-fluid">
 
-        <h1 class="h3 mb-2 text-gray-800">Inventario de hilos</h1>
-        <p class="mb-4">La tabla mostrará los detalles de los hilos</p>
+        <h1 class="h3 mb-2 text-gray-800">Proveedores</h1>
+        <p class="mb-4">La tabla mostrará todos los proveedores</p>
 
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Usuarios</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Proveedores</h6>
                 <div class="card-header py-3 d-flex justify-content-between align-items-center" style="gap: .3rem;">
-                    <a href="{{ route('inventario.reabastecimientoForm') }}" class="btn btn-success">
-                        <i class="fa-solid fa-material-plus"></i> Reabastecer Stock
-                    </a>
-                    <a href="{{ route('inventario.create') }}" class="btn btn-success">
-                        <i class="fa-solid fa-material-plus"></i> Nuevo Hilo
-                    </a>
-                    <a href="{{ route('inventario.reporte') }}" class="btn btn-success" target="_blank">
-                        <i class="fa-solid fa-material-plus"></i> Reporte
+                    <a href="{{ route('proveedor.create') }}" class="btn btn-success">
+                        <i class="fa-solid fa-material-plus"></i> Nuevo Proveedor
                     </a>
                 </div>
             </div>
@@ -28,50 +22,29 @@
                     <table class="table table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
                         <thead class="table-light">
                             <tr>
+                                <th>Id</th>
                                 <th>Nombre</th>
-                                <th>Codigo</th>
-                                <th>Descripcion</th>
-                                <th>Stock</th>
-                                <th>Tipo Hilo</th>
-                                <th>Estado</th>
+                                <th>Telefono</th>
+                                <th>Email</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($inventario as $material)
+                            @foreach ($proveedores as $proveedor)
                                 <tr>
-                                    <td>{{ $material->nombre }}</td>
-                                    <td>{{ $material->codigo }}</td>
-                                    <td>{{ $material->descripcion }}</td>
-                                    <td>{{ $material->stock }}</td>
-                                    <td>{{ $material->tipoHilo->nombre_tipo_hilo }}</td>
-                                    <td>
-                                        @php
-                                            $badgeClass = 'bg-success';
-                                            $mensaje = 'Disponible';
-
-                                            if ($material->stock <= 0) {
-                                                $badgeClass = 'bg-danger';
-                                                $mensaje = 'Agotado';
-                                            } elseif ($material->stock < 15) {
-                                                $badgeClass = 'bg-warning text-dark';
-                                                $mensaje = 'Insuficiente';
-                                            }
-                                        @endphp
-
-                                        <span class="badge {{ $badgeClass }} text-white">
-                                            {{ $mensaje }}
-                                        </span>
-                                    </td>
+                                    <td>{{ $proveedor->id }}</td>
+                                    <td>{{ $proveedor->nombre }}</td>
+                                    <td>{{ $proveedor->telefono }}</td>
+                                    <td>{{ $proveedor->email }}</td>
+                                    
+                                   
 
                                     <td class="text-center">
-                                        <a href="{{ route('inventario.edit', $material->id) }}"
+                                        <a href="{{ route('proveedor.edit', $proveedor->id) }}"
                                             class="btn btn-warning btn-sm me-1">
                                             <i class="fa-solid fa-pencil"></i>
                                         </a>
-
-                                        {{-- @if (!$material->hasRole('admin')) --}}
-                                        <form action="{{ route('inventario.destroy', $material->id) }}" method="POST"
+                                        <form action="{{ route('proveedor.destroy', $proveedor->id) }}" method="POST"
                                             class="d-inline delete-material-form">
                                             @csrf
                                             @method('DELETE')
@@ -79,7 +52,6 @@
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </form>
-                                        {{-- @endif --}}
                                     </td>
                                 </tr>
                             @endforeach

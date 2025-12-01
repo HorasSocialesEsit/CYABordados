@@ -19,7 +19,6 @@ class OrdenSeeder extends Seeder
 
         // 🔹 Crear clientes de ejemplo si no existen
         if (Cliente::count() === 0) {
-            $this->command->warn('⚠️ No hay clientes. Generando 10 clientes de ejemplo...');
 
             for ($i = 1; $i <= 10; $i++) {
                 Cliente::create([
@@ -38,8 +37,6 @@ class OrdenSeeder extends Seeder
                     'tipo_cliente_id' => rand(1, 2),
                 ]);
             }
-
-            $this->command->info('✅ Se crearon 10 clientes de ejemplo.');
         }
 
         // 🔹 Resto del código (órdenes y detalles)
@@ -115,7 +112,5 @@ class OrdenSeeder extends Seeder
                 $orden->actualizarTotales();
             }
         });
-
-        $this->command->info('✅ Se generaron 100 órdenes aleatorias con detalles.');
     }
 }

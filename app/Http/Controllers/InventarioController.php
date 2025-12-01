@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\DetalleHilo;
 use App\Models\Material;
 use App\Models\OrdenMaterialHistorial;
+use App\Models\Proveedor;
+use App\Models\ProveedorMaterial;
 use App\Models\TiposHilos;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -29,8 +31,8 @@ class InventarioController extends Controller
     public function create()
     {
         $tiposHilo = TiposHilos::all();
-
-        return view('app.inventario.inventarioCreate', compact('tiposHilo', 'tiposHilo'));
+        $proveedores = Proveedor::all();
+        return view('app.inventario.inventarioCreate', compact('tiposHilo',  'proveedores'));
     }
 
     /**
@@ -43,6 +45,7 @@ class InventarioController extends Controller
             'codigo' => 'required|string|max:50|unique:materiales,codigo',
             'descripcion' => 'nullable|string',
             'tipo_hilo_id' => 'required',
+            'id_proveedor' => 'required',
             'stock' => 'required|integer|min:1',
         ], [
             'nombre.required' => 'El nombre del material es obligatorio.',
@@ -57,12 +60,13 @@ class InventarioController extends Controller
             'descripcion.string' => 'La descripción debe ser un texto válido.',
 
             'tipo_hilo_id.required' => 'Debe seleccionar un tipo de hilo.',
+            'id_proveedor.required' => 'Debe seleccionar un proveedor.',
 
             'stock.required' => 'Debe especificar el stock del material.',
             'stock.integer' => 'El stock debe ser un número entero.',
             'stock.min' => 'El stock debe ser al menos 1 unidad.',
         ]);
-        Material::create([
+        $material = Material::create([
             'nombre' => $request->nombre,
             'codigo' => $request->codigo,
             'descripcion' => $request->descripcion,
@@ -70,6 +74,11 @@ class InventarioController extends Controller
             'tipo_hilo_id' => $request->tipo_hilo_id,
         ]);
 
+        ProveedorMaterial::create([
+            'proveedor_id' => $request->id_proveedor,
+            'material_id' => $material->id,
+            'cantidad' => $request->stock,
+        ]);
         return redirect()->route('inventario.index')->with('success', 'Hilo agregado correctamente.');
     }
 
@@ -88,8 +97,9 @@ class InventarioController extends Controller
     {
         $tiposHilo = TiposHilos::all();
         $hilo = Material::findOrFail($id);
+        $proveedores = Proveedor::all();
 
-        return view('app.inventario.inventarioEdit', compact('tiposHilo', 'hilo'));
+        return view('app.inventario.inventarioEdit', compact('tiposHilo', 'hilo', 'proveedores'));
     }
 
     /**
@@ -235,6 +245,62 @@ class InventarioController extends Controller
             // confirmamos la transaccion
             DB::commit();
             return redirect()->route('ordenProceso.index')->with('success', "Stock descontado correctamente.");
+        } catch (\Exception $e) {
+            // desasemos todos los cambios que se insertaron
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function reabastecimientoStock(Request $request)
+    {
+        $inventario = Material::where('stock', '<', 21)->get();
+        return view('app.inventario.reabastecimientoStock', compact('inventario'));
+    }
+
+    public function reabastecimientoStockUpdate(Request $request)
+    {
+        // recuperamos los seleccionados y la cantidad
+        $seleccionados = $request->input('seleccionados', []);
+        $hilosReabastecer = $request->input('hilos_reabastecer', []);
+
+        DB::beginTransaction();
+        try {
+            foreach ($seleccionados as $materialId) {
+                $cantidad = isset($hilosReabastecer[$materialId])
+                    ? intval($hilosReabastecer[$materialId])
+                    : 0;
+
+                // buscamos el hilo
+                $material = Material::find($materialId);
+
+
+                // validamos el material y la cantidad
+                if ($material && $cantidad > 0) {
+                    // descontamos el stock la cantidad ingresada
+                    $material->stock += $cantidad;
+                    $material->save();
+                    // si no se encuentra el material lanzamos un error
+                } else {
+                    throw new \Exception("Material no encontrado o cantidad inválida");
+                }
+
+                $proveedorMaterial = ProveedorMaterial::where('material_id', $materialId)->first();
+
+                if (!$proveedorMaterial) {
+                    throw new \Exception("Proveedor del material no encontrado o id hilo invalido");
+                }
+
+                // creamos un nuevo registro en el historial de compras
+                ProveedorMaterial::create([
+                    'proveedor_id' => $proveedorMaterial->proveedor_id,
+                    'material_id' => $materialId,
+                    'cantidad' => $cantidad,
+                ]);
+            }
+            // confirmamos la transaccion
+            DB::commit();
+            return redirect()->route('inventario.index')->with('success', "Reabastecimiento Completado.");
         } catch (\Exception $e) {
             // desasemos todos los cambios que se insertaron
             DB::rollBack();
