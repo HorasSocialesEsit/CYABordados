@@ -43,7 +43,6 @@ Route::prefix('administracion-usuarios')->middleware(['auth', 'active', 'role:ad
     Route::get('/', [UserController::class, 'index'])->name('usuarios.index');
 });
 
-
 Route::middleware(['auth', 'active', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class);
 });
@@ -68,7 +67,6 @@ Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group
     Route::get('/{id}/editar', [ProduccionController::class, 'edit'])->name('produccion.arte.edit');
 });
 
-
 Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin,Operario'])->group(function () {
     // rutas de menu orden en proceso
     Route::get('/', [OrdenProduccionController::class, 'index'])->name('ordenProceso.index');
@@ -81,7 +79,6 @@ Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin,Operari
 
 });
 
-
 // ////// administracion inventario   ///////////
 Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:admin'])->group(function () {
     Route::get('/', [InventarioController::class, 'index'])->name('inventario.index');
@@ -91,7 +88,6 @@ Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:
     Route::put('/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
     Route::delete('inventario/{id}/destroy', [InventarioController::class, 'destroy'])->name('inventario.destroy');
     Route::get('inventario/reporte', [InventarioController::class, 'reporte'])->name('inventario.reporte');
-
 
     Route::get('/inventario/orden/stock/{id}', [InventarioController::class, 'filtradoHilosOrden'])->name('inventario.ordenStock');
     Route::post('/inventario/orden/stock/descuento', [InventarioController::class, 'descontarSalidaStockOrden'])->name('inventario.ordenStockDescuento');
@@ -108,8 +104,6 @@ Route::prefix('proveedor')->middleware(['auth', 'active', 'role:admin,Operario']
     Route::get('/proveedor/{id}/edit', [ProveedorController::class, 'edit'])->name('proveedor.edit');
     Route::put('/proveedor/{id}/update', [ProveedorController::class, 'update'])->name('proveedor.update');
     Route::delete('proveedor/{id}/destroy', [ProveedorController::class, 'destroy'])->name('proveedor.destroy');
-    
-
 
 });
 
@@ -121,6 +115,7 @@ Route::prefix('maquinas')->middleware(['auth', 'active', 'role:admin'])->group(f
     Route::get('/{id}/edit', [MaquinasController::class, 'edit'])->name('maquinas.edit');
     Route::put('/{id}', [MaquinasController::class, 'update'])->name('maquinas.update');
     Route::delete('/{id}', [MaquinasController::class, 'destroy'])->name('maquinas.destroy');
+    Route::get('/info/{id}', [MaquinasController::class, 'getInfoMaquinasJson'])->name('getInfoMaquinasJson');
 });
 
 // calculos por arte

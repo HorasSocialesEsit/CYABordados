@@ -16,6 +16,7 @@ class OrdenProduccionController extends Controller
     public function index()
     {
         $ordenes = Orden::with('detalles')->where('estado_orden_id', 5)->get();
+
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
     }
 
@@ -232,16 +233,14 @@ class OrdenProduccionController extends Controller
         //
     }
 
-
     public function agregarCantidadProduccionOrden(Request $request, string $id, string $cantidad)
     {
 
+        $fecha_inicio = '30-11-2025';
+        $hora_inicio = '14:30';
 
-        $fecha_inicio = "30-11-2025";
-        $hora_inicio = "14:30";
-
-        $fecha_final = "30-11-2025";
-        $hora_final = "17:45";
+        $fecha_final = '30-11-2025';
+        $hora_final = '17:45';
 
         // fecha y hora actual
         $fecha_actual = Carbon::now()->format('d-m-Y');
@@ -275,21 +274,20 @@ class OrdenProduccionController extends Controller
             $restante_orden = $cantidad - $request->cantidad_produccion;
 
             if ($request->cantidad_produccion > $restante_orden) {
-                return back()->with('error', "La cantidad producida no puede ser mayor a la pendiente.");
+                return back()->with('error', 'La cantidad producida no puede ser mayor a la pendiente.');
             }
 
             HistorialOrden::create([
                 'rpm' => 10,
-                'puntadas'  => 10,
-                'secuencias'  => 10,
-                'cabezales'  => 10,
-                'tiempo_cambio'  => 10,
-                'eficiencia'  => 10,
+                'puntadas' => 10,
+                'secuencias' => 10,
+                'cabezales' => 10,
+                'tiempo_cambio' => 10,
+                'eficiencia' => 10,
 
-                'ciclos'  => 10,
+                'ciclos' => 10,
                 'horas' => 10,
                 'minutos' => 10,
-
 
                 'cantidad' => $cantidad,
                 'realizada' => $request->cantidad_produccion,
@@ -304,7 +302,7 @@ class OrdenProduccionController extends Controller
                 ]);
             }
         } catch (\Throwable $th) {
-            return back()->with('error', "Ocurrió un error al registrar la producción, intente nuevamente.");
+            return back()->with('error', 'Ocurrió un error al registrar la producción, intente nuevamente.');
         }
 
         if ($minutos_restantes > 0) {

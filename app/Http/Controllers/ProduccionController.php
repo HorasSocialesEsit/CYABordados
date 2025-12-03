@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Maquinas;
 use App\Models\Material;
 use App\Models\Orden;
 use App\Models\OrdenDetalle;
@@ -35,8 +36,9 @@ class ProduccionController extends Controller
 
         $clientes = Cliente::where('estado', 'Activo')->get();
         $hilos = Material::all();
+        $maquinas = Maquinas::all();
 
-        return view('app.produccion.arte.ProcesarOrdenArte', compact('clientes', 'hilos'));
+        return view('app.produccion.arte.ProcesarOrdenArte', compact('clientes', 'hilos', 'maquinas'));
 
     }
 
@@ -66,8 +68,7 @@ class ProduccionController extends Controller
             'estado_orden_id' => '2',
         ]);
 
-        // $orden = Orden::with('detalles')->findOrFail($id);
-        $orden = Orden::with('detalles.hilos.material')->findOrFail($id);
+        $orden = Orden::with('detalles.detalleHilo.material')->findOrFail($id);
 
         // return Json::encode($orden);
         //  $id_detalles = OrdenDetalle::where('orden_id', $id)->get();
@@ -75,8 +76,9 @@ class ProduccionController extends Controller
         $clientes = Cliente::where('estado', 'Activo')->get();
 
         //  $detallehilo = OrdenDetalle::with('hilos.material')->findOrFail($id_detalles);
+        $maquinas = Maquinas::all();
 
-        return view('app.produccion.arte.ProcesarOrdenArte', compact('orden', 'clientes'));
+        return view('app.produccion.arte.ProcesarOrdenArte', compact('orden', 'clientes', 'maquinas'));
     }
 
     /**
