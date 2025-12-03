@@ -23,6 +23,11 @@ class OrdenCalculoArteController extends Controller
             'tiempo_ciclo' => 'nullable|numeric',
             'notaadicional' => 'nullable|string|max:255',
             'imagen_arte' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'maquina_id' => 'required|integer',
+            'ciclos' => 'required|integer|min:1',
+            'tiempoTotal' => 'required|numeric|min:0',
+            'cabezales' => 'nullable|integer|min:1',
+
         ]);
 
         // DB::transaction();
@@ -43,6 +48,10 @@ class OrdenCalculoArteController extends Controller
                 'tiempo_ciclo' => 10,
                 'nota_adicional' => 'qadicional',
                 'ruta_arte' => $rutaImagen,
+                'maquina_id' => $request->maquina_id,
+                'ciclos' => $request->ciclos,
+                'tiempo_total_orden' => $request->tiempoTotal,
+                'cabezales' => $request->cabezales,
             ]);
 
             if (! $calculo) {
