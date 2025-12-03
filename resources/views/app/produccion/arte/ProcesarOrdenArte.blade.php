@@ -144,6 +144,8 @@
                 <div class="alert alert-danger shadow-sm">{{ session('error') }}</div>
             @endif
 
+
+
             <form method="POST" action="{{ route('ordenesCalculosArte.store', $orden->id) }}" enctype="multipart/form-data">
                 @csrf
 
@@ -230,12 +232,15 @@
                                 <div class="col-md-6">
                                     <label class="form-label">Máquina</label>
                                     <select class="form-select" name="maquina_id" id="maquina_id">
-                                        <option selected disabled>Seleccione...</option>
+                                        <option selected disabled></option>
                                         @foreach ($maquinas as $maquina)
                                             <option value="{{ $maquina->id }}">{{ $maquina->nombre }}</option>)
                                         @endforeach
 
                                     </select>
+                                    @error('maquina_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
 
                                 <div class="col-md-6">
@@ -259,11 +264,18 @@
                                 <div class="col-md-6">
                                     <label class="form-label">Puntadas</label>
                                     <input type="number" class="form-control" name="puntadas" id="puntadas">
+                                    @error('puntadas')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="form-label">Secuencias</label>
                                     <input type="number" class="form-control" name="secuencias" id="secuencias">
+                                    @error('secuencias')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+
                                 </div>
 
                                 <div class="col-md-6">
@@ -324,6 +336,7 @@
                 </div>
 
             </form>
+
 
         </div>
     </div>

@@ -49,22 +49,22 @@ class DatabaseSeeder extends Seeder
 
         Maquinas::insert([
             [
-                'nombre' => 'Maquina Industrial 1',
+                'nombre' => 'M01',
                 'cabezales' => 12,
                 'cabezales_danado' => 0,
-                'rpm' => 5000,
+                'rpm' => 500,
             ],
             [
-                'nombre' => 'Maquina Industrial 2',
+                'nombre' => 'M02',
                 'cabezales' => 4,
                 'cabezales_danado' => 1,
-                'rpm' => 6000,
+                'rpm' => 600,
             ],
             [
-                'nombre' => 'Maquina Industrial 3',
+                'nombre' => 'M03',
                 'cabezales' => 12,
                 'cabezales_danado' => 1,
-                'rpm' => 6500,
+                'rpm' => 650,
             ],
         ]);
 
