@@ -17,18 +17,24 @@ class OrdenCalculoArteController extends Controller
         // 1️⃣ Validación de los datos
         $request->validate([
             'arte_id' => 'required|integer',
-            'puntadas' => 'nullable|integer',
-            'secuencias' => 'nullable|integer',
+            'puntadas' => 'required|integer',
+            'secuencias' => 'required|integer',
             'rpm' => 'nullable|integer',
             'tiempo_ciclo' => 'nullable|numeric',
             'notaadicional' => 'nullable|string|max:255',
             'imagen_arte' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'maquina_id' => 'required|integer',
-            'ciclos' => 'required|integer|min:1',
-            'tiempoTotal' => 'required|numeric|min:0',
+            'ciclos' => 'nullable|integer',
+            'tiempoTotal' => 'nullable|numeric|min:0',
             'cabezales' => 'nullable|integer|min:1',
 
-        ]);
+        ],
+            [
+                'maquina_id.required' => 'Debe seleccionar una máquina.',
+                'puntadas.required' => 'Debe ingresar las puntadas.',
+                'secuencias.required' => 'Debe ingresar las secuencias.',
+
+            ]);
 
         // DB::transaction();
         try {
@@ -36,6 +42,8 @@ class OrdenCalculoArteController extends Controller
             $rutaImagen = null;
             if ($request->hasFile('imagen_arte')) {
                 $rutaImagen = $request->file('imagen_arte')->store('arte', 'public');
+            } else {
+                $rutaImagen = 'img/admin/undraw_profile.svg'; // Ruta de imagen por defecto
             }
 
             // 3️⃣ Crear registro del cálculo
@@ -101,7 +109,14 @@ class OrdenCalculoArteController extends Controller
             'tiempo_ciclo' => 'nullable|numeric',
             // 'notaadicional' => 'nullable|string|max:255',
             'imagen_arte' => 'nullable|image|max:4096',
-        ]);
+        ],
+            [
+                'maquina_id.required' => 'Debe seleccionar una máquina.',
+
+                'puntadas.integer' => 'Las puntadas deben ser un número.',
+                'secuencias.integer' => 'Las secuencias deben ser un número.',
+
+            ]);
 
         // Si se sube una nueva imagen la reemplazamos
         if ($request->hasFile('imagen_arte')) {

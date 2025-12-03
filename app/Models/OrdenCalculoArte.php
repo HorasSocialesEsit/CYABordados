@@ -32,4 +32,9 @@ class OrdenCalculoArte extends Model
     {
         return $this->belongsTo(OrdenDetalle::class, 'arte_id');
     }
+
+    public function maquina()
+    {
+        return $this->belongsTo(Maquinas::class, 'maquina_id');
+    }
 }

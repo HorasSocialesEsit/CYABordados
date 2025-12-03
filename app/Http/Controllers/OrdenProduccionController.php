@@ -23,12 +23,13 @@ class OrdenProduccionController extends Controller
     public function ArtesAprobados()
     {
         // $ordenes = Orden::where('estado_orden_id', '3')->get();
-        $ordenes = OrdenCalculoArte::with('orden')
+        $ordenes = OrdenCalculoArte::with(['orden', 'maquina'])
             ->whereHas('orden', function ($query) {
                 $query->where('estado_orden_id', 3);
             })
+            ->orderBy('maquina_id') // 1️⃣ Primero ordenar por máquina
             ->orderBy(
-                Orden::select('fecha_entrega')
+                Orden::select('fecha_entrega') // 2️⃣ Luego por fecha
                     ->whereColumn('ordenes.id', 'ordenes_calculos_por_arte.orden_id_calculo')
             )
             ->get();

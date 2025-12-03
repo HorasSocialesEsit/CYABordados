@@ -17,6 +17,7 @@
                     <table class="table table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
                         <thead class="table-light">
                             <tr>
+                                <th>Maquina</th>
                                 <th>Orden</th>
 
                                 <th>Fecha Entrega</th>
@@ -29,6 +30,7 @@
                         <tbody>
                             @foreach ($ordenes as $calculo)
                                 <tr>
+                                    <td>{{ $calculo->maquina->nombre ?? 'sin asignar' }}</td>
                                     <td>{{ $calculo->orden->codigo_orden }}</td>
 
                                     <td>{{ $calculo->orden->fecha_entrega->format('d-m-y') }}</td>
@@ -37,8 +39,15 @@
                                     <td>{{ $calculo->tiempo_ciclo }}</td>
                                     <td>
                                         @if ($calculo->ruta_arte)
-                                            <img src="{{ asset('storage/' . $calculo->ruta_arte) }}" alt=""
-                                                class="img-fluid" style="max-width: 100px; max-height: 100px;">
+                                            @if (Str::startsWith($calculo->ruta_arte, 'arte/'))
+                                                {{-- Imagen subida (en storage/app/public/arte) --}}
+                                                <img src="{{ asset('storage/' . $calculo->ruta_arte) }}" class="img-fluid"
+                                                    style="max-width: 100px; max-height: 100px;">
+                                            @else
+                                                {{-- Imagen por defecto (public/img/admin/) --}}
+                                                <img src="{{ asset($calculo->ruta_arte) }}" class="img-fluid"
+                                                    style="max-width: 100px; max-height: 100px;">
+                                            @endif
                                         @endif
 
                                     <td>

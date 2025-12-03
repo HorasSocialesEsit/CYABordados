@@ -67,7 +67,6 @@ return [
 
     'timezone' => 'America/El_Salvador',
 
-
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
