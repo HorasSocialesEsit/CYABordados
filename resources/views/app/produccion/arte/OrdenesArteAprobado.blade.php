@@ -20,9 +20,9 @@
                                 <th>Maquina</th>
                                 <th>Orden</th>
 
-                                <th>Fecha Entrega</th>
-                                <th>puntadas</th>
-                                <th>Tiempos</th>
+
+                                <th>Cantidad</th>
+                                <th>Tiempos total(min)</th>
                                 <th>Arte</th>
                                 <th>Acciones</th>
                             </tr>
@@ -33,10 +33,10 @@
                                     <td>{{ $calculo->maquina->nombre ?? 'sin asignar' }}</td>
                                     <td>{{ $calculo->orden->codigo_orden }}</td>
 
-                                    <td>{{ $calculo->orden->fecha_entrega->format('d-m-y') }}</td>
 
-                                    <td>{{ $calculo->puntadas }}</td>
-                                    <td>{{ $calculo->tiempo_ciclo }}</td>
+
+                                    <td>{{ $calculo->orden->detalles->first()->cantidad }}</td>
+                                    <td>{{ $calculo->tiempo_total_orden }}</td>
                                     <td>
                                         @if ($calculo->ruta_arte)
                                             @if (Str::startsWith($calculo->ruta_arte, 'arte/'))
@@ -51,13 +51,19 @@
                                         @endif
 
                                     <td>
-                                        <form action="{{ route('ordenProceso.inicio', $calculo->orden->id) }}"
-                                            method="POST" style="display:inline;">
+                                        <form action="{{ route('ordenProceso.inicio', $calculo->id) }}" method="POST"
+                                            style="display:inline;">
                                             @csrf
                                             @method('PUT')
 
-                                            <button type="submit" class="btn btn-success btn-sm">Iniciar</button>
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="fa-solid fa-play"></i> Iniciar</button>
+
                                         </form>
+                                        <a href="#">
+                                            <i class="fa-solid fa-pencil"></i>
+                                            Editar
+                                        </a>
 
                                     </td>
 

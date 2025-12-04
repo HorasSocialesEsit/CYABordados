@@ -70,12 +70,12 @@ Route::prefix('produccion')->middleware(['auth', 'active', 'role:admin'])->group
 Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin,Operario'])->group(function () {
     // rutas de menu orden en proceso
     Route::get('/', [OrdenProduccionController::class, 'index'])->name('ordenProceso.index');
-    Route::put('/ordenProceso/{id}', [OrdenProduccionController::class, 'iniciarProceso'])->name('ordenProceso.inicio');
-    Route::get('/ordenProceso/{id}/edit', [OrdenProduccionController::class, 'edit'])->name('ordenProceso.edit');
-    Route::put('/ordenProceso/{id}/update', [OrdenProduccionController::class, 'update'])->name('ordenProceso.update');
-    Route::get('/ordenProceso/ArteAprobados', [OrdenProduccionController::class, 'ArtesAprobados'])->name('ordenProceso.ArtesAProbados');
+    Route::put('/{id}', [OrdenProduccionController::class, 'iniciarProceso'])->name('ordenProceso.inicio');
+    Route::get('/{id}/edit', [OrdenProduccionController::class, 'edit'])->name('ordenProceso.edit');
+    Route::put('/{id}/update', [OrdenProduccionController::class, 'update'])->name('ordenProceso.update');
+    Route::get('/ArteAprobados', [OrdenProduccionController::class, 'ArtesAprobados'])->name('ordenProceso.ArtesAProbados');
 
-    Route::post('/ordenProceso/produccionRealizadaOrden/{id}/{cantidad}', [OrdenProduccionController::class, 'agregarCantidadProduccionOrden'])->name('ordenProceso.produccionRealizadaOrden');
+    Route::post('/produccionRealizadaOrden/{id}/{cantidad}', [OrdenProduccionController::class, 'agregarCantidadProduccionOrden'])->name('ordenProceso.produccionRealizadaOrden');
 
 });
 
@@ -123,6 +123,11 @@ Route::prefix('ordenes-calculos-arte')->middleware(['auth', 'active', 'role:admi
     Route::post('/store/{ordenId}', [OrdenCalculoArteController::class, 'store'])->name('ordenesCalculosArte.store');
     Route::put('/update/{id}', [OrdenCalculoArteController::class, 'update'])->name('ordenesCalculosArte.update');
     Route::delete('/destroy/{id}', [OrdenCalculoArteController::class, 'destroy'])->name('ordenesCalculosArte.destroy');
+    Route::get('/calculoarte/{id}/editar', [OrdenCalculoArteController::class, 'edit'])
+        ->name('calculoarte.edit');
+
+    Route::put('/calculoarte/{id}', [OrdenCalculoArteController::class, 'update'])
+        ->name('calculoarte.update');
 });
 
 // rutas libres

@@ -74,7 +74,7 @@ class OrdenCalculoArteController extends Controller
             }
 
             // Opcional: si tu columna es ENUM, asegúrate que el valor exista
-            $orden->estado_orden_id = 3;
+            $orden->estado_orden_id = 4;
             $orden->save();
             $ordenRef = Orden::find($ordenId);
             // dd($ordenRef->estado_orden_id);
