@@ -61,8 +61,18 @@ class OrdenesController extends Controller
         DB::beginTransaction();
 
         try {
+
+            $ultimo = Orden::orderBy('id', 'desc')->first();
+            if ($ultimo) {
+                // Extraer los últimos 7 números del código
+                $num = intval(substr($ultimo->codigo_orden, -7)) + 1;
+            } else {
+                $num = 1; // Primera orden
+            }
+
             // Generar código único para la orden
-            $codigo = 'ORD-'.strtoupper(Str::random(6));
+            //  $codigo = 'ORD-'.strtoupper(Str::random(6));
+            $codigo = 'ORD'.str_pad($num, 7, '0', STR_PAD_LEFT);
 
             // Crear orden principal
             $orden = Orden::create([
@@ -90,7 +100,7 @@ class OrdenesController extends Controller
                 // 🔹 Guardar los hilos asociados a este detalle (si vienen en el request)
                 if (! empty($request->hilos)) {
                     foreach ($request->hilos as $materialId) {
-                        $detalle->hilos()->create([
+                        $detalle->detalleHilo()->create([
                             'material_id' => $materialId,
                             'cantidad' => 1,
                         ]);

@@ -1,109 +1,138 @@
 @extends('layouts.app')
 
-@section('title', 'Producción - Ordenes en Proceso')
+@section('title', 'Producción - Órdenes en Proceso')
 
 @section('contenido')
     <div class="container-fluid">
 
-        <h1 class="h3 mb-2 text-gray-800">Estado: Ordenes en Proceso</h1>
+        <!-- TÍTULO -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 text-gray-800">Órdenes en Proceso</h1>
 
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Ordenes para proceso</h6>
-                <button class="btn btn-primary">Reportar Hilo Terminado</button>
+            <button class="btn btn-primary shadow-sm">
+                <i class="fas fa-exclamation-circle me-1"></i> Reportar Hilo Terminado
+            </button>
+        </div>
+
+        <!-- CARD -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-light border-bottom d-flex justify-content-between align-items-center">
+                <h6 class="m-0 fw-bold text-secondary">Listado de Órdenes en Producción</h6>
             </div>
+
             <div class="card-body">
+
+                <!-- TABLA -->
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-hover table-striped align-middle" id="dataTable">
+
                         <thead class="table-light">
                             <tr>
-                                <td>maquinas</td>
-                                <th>Orden</th>
+                                <th class="text-center">Máquina</th>
+                                <th class="text-center">Orden</th>
 
-                                <th>Fecha de Entrega</th>
-
-                                <th>Arte</th>
-                                <th>Tiempo para producir en minutos </th>
-                                <th>Tiempo restante en minutos </th>
-                                <th>Ingresar Cantidad produccion</th>
-                                <th>Acciones</th>
+                                <th class="text-center">Arte</th>
+                                <th class="text-center">Tiempo Total</th>
+                                <th class="text-center">Tiempo Restante</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-center">Producción</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @foreach ($ordenes as $orden)
+                                @php
+                                    $detalle = $orden->detalles->first();
+                                @endphp
+
                                 <tr>
-                                    <td>01</td>
-                                    <td>{{ $orden->codigo_orden }}</td>
+                                    <td class="text-center">
+                                        {{ $orden->ordenCalculoArte->first()->maquina->nombre ?? 'Sin máquina' }}
+                                    </td>
+
+                                    <td class="text-center fw-bold">
+                                        {{ $orden->codigo_orden }}
+                                    </td>
 
 
-                                    <td>{{ $orden->fecha_entrega->format('d/m/Y') }}</td>
 
-                                    <td>{{ $orden->detalles->first()->nombre_arte ?? '-' }}</td>
-                                    <td>145</td>
-                                    <td>100 - {{$orden->detalles->first()->cantidad}}</td>
-                                    <td>
+                                    <td class="text-center">{{ $detalle->nombre_arte ?? '-' }}</td>
+
+                                    <td class="text-center">145 min</td>
+
+                                    <td class="text-center">{{ 100 - $detalle->cantidad }} min</td>
+                                    <td class="text-center">{{ $detalle->cantidad }} </td>
+
+                                    <!-- PRODUCCIÓN -->
+                                    <td class="text-center">
                                         <form method="POST"
-                                            action="{{ route('ordenProceso.produccionRealizadaOrden', [$orden->id, $orden->detalles->first()->cantidad]) }}">
+                                            action="{{ route('ordenProceso.produccionRealizadaOrden', [$orden->id, $detalle->cantidad]) }}">
                                             @csrf
 
-                                            <div class="row g-2"> 
-                                                <!-- Input → 50% -->
-                                                <div class="col-6">
-                                                    <input type="number"
-                                                        name="cantidad_produccion"
-                                                        min="1"
-                                                        class="form-control form-control-sm"
-                                                        @if ($orden->estado_orden_id != 5) disabled @endif
-                                                        required>
-                                                </div>
+                                            <div class="input-group input-group-sm">
+                                                <input type="number" min="1" name="cantidad_produccion"
+                                                    class="form-control" @if ($orden->estado_orden_id != 5) disabled @endif
+                                                    required>
 
-                                             
-                                                <div class="col-6">
-                                                    @if ($orden->estado_orden_id == 5)
-                                                        <button type="submit" class="btn btn-success btn-sm w-100">
-                                                            Enviar
-                                                        </button>
-                                                    @endif
-                                                </div>
+                                                @if ($orden->estado_orden_id == 5)
+                                                    <button type="submit" class="btn btn-success">
+                                                        Enviar
+                                                    </button>
+                                                @endif
                                             </div>
-
                                         </form>
                                     </td>
 
-                                    <td>
+                                    <!-- ACCIONES -->
+                                    <td class="text-center">
                                         <a href="{{ route('inventario.ordenStock', $orden->id) }}"
-                                            class="btn btn-primary btn-sm">Control Hilos</a>
+                                            class="btn btn-primary btn-sm">
+                                            Control Hilos
+                                        </a>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
+
                     </table>
                 </div>
+
             </div>
         </div>
 
     </div>
 @endsection
 
+@section('styles')
+    <style>
+        /* Hover profesional */
+        .table-hover tbody tr:hover {
+            background-color: #eef3ff !important;
+            transition: 0.2s ease-in-out;
+            cursor: pointer;
+        }
+    </style>
+@endsection
+
 @section('scripts')
     <script>
         $(document).ready(function() {
-            // Inicializar DataTables
             $('#dataTable').DataTable({
-                "pageLength": 10,
-                "lengthMenu": [20, 50, 20, 10, 10, 30],
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+                pageLength: 10,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
                 }
             });
         });
 
-        // Mensajes SweetAlert2
         document.addEventListener('DOMContentLoaded', function() {
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Éxito!',
+                    title: 'Éxito',
                     text: '{{ session('success') }}',
                     showConfirmButton: false,
                     timer: 2000
@@ -113,10 +142,11 @@
             @if (session('error'))
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'Error',
                     text: '{{ session('error') }}'
                 });
             @endif
+
         });
     </script>
 @endsection

@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYA Bordados - Bordamos tus ideas con arte</title>
+    <title>CYE Bordados - Bordamos tus ideas con arte</title>
 
-       
+
     <link rel="shortcut icon" href="{{ asset('cyabordados.png') }}" type="image/x-icon">
 
     <!-- Bootstrap 5 -->
@@ -191,7 +191,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">CYA Bordados</a>
+            <a class="navbar-brand" href="#">CYE Bordados</a>
             <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -215,7 +215,7 @@
     <header class="hero" data-aos="fade-up">
         <h1>Bordamos tus ideas con arte</h1>
         <p>Transformamos tu diseño en un bordado de alta calidad. Uniformes, gorras, logotipos y más, con el toque
-            artesanal que distingue a CYA Bordados.</p>
+            artesanal que distingue a CYE Bordados.</p>
         <a href="#contacto" class="btn btn-mostaza mt-3">Solicita tu diseño</a>
     </header>
 
@@ -224,7 +224,7 @@
         <div class="container text-center">
             <h2>¿Quiénes Somos?</h2>
             <p class="text-muted mx-auto" style="max-width:700px;">
-                En <b>CYA Bordados</b> somos un taller especializado en <b>bordados personalizados</b> para prendas,
+                En <b>CYE Bordados</b> somos un taller especializado en <b>bordados personalizados</b> para prendas,
                 gorras y textiles.
                 Creamos arte digital para máquinas <b>Tajima</b> y usamos hilos de primera calidad.
                 Cada puntada refleja dedicación, precisión y creatividad.
@@ -284,7 +284,7 @@
                 <a href="https://wa.me/50377777777"><i class="fab fa-whatsapp"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
             </div>
-            <p>© 2025 CYA Bordados | Hecho con dedicación en El Salvador</p>
+            <p>© 2025 CYE Bordados | Hecho con dedicación en El Salvador</p>
         </div>
     </footer>
 

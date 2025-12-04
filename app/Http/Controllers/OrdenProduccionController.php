@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HistorialOrden;
+use App\Models\Maquinas;
 use App\Models\Orden;
 use App\Models\OrdenCalculoArte;
 use Carbon\Carbon;
@@ -15,7 +16,13 @@ class OrdenProduccionController extends Controller
      */
     public function index()
     {
-        $ordenes = Orden::with('detalles')->where('estado_orden_id', 5)->get();
+        // $ordenes = Orden::with('detalles')->where('estado_orden_id', 5)->get();
+        $ordenes = Orden::with([
+            'detalles',
+            'ordenCalculoArte.maquina',
+        ])
+            ->where('estado_orden_id', 5)
+            ->get();
 
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
     }
@@ -25,11 +32,11 @@ class OrdenProduccionController extends Controller
         // $ordenes = Orden::where('estado_orden_id', '3')->get();
         $ordenes = OrdenCalculoArte::with(['orden', 'maquina'])
             ->whereHas('orden', function ($query) {
-                $query->where('estado_orden_id', 3);
+                $query->where('estado_orden_id', 4);
             })
-            ->orderBy('maquina_id') // 1️⃣ Primero ordenar por máquina
+            ->orderBy('maquina_id') // 1️ Primero ordenar por máquina
             ->orderBy(
-                Orden::select('fecha_entrega') // 2️⃣ Luego por fecha
+                Orden::select('fecha_entrega') // 2 Luego por fecha
                     ->whereColumn('ordenes.id', 'ordenes_calculos_por_arte.orden_id_calculo')
             )
             ->get();
@@ -207,21 +214,50 @@ class OrdenProduccionController extends Controller
     {
         try {
 
-            $orden = Orden::findOrFail($id);
-            // dd($orden);
-            // Validar que esté en el estado correcto (5 = por iniciar)
-            if ($orden->estado_orden_id >= 4) {
-                return redirect()->route('ordenProceso.index')
-                    ->with('error', 'La orden ya fue iniciada o entregada');
+            // 1. Cargar la orden con sus cálculos y máquina
+
+            $orden = Orden::with('ordenCalculoArte.maquina')->findOrFail($id);
+
+            // 2. Buscar el cálculo de arte (siempre debería existir uno)
+            $calculo = $orden->ordenCalculoArte->first();
+
+            if (! $calculo) {
+                return redirect()->route('ordenProceso.ArtesAProbados')
+                    ->with('error', 'La orden no tiene cálculo de arte asignado.');
             }
-            // Actualizar el estado de la orden a "en proceso" (6 = en proceso)
-            $orden->estado_orden_id = 5; // ejemplo
-            $orden->save();
+
+            // 3. Obtener la máquina desde el cálculo
+            $maquina = $calculo->maquina;
+
+            if (! $maquina) {
+                return redirect()->route('ordenProceso.ArtesAProbados')
+                    ->with('error', 'La orden no tiene una máquina asignada.');
+            }
+
+            // 4. Verificar si la máquina ya está en uso
+            if ($maquina->en_uso == 1) {
+                return redirect()->route('ordenProceso.ArtesAProbados')
+                    ->with('error', "La máquina {$maquina->nombre} ya está en uso.");
+            }
+            //  dd($orden->estado_orden_id);
+            // 4. Verificar el estado de la orden
+            if ($orden->estado_orden_id >= 5) {
+                return redirect()->route('ordenProceso.ArtesAProbados')
+                    ->with('error', "La orden { $orden->codigo_orden  } ya fue iniciada ");
+            }
+
+            // 5. Cambiar estado de la orden a "en proceso"
+            Orden::where('id', $orden->id)->update(['estado_orden_id' => 5]);
+            //    $orden->save();
+
+            // 6. Cambiar estado de la máquina a "en uso"
+            Maquinas::where('id', $maquina->id)->update(['en_uso' => 1]);
 
             return redirect()->route('ordenProceso.index')
-                ->with('success', 'La orden se encuentra en estado de procesamiento');
+                ->with('success', 'Proceso iniciado y máquina marcada como en uso.');
+
         } catch (\Throwable $th) {
-            return redirect()->route('ordenProceso.index')
+            return redirect()->route('ordenProceso.ArtesAProbados')
                 ->with('error', 'Error al iniciar la orden');
         }
     }
