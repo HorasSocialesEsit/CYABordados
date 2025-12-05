@@ -360,7 +360,7 @@
                     document.getElementById('resultado').value = tiempo.toFixed(2);
 
                     const tiempoTotal = tiempo * (parseInt(document.getElementById('ciclos').value) || 1);
-                    document.getElementById('tiempoTotal').value = tiempoTotal.toFixed(2);
+                    document.getElementById('tiempoTotal').value = Math.ceil(tiempoTotal.toFixed(2));
                 });
             });
         }

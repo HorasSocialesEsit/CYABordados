@@ -16,15 +16,6 @@ return new class extends Migration
     {
         Schema::create('historial_orden', function (Blueprint $table) {
             $table->id();
-            $table->string('rpm');
-            $table->integer('puntadas');
-            $table->integer('secuencias');
-            $table->integer('cabezales');
-            $table->integer('tiempo_cambio');
-            $table->decimal('eficiencia');
-            $table->integer('ciclos');
-            $table->decimal('horas');
-            $table->integer('minutos');
             $table->integer('cantidad');
             $table->integer('realizada');
             $table->integer('restante');

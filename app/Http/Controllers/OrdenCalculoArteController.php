@@ -58,7 +58,7 @@ class OrdenCalculoArteController extends Controller
                 'ruta_arte' => $rutaImagen,
                 'maquina_id' => $request->maquina_id,
                 'ciclos' => $request->ciclos,
-                'tiempo_total_orden' => $request->tiempoTotal,
+                'tiempo_total_orden' => ceil($request->tiempoTotal),
                 'cabezales' => $request->cabezales,
             ]);
 

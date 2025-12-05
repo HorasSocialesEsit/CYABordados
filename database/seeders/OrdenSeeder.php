@@ -52,7 +52,7 @@ class OrdenSeeder extends Seeder
                     'fecha_orden' => $fechaOrden,
                     'codigo_orden' => 'ORD-'.strtoupper(Str::random(6)),
                     'fecha_entrega' => $fechaEntrega,
-                    'estado_orden_id' => rand(1, 5),
+                    'estado_orden_id' => 1,
                     'usuario_id' => 1,
                 ]);
 
@@ -75,20 +75,20 @@ class OrdenSeeder extends Seeder
                     'maquina_id' => 1,
                 ]);
 
-                OrdenCalculoArte::create([
-                    'puntadas' => 2500,
-                    'secuencias' => 33,
-                    'rpm' => 5000,
-                    'tiempo_ciclo' => 53,
-                    'nota_adicional' => 'content',
-                    'ruta_arte' => 'content',
-                    'orden_id_calculo' => $orden->id,
-                    'arte_id' => $orden_detall->id,
-                    'maquina_id' => 1,
-                    'ciclos' => 1,
-                    'tiempo_total_orden' => 53,
+                // OrdenCalculoArte::create([
+                //     'puntadas' => 2500,
+                //     'secuencias' => 33,
+                //     'rpm' => 5000,
+                //     'tiempo_ciclo' => 53,
+                //     'nota_adicional' => 'content',
+                //     'ruta_arte' => 'content',
+                //     'orden_id_calculo' => $orden->id,
+                //     'arte_id' => $orden_detall->id,
+                //     'maquina_id' => 1,
+                //     'ciclos' => 1,
+                //     'tiempo_total_orden' => 53,
 
-                ]);
+                // ]);
 
                 DetalleHilo::create([
                     'cantidad' => rand(3, 10),

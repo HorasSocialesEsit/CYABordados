@@ -75,7 +75,7 @@ Route::prefix('ordenProceso')->middleware(['auth', 'active', 'role:admin,Operari
     Route::put('/{id}/update', [OrdenProduccionController::class, 'update'])->name('ordenProceso.update');
     Route::get('/ArteAprobados', [OrdenProduccionController::class, 'ArtesAprobados'])->name('ordenProceso.ArtesAProbados');
 
-    Route::post('/produccionRealizadaOrden/{id}/{cantidad}', [OrdenProduccionController::class, 'agregarCantidadProduccionOrden'])->name('ordenProceso.produccionRealizadaOrden');
+    Route::post('/produccionRealizadaOrden/{id}/{cantidad}/{inicio}/{fin}/{id_maquina}', [OrdenProduccionController::class, 'agregarCantidadProduccionOrden'])->name('ordenProceso.produccionRealizadaOrden');
 
 });
 

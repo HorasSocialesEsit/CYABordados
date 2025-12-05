@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\BusinessException;
 use App\Models\HistorialOrden;
 use App\Models\Maquinas;
 use App\Models\Orden;
 use App\Models\OrdenCalculoArte;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrdenProduccionController extends Controller
 {
@@ -16,27 +18,25 @@ class OrdenProduccionController extends Controller
      */
     public function index()
     {
-        // $ordenes = Orden::with('detalles')->where('estado_orden_id', 5)->get();
         $ordenes = Orden::with([
             'detalles',
             'ordenCalculoArte.maquina',
         ])
+            ->withSum('historial', 'realizada')
             ->where('estado_orden_id', 5)
             ->get();
-
         return view('app.produccion.arte.OrdenesEnProceso', compact('ordenes'));
     }
 
     public function ArtesAprobados()
     {
-        // $ordenes = Orden::where('estado_orden_id', '3')->get();
         $ordenes = OrdenCalculoArte::with(['orden', 'maquina'])
             ->whereHas('orden', function ($query) {
                 $query->where('estado_orden_id', 4);
             })
-            ->orderBy('maquina_id') // 1️ Primero ordenar por máquina
+            ->orderBy('maquina_id')
             ->orderBy(
-                Orden::select('fecha_entrega') // 2 Luego por fecha
+                Orden::select('fecha_entrega')
                     ->whereColumn('ordenes.id', 'ordenes_calculos_por_arte.orden_id_calculo')
             )
             ->get();
@@ -68,197 +68,82 @@ class OrdenProduccionController extends Controller
         //
     }
 
-    private function obtenerMinutosTrabajadosDias()
-    {
-        $dia = Carbon::now()->dayOfWeek;
-        $horas_laboradas = 0;
-        $minutos_calculados = 0;       // en caso que sea domingo, ya que solo ese dia queda
-
-        // obtenemos los rangos de dias de lunes a viernes
-        if ($dia >= 1 && $dia <= 5) {
-            $horas_laboradas = 8;
-            $minutos_calculados = $horas_laboradas * 60;
-        }
-
-        // si el dia es sabado
-        if ($dia === 6) {
-            $horas_laboradas = 4.5;
-            $minutos_calculados = $horas_laboradas * 60;
-        }
-
-        return [
-            'horas' => $horas_laboradas,
-            'minutos' => $minutos_calculados,
-        ];
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        $orden_buscada = Orden::with([
-            'detalles',
-            'detalles.maquinaAsignada',
-            'ordenCalculoArte',
-        ])->findOrFail($id);
-
-        // obtenemos la maquina asignada al detalle
-        $maquina_asignada = $orden_buscada->detalles->first()->maquinaAsignada;
-        // obtenemos el detalle de la orden
-        $detalle = $orden_buscada->detalles->first();
-        // obtener el detalle de calculo del arte
-        $detalle_calculo_arte = $orden_buscada->ordenCalculoArte;
-
-        // obtenemos el último restante del historial de la orden
-        $restante = HistorialOrden::where('orden_id', $id)
-            ->orderByDesc('id')
-            ->value('restante');
-
-        // en caso de que exista cambiamos el valor original del pedido
-        $cantidad = $restante !== null ? $restante : $detalle->cantidad;
-
-        // en caso que la maquina asignada este dañada en algunos cabezales
-        $cabezales_reales = $maquina_asignada ? $maquina_asignada->cabezales - $maquina_asignada->cabezales_danado : 0;
-
-        $data = [
-            'id' => $orden_buscada->id,
-            'cantidad' => $cantidad,
-            'cabezales' => $cabezales_reales,
-            'eficiencia' => 0.85,
-            'tiempo_de_cambio' => 20,
-            'horas_laboradas' => $this->obtenerMinutosTrabajadosDias()['horas'],
-            'minutos_laboradas' => $this->obtenerMinutosTrabajadosDias()['minutos'],
-
-            // datos por default pero en la interfaz se puede editar
-            'rmp_maquina' => $detalle_calculo_arte->first()->rpm ?? 0,
-            'puntadas_maquina' => $detalle_calculo_arte->first()->puntadas ?? 0,
-            'secuencia_maquina' => $detalle_calculo_arte->first()->secuencias ?? 0,
-
-        ];
-
-        return view('app.produccion.arte.OrdenesEnProcesoForm', compact('data'));
-    }
+    public function edit(string $id) {}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        // claves a almacenar
-        // rpm
-        // puntadas
-        // secuencia
-        // cabezales
-        // tiempo_cambio
-        // eficiencia
-        // ciclos
-        // horas
-        // minutos
-        // cantidad
-        // realizada
-        // restante
-
-        $request->validate([
-            'rpm' => 'required|min:1',
-            'puntadas' => 'required|min:1',
-            'secuencia' => 'required|min:1',
-            'cabezales' => 'required|min:1',
-            'tiempo_cambio' => 'required|min:1',
-            'eficiencia' => 'required|min:1',
-            'ciclos_calculo' => 'required|min:1',
-            'horas' => 'required|min:1',
-            'minutos_calculo' => 'required|min:1',
-            'dias_calculo' => 'required|min:1',
-            'unidades' => 'required|min:1',
-            'producido' => 'required|min:1',
-            'pendiente' => 'required|min:1',
-        ]);
-        try {
-
-            HistorialOrden::create([
-                'rpm' => $request->rpm,
-                'puntadas' => $request->puntadas,
-                'secuencias' => $request->secuencia,
-                'cabezales' => $request->cabezales,
-                'tiempo_cambio' => $request->tiempo_cambio,
-                'eficiencia' => $request->eficiencia,
-
-                'ciclos' => $request->ciclos_calculo,
-                'horas' => $request->horas,
-                'minutos' => $request->horas * 60,
-
-                'cantidad' => $request->unidades,
-                'realizada' => $request->producido,
-                'restante' => $request->pendiente,
-
-                'orden_id' => $id,
-            ]);
-
-            // aqui cuando el restante sea cero actualizamos la orden a completada el estado
-            if ($request->pendiente == 0) {
-                Orden::where('id', $id)->update([
-                    'estado' => 'completada',
-                ]);
-            }
-
-            return redirect()->route('ordenProceso.index')
-                ->with('success', 'Producción registrada correctamente.');
-        } catch (\Throwable $th) {
-            return redirect()->route('ordenProceso.index')
-                ->with('error', 'Error al registrar.');
-        }
-    }
+    public function update(Request $request, string $id) {}
 
     public function iniciarProceso(string $id)
     {
+        // implementamos transacciones, ya que si no se actualiza una tabla, hacemos rollback de todas para que no quede inconsistencia
+        DB::beginTransaction();
         try {
 
-            // 1. Cargar la orden con sus cálculos y máquina
+            // buscamos que la orden exista
+            $orden = Orden::with('ordenCalculoArte.maquina')
+                ->whereHas('ordenCalculoArte', function ($q) use ($id) {
+                    $q->where('id', $id);
+                })
+                ->first();
 
-            $orden = Orden::with('ordenCalculoArte.maquina')->findOrFail($id);
 
-            // 2. Buscar el cálculo de arte (siempre debería existir uno)
+            // Buscar el cálculo de arte (siempre debería existir uno)
             $calculo = $orden->ordenCalculoArte->first();
 
-            if (! $calculo) {
-                return redirect()->route('ordenProceso.ArtesAProbados')
-                    ->with('error', 'La orden no tiene cálculo de arte asignado.');
+            // validamos que exista el calculo de la orden
+            if (!$calculo) {
+                throw new BusinessException('La orden no tiene cálculo de arte asignado.');
             }
 
-            // 3. Obtener la máquina desde el cálculo
+            // obtenemos la maquina que esta asignada a esa orden
             $maquina = $calculo->maquina;
-
-            if (! $maquina) {
-                return redirect()->route('ordenProceso.ArtesAProbados')
-                    ->with('error', 'La orden no tiene una máquina asignada.');
+            if (!$maquina) {
+                throw new BusinessException('La orden no tiene una máquina asignada.');
             }
 
             // 4. Verificar si la máquina ya está en uso
             if ($maquina->en_uso == 1) {
-                return redirect()->route('ordenProceso.ArtesAProbados')
-                    ->with('error', "La máquina {$maquina->nombre} ya está en uso.");
+                throw new BusinessException("La máquina {$maquina->nombre} ya está en uso.");
             }
             //  dd($orden->estado_orden_id);
             // 4. Verificar el estado de la orden
             if ($orden->estado_orden_id >= 5) {
-                return redirect()->route('ordenProceso.ArtesAProbados')
-                    ->with('error', "La orden { $orden->codigo_orden  } ya fue iniciada ");
+                throw new BusinessException("La orden {$orden->codigo_orden} ya fue iniciada.");
             }
 
-            // 5. Cambiar estado de la orden a "en proceso"
-            Orden::where('id', $orden->id)->update(['estado_orden_id' => 5]);
-            //    $orden->save();
+            // obtenemos los minutos que durara la orden
+            $minutos_orden = ceil($calculo->tiempo_total_orden);
 
-            // 6. Cambiar estado de la máquina a "en uso"
-            Maquinas::where('id', $maquina->id)->update(['en_uso' => 1]);
+
+            // obtenemos la hora actual
+            $inicio = Carbon::now(); // definimos la hora de inicio de la orden
+            $final  = Carbon::now()->copy()->addMinutes($minutos_orden); // definimos la hora final de la orden
+
+            // cambiamos el estado de la orden a "En proceso de maquina"
+            Orden::where('id', $orden->id)->update(['fecha_hora_inicio' => $inicio, 'fecha_hora_fin' => $final, 'estado_orden_id' => 5]);
+
+            // cambiamos el estado de la maquina a ocupada
+            Maquinas::where('id', $maquina->id)->update(['en_uso' =>  true]);
+            DB::commit();
 
             return redirect()->route('ordenProceso.index')
                 ->with('success', 'Proceso iniciado y máquina marcada como en uso.');
-
-        } catch (\Throwable $th) {
+            // validamos si son errores que nosotros personalizamos
+        } catch (BusinessException $e) {
+            DB::rollBack();
             return redirect()->route('ordenProceso.ArtesAProbados')
-                ->with('error', 'Error al iniciar la orden');
+                ->with('error', $e->getMessage());
+            // capturamos cualquier otro error inesperado
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('ordenProceso.ArtesAProbados')
+                ->with('error', "Ocurrió un error interno al iniciar el proceso: ");
         }
     }
 
@@ -270,36 +155,25 @@ class OrdenProduccionController extends Controller
         //
     }
 
-    public function agregarCantidadProduccionOrden(Request $request, string $id, string $cantidad)
+    public function agregarCantidadProduccionOrden(Request $request, string $id, string $cantidad, string $fecha_hora_inicio, string $fecha_hora_fin, string $id_maquina)
     {
-
-        $fecha_inicio = '30-11-2025';
-        $hora_inicio = '14:30';
-
-        $fecha_final = '30-11-2025';
-        $hora_final = '17:45';
-
-        // fecha y hora actual
-        $fecha_actual = Carbon::now()->format('d-m-Y');
-        $hora_actual = Carbon::now()->format('H:i');
-
-        $inicio = Carbon::createFromFormat('d-m-Y H:i', "$fecha_inicio $hora_inicio");
-        $final = Carbon::createFromFormat('d-m-Y H:i', "$fecha_final $hora_final");
-        $actual = Carbon::createFromFormat('d-m-Y H:i', "$fecha_actual $hora_actual");
-
-        //    calculamos el tiempo trabajado
-        $minutos_trabajados = $inicio->diffInMinutes($actual, false);
-
-        // calculamos el tiempo restante para la hora final
-        $minutos_restantes = $actual->diffInMinutes($final, false);
-
-        // verificamos si se ha pasado del tiempo final
-        $pasado = $actual->greaterThan($final);
-
-        // calculamos cuanto tiempo se ha excedido
-        $minutos_excedidos = $pasado ? $final->diffInMinutes($actual) : 0;
-
+        DB::beginTransaction();
         try {
+            $fecha_hora_inicio = Carbon::parse($fecha_hora_inicio);
+            $fecha_hora_fin = Carbon::parse($fecha_hora_fin);
+            $actual = Carbon::now();
+
+            //    calculamos el tiempo trabajado
+            $minutos_trabajados = ceil($fecha_hora_inicio->diffInMinutes($actual, false));
+
+            // calculamos el tiempo restante para la hora final
+            $minutos_restantes = ceil($actual->diffInMinutes($fecha_hora_fin, false));
+
+            // verificamos si se ha pasado del tiempo final
+            $pasado = $actual->greaterThan($fecha_hora_fin);
+
+            // calculamos cuanto tiempo se ha excedido
+            $minutos_excedidos = ceil($pasado ? $fecha_hora_fin->diffInMinutes($actual) : 0);
             // obtenemos el último restante del historial de la orden, validamos si ya se añadio
             $restante = HistorialOrden::where('orden_id', $id)
                 ->orderByDesc('id')
@@ -310,47 +184,45 @@ class OrdenProduccionController extends Controller
 
             $restante_orden = $cantidad - $request->cantidad_produccion;
 
-            if ($request->cantidad_produccion > $restante_orden) {
-                return back()->with('error', 'La cantidad producida no puede ser mayor a la pendiente.');
+
+            if ($restante_orden < 0) {
+                throw new BusinessException('La cantidad producida no puede ser mayor a la pendiente.');
             }
 
+
             HistorialOrden::create([
-                'rpm' => 10,
-                'puntadas' => 10,
-                'secuencias' => 10,
-                'cabezales' => 10,
-                'tiempo_cambio' => 10,
-                'eficiencia' => 10,
-
-                'ciclos' => 10,
-                'horas' => 10,
-                'minutos' => 10,
-
                 'cantidad' => $cantidad,
                 'realizada' => $request->cantidad_produccion,
                 'restante' => $restante_orden,
                 'orden_id' => $id,
             ]);
 
+
             // aqui cuando el restante sea cero actualizamos la orden a completada el estado
-            if ($request->pendiente == 0) {
+            if ($restante_orden == 0) {
                 Orden::where('id', $id)->update([
                     'estado_orden_id' => 6,
                 ]);
+                // liberamos la maquina al completar la orden
+                Maquinas::where('id', $id_maquina)->update(['en_uso' =>  false]);
             }
+            DB::commit();
+            if ($minutos_restantes > 0) {
+
+                return back()->with('success', "Tu produccion se ha registrado correctamente, te quedan $minutos_restantes minutos para finalizar, has trabajado $minutos_trabajados minutos.");
+            }
+
+            if ($pasado) {
+                return back()->with('success', "Tu produccion se ha registrado correctamente, pero has excedido el tiempo estimado por $minutos_excedidos minutos, has trabajado $minutos_trabajados minutos.");
+            }
+
+            return back()->with('success', "Tu produccion se ha registrado correctamente, has trabajado $minutos_trabajados minutos.");
+        } catch (BusinessException $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
         } catch (\Throwable $th) {
+            DB::rollBack();
             return back()->with('error', 'Ocurrió un error al registrar la producción, intente nuevamente.');
         }
-
-        if ($minutos_restantes > 0) {
-
-            return back()->with('success', "Tu produccion se ha registrado correctamente, te quedan $minutos_restantes minutos para finalizar, has trabajado $minutos_trabajados minutos.");
-        }
-
-        if ($pasado) {
-            return back()->with('success', "Tu produccion se ha registrado correctamente, pero has excedido el tiempo estimado por $minutos_excedidos minutos, has trabajado $minutos_trabajados minutos.");
-        }
-
-        return back()->with('success', "Tu produccion se ha registrado correctamente, has trabajado $minutos_trabajados minutos.");
     }
 }

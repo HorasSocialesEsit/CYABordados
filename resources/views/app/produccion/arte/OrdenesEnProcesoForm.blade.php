@@ -2,7 +2,7 @@
 
 @section('title', 'Producción de Orden')
 
-@section('contenido')
+{{-- @section('contenido')
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
             <h4>Registrar Producción – Orden #{{ $data['id'] }}</h4>
@@ -155,7 +155,7 @@
             </form>
 
         </div>
-    </div>
+    </div> --}}
 
     <script>
         document.getElementById('horas').addEventListener('input', () => {

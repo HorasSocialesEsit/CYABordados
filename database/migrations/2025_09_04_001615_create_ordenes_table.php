@@ -21,6 +21,8 @@ return new class extends Migration
             
             // Totales de la orden
             $table->decimal('precio_total', 12, 2)->default(0);
+            $table->datetime('fecha_hora_inicio')->nullable();
+            $table->datetime('fecha_hora_fin')->nullable();
             
             $table->unsignedBigInteger('estado_orden_id')->default(1);
             $table->unsignedBigInteger('cliente_id')->nullable();

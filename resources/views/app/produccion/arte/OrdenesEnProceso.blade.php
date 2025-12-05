@@ -31,10 +31,13 @@
                                 <th class="text-center">Máquina</th>
                                 <th class="text-center">Orden</th>
 
-                                <th class="text-center">Arte</th>
+                                {{-- <th class="text-center">Arte</th> --}}
                                 <th class="text-center">Tiempo Total</th>
+                                <th class="text-center">Hora/fecha Iniciado</th>
+                                <th class="text-center">Hora/fecha finalizar</th>
                                 <th class="text-center">Tiempo Restante</th>
                                 <th class="text-center">Cantidad</th>
+                                <th class="text-center">Restante</th>
                                 <th class="text-center">Producción</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
@@ -57,17 +60,27 @@
 
 
 
-                                    <td class="text-center">{{ $detalle->nombre_arte ?? '-' }}</td>
+                                    {{-- <td class="text-center">{{ $detalle->nombre_arte ?? '-' }}</td> --}}
 
-                                    <td class="text-center">145 min</td>
+                                    <td class="text-center">{{ ceil($orden->ordenCalculoArte->first()->tiempo_total_orden) }} min</td>
+                                    <td class="text-center">{{ $orden->fecha_hora_inicio }} </td>
+                                    <td class="text-center">{{ $orden->fecha_hora_fin }} </td>
+                                   @php
+                                       
+                                        $inicio = \Carbon\Carbon::parse($orden->fecha_hora_inicio);
+                                        $fin = \Carbon\Carbon::parse($orden->fecha_hora_fin);
+                                        $actual = \Carbon\Carbon::now();
+                                        $minutos_restantes = $actual->diffInMinutes($fin, false);
+                                    @endphp
 
-                                    <td class="text-center">{{ 100 - $detalle->cantidad }} min</td>
+                                    <td class="text-center">{{ ceil($minutos_restantes) }} min</td>
                                     <td class="text-center">{{ $detalle->cantidad }} </td>
+                                    <td class="text-center">{{ $detalle->cantidad-$orden->historial_sum_realizada }} </td>
 
                                     <!-- PRODUCCIÓN -->
                                     <td class="text-center">
                                         <form method="POST"
-                                            action="{{ route('ordenProceso.produccionRealizadaOrden', [$orden->id, $detalle->cantidad]) }}">
+                                            action="{{ route('ordenProceso.produccionRealizadaOrden', [$orden->id, $detalle->cantidad,$orden->fecha_hora_inicio, $orden->fecha_hora_fin, $detalle->maquina_id]) }}">
                                             @csrf
 
                                             <div class="input-group input-group-sm">
@@ -122,19 +135,21 @@
             $('#dataTable').DataTable({
                 pageLength: 10,
                 language: {
-                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+                    url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
                 }
             });
         });
 
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('{{ session('success') }}');
+            console.log('{{ session('error') }}');
 
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Éxito',
                     text: '{{ session('success') }}',
-                    showConfirmButton: false,
+                    showConfirmButton: true,
                     timer: 2000
                 });
             @endif
@@ -143,6 +158,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
+                    showConfirmButton: true,
                     text: '{{ session('error') }}'
                 });
             @endif

@@ -40,6 +40,10 @@ class Orden extends Model
     /**
      * 🔹 Relaciones
      */
+    public function historial()
+    {
+        return $this->hasMany(HistorialOrden::class, 'orden_id');
+    }
 
     // Una orden pertenece a un cliente
     public function cliente()
@@ -61,7 +65,6 @@ class Orden extends Model
     // Una orden puede tener muchos detalles (productos, artes, materiales, etc.)
     public function detalles()
     {
-        //  return $this->hasMany(OrdenDetalle::class);
         return $this->hasMany(OrdenDetalle::class)->orderBy('id', 'asc');
     }
 

@@ -10,18 +10,14 @@ class HistorialOrden extends Model
 
     // campos que se pueden editar
     protected $fillable = [
-        'rpm',
-        'puntadas',
-        'secuencias',
-        'cabezales',
-        'tiempo_cambio',
-        'eficiencia',
-        'ciclos',
-        'horas',
-        'minutos',
         'cantidad',
         'realizada',
         'restante',
         'orden_id',
     ];
+
+    public function historialOrden()
+    {
+        return $this->belongsTo(Orden::class, 'orden_id');
+    }
 }

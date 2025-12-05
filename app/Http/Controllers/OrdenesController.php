@@ -181,7 +181,7 @@ class OrdenesController extends Controller
         $orden->update([
             'cliente_id' => $request->cliente_id,
             'fecha_entrega' => $request->fecha_entrega,
-            'Precio_total' => $request->input('pago.saldo_restante'),
+            'precio_total' => $request->input('pago.saldo_restante'),
 
         ]);
         $detalleData = $request->detalles[0];
