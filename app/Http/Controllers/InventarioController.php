@@ -8,7 +8,7 @@ use App\Models\OrdenMaterialHistorial;
 use App\Models\Proveedor;
 use App\Models\ProveedorMaterial;
 use App\Models\TiposHilos;
-use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -162,16 +162,7 @@ class InventarioController extends Controller
         }
     }
 
-    public function reporte()
-    {
-        $inventario = Material::orderBy('stock', 'asc')->orderBy('nombre', 'asc')->get();
-        $fecha = (new Componentes())->fechaActual();
-        $nombre_persona = "Pedro Perez";
-
-        $pdf = PDF::loadView('app.reportes.inventario.inventarioHilos', compact('fecha', 'inventario', 'nombre_persona'));
-        $pdf->setPaper('letter');
-        return $pdf->stream('Inventario Hilos.pdf');
-    }
+   
     /**
      * esta funcion se encarga de descontrar el stock de un hilo cuando una orden se finaliza, asi sabemos que hilos
      * se utilizaron y en que orden

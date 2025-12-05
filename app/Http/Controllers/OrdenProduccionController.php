@@ -41,6 +41,10 @@ class OrdenProduccionController extends Controller
             )
             ->get();
 
+            // return response()->json($ordenes);
+
+        
+
         return view('app.produccion.arte.OrdenesArteAprobado', compact('ordenes'));
     }
 

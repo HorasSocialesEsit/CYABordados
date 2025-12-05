@@ -109,8 +109,9 @@
             <div class="container-img-arte" style="text-align: center;">
                 <div
                     style="width: 160px;height: 160px;margin-bottom: 10px;border: 1px solid #ddd;background-color: #f9f9f9;">
-                    <img src="{{ public_path('lOGOCYABORDADOS.png') }}" alt="foto del arte"
-                        style="width: 100%;height: 100%;object-fit: contain;">
+                    <img src="{{ public_path('storage/' . optional($orden_buscada->ordenCalculoArte->first())->ruta_arte) }}"
+                        alt="Imagen del Arte" style="width: 100%; height: 100%; object-fit: contain;">
+
                 </div>
                 <div style="clear: both;"></div>
             </div>

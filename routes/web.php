@@ -12,6 +12,7 @@ use App\Http\Controllers\OrdenProduccionController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProduccionController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,8 +35,8 @@ Route::prefix('recepcion')->middleware(['auth', 'active', 'role:recepcion,admin'
     Route::get('/ordenes/{id}/editar', [OrdenesController::class, 'edit'])->name('ordenes.edit');
     Route::put('/ordenes/{id}', [OrdenesController::class, 'update'])->name('ordenes.update');
     Route::delete('/ordenes{id}', [OrdenesController::class, 'destroy'])->name('ordenes.destroy');
-    Route::get('/ordenes/{id}/reporte', [OrdenesController::class, 'reporteOrden'])->name('ordenes.reporteOrden');
-    Route::get('/ordenes/{id}/reporte/disehno', [OrdenesController::class, 'reporteOrdenDisehno'])->name('ordenes.reporteOrdenDisehno');
+    Route::get('/ordenes/{id}/reporte', [ReportesController::class, 'reporteOrden'])->name('ordenes.reporteOrden');
+    Route::get('/ordenes/{id}/reporte/disehno', [ReportesController::class, 'reporteOrdenDisehno'])->name('ordenes.reporteOrdenDisehno');
 });
 
 // ////// administracion usuarios   ///////////
@@ -87,7 +88,7 @@ Route::prefix('administracion-inventario')->middleware(['auth', 'active', 'role:
     Route::get('/inventario/{id}/edit', [InventarioController::class, 'edit'])->name('inventario.edit');
     Route::put('/inventario/{id}/update', [InventarioController::class, 'update'])->name('inventario.update');
     Route::delete('inventario/{id}/destroy', [InventarioController::class, 'destroy'])->name('inventario.destroy');
-    Route::get('inventario/reporte', [InventarioController::class, 'reporte'])->name('inventario.reporte');
+    Route::get('inventario/reporte', [ReportesController::class, 'reporteInventario'])->name('inventario.reporte');
 
     Route::get('/inventario/orden/stock/{id}', [InventarioController::class, 'filtradoHilosOrden'])->name('inventario.ordenStock');
     Route::post('/inventario/orden/stock/descuento', [InventarioController::class, 'descontarSalidaStockOrden'])->name('inventario.ordenStockDescuento');

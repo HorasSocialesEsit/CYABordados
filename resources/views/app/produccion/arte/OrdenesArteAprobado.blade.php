@@ -64,6 +64,9 @@
                                             <i class="fa-solid fa-pencil"></i>
                                             Editar
                                         </a>
+                                        {{-- temporal --}}
+                                        <a href="{{ route('ordenes.reporteOrden', $calculo->orden_id_calculo ) }}" target="_blank"
+                                            class="btn btn-warning btn-sm"><i class="fa-solid fa-print"></i></a>
 
                                     </td>
 
@@ -80,7 +83,7 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Inicializar DataTables
             $('#dataTable').DataTable({
                 "order": [], //
@@ -96,7 +99,7 @@
         });
 
         // Mensajes SweetAlert2
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -114,6 +117,6 @@
                     text: '{{ session('error') }}'
                 });
             @endif
-        });
+            });
     </script>
 @endsection
